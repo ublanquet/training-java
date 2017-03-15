@@ -23,9 +23,7 @@ public class Cli {
     public static void main(String [] args)
     {
         System.out.println("Welcome to ComputerDataBase CLI");
-
-        //logger = LoggerFactory.getLogger("main.java.dao.Cli");
-        logger.debug("Getting connection");
+        logger.debug("CLI start");
 
         while(true) {
             String command = waitCommand();
