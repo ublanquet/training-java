@@ -28,54 +28,78 @@ public class DaoComputer {
     }
 
     public void create(Computer c){
+        Timestamp intro = c.getIntroduced() == null ? null : Timestamp.valueOf( c.getIntroduced() );
+        Timestamp disco = c.getIntroduced() == null ? null : Timestamp.valueOf( c.getIntroduced() );
+
         this.connect = getInstance();
         try {
 
             PreparedStatement p = connect.prepareStatement("INSERT INTO computer c " +
                     "(c.name, c.introduced, c.discontinued, c.companyId) " +
-                    "VALUES (?,?,?,?)");
+                    "VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             p.setString(1, c.getName());
-            p.setTimestamp(2, Timestamp.valueOf(c.getIntroduced()));
-            p.setTimestamp(3, Timestamp.valueOf(c.getIntroduced()));
+            if(intro != null) {
+                p.setTimestamp(2, intro);
+            }
+            else{
+                //p.setNull(2, java.sql.Types.TIMESTAMP);
+                p.setString(2, "NULL");
+                //p.setTimestamp(2, null);
+            }
+            if(disco != null) {
+                p.setTimestamp(3, disco);
+            }
+            else{
+                //p.setString(3, "NULL");
+                //p.setTimestamp(3, null);
+                //p.setNull(3, java.sql.Types.TIMESTAMP);
+            }
             p.setLong(4, c.getCompanyId());
 
-            p.executeUpdate();
-            connect.commit();
+            long generatedKey = p.executeUpdate();
+
             connect.close();
             connect = null;
-            System.out.println(p.getResultSet());
-            //p.getResultSet();
+            System.out.println("Generated ID : " + generatedKey);
         }catch(SQLException e){
             e.printStackTrace();
         }
-
-        //return p
     }
 
     public void update(Computer c){
+        Timestamp intro = c.getIntroduced() == null ? null : Timestamp.valueOf( c.getIntroduced() );
+        Timestamp disco = c.getIntroduced() == null ? null : Timestamp.valueOf( c.getIntroduced() );
 
         try {
             this.connect = getInstance();
-            PreparedStatement p = connect.prepareStatement("UPDATE computer c SET" +
+            PreparedStatement p = connect.prepareStatement("UPDATE computer c SET " +
                     "name = ?, introduced = ?, discontinued = ?, companyId = ?"+
                     "WHERE c.id = ?");
+
+
             p.setString(1, c.getName());
-            p.setTimestamp(2, Timestamp.valueOf(c.getIntroduced()));
-            p.setTimestamp(3, Timestamp.valueOf(c.getIntroduced()));
+            if(intro != null) {
+                p.setTimestamp(2, intro);
+            }
+            else{
+                p.setNull(2, java.sql.Types.TIMESTAMP);
+            }
+            if(disco != null) {
+                p.setTimestamp(3, disco);
+            }
+            else{
+                p.setNull(3, java.sql.Types.TIMESTAMP);
+            }
             p.setLong(4, c.getCompanyId());
             p.setLong(5, c.getId());
 
-            p.executeUpdate();
-            connect.commit();
+            long affectedRows = p.executeUpdate();
             connect.close();
             connect = null;
-            System.out.println(p.getResultSet());
-            //p.getResultSet();
+            System.out.println("Affected Rows : " + affectedRows);
         }catch(SQLException e){
             e.printStackTrace();
         }
-
-        //return p
     }
 
     public ArrayList<Computer> selectAll(long min, long max){
@@ -149,12 +173,11 @@ public class DaoComputer {
             PreparedStatement p = connect.prepareStatement("DELETE FROM computer WHERE computer.id = ?");
             p.setLong(1, id);
 
-            p.executeUpdate();
-            connect.commit();
+            long affectedRows = p.executeUpdate();
+
             connect.close();
             connect = null;
-            System.out.println(p.getResultSet());
-            //p.getResultSet();
+            System.out.println("Affected rows : " + affectedRows);
         }catch(SQLException e){
             e.printStackTrace();
         }
