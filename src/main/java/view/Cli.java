@@ -182,13 +182,13 @@ public class Cli {
         if ( c == null ){
             return "Command error : error creating computer object, check args";
         }
-
+        long generatedKey = 0;
         try {
-            daoC.create(c);
+            generatedKey = daoC.create(c);
             System.out.println(c.toString());
         } catch (Exception ex) {
             return "Command error "+ex.getMessage();
         }
-        return "Command success";
+        return "Command success, generated ID : " + generatedKey;
     }
 }

@@ -27,21 +27,30 @@ public class DaoCompany {
         return connect;
     }
 
-    public void create(Company c){
+    public long create(Company c){
         this.connect = getInstance();
+        long generatedKey = 0;
         try {
 
-            PreparedStatement p = connect.prepareStatement("INSERT INTO company c " +
-                    "(c.name) " +
+            PreparedStatement p = connect.prepareStatement("INSERT INTO company " +
+                    "(name) " +
                     "VALUES (?)", Statement.RETURN_GENERATED_KEYS);
             p.setString(1, c.getName());
-            long generatedKey = p.executeUpdate();
+            long affectedRows = p.executeUpdate();
+
+            if(affectedRows > 0) {
+                ResultSet rs = p.getGeneratedKeys();
+                rs.next();
+                generatedKey = rs.getLong(1);
+                c.setId(generatedKey);
+            }
             connect.close();
             connect = null;
             System.out.println("Generated key : " + generatedKey);
         }catch(SQLException e){
             e.printStackTrace();
         }
+        return generatedKey;
     }
 
 

@@ -27,43 +27,38 @@ public class DaoComputer {
         return connect;
     }
 
-    public void create(Computer c){
+    public long create(Computer c){
         Timestamp intro = c.getIntroduced() == null ? null : Timestamp.valueOf( c.getIntroduced() );
         Timestamp disco = c.getIntroduced() == null ? null : Timestamp.valueOf( c.getIntroduced() );
 
         this.connect = getInstance();
+        long generatedKey = 0;
         try {
 
-            PreparedStatement p = connect.prepareStatement("INSERT INTO computer c " +
-                    "(c.name, c.introduced, c.discontinued, c.companyId) " +
+            PreparedStatement p = connect.prepareStatement("INSERT INTO computer " +
+                    "(name, introduced, discontinued, company_id) " +
                     "VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             p.setString(1, c.getName());
-            if(intro != null) {
-                p.setTimestamp(2, intro);
-            }
-            else{
-                //p.setNull(2, java.sql.Types.TIMESTAMP);
-                p.setString(2, "NULL");
-                //p.setTimestamp(2, null);
-            }
-            if(disco != null) {
-                p.setTimestamp(3, disco);
-            }
-            else{
-                //p.setString(3, "NULL");
-                //p.setTimestamp(3, null);
-                //p.setNull(3, java.sql.Types.TIMESTAMP);
-            }
+            p.setTimestamp(2, intro);
+            p.setTimestamp(3, disco);
             p.setLong(4, c.getCompanyId());
 
-            long generatedKey = p.executeUpdate();
+            long affectedRows = p.executeUpdate();
 
+            if(affectedRows > 0) {
+                ResultSet rs = p.getGeneratedKeys();
+                rs.next();
+                generatedKey = rs.getLong(1);
+                c.setId(generatedKey);
+            }
             connect.close();
             connect = null;
             System.out.println("Generated ID : " + generatedKey);
+            System.out.println("Affected Rows : " + affectedRows);
         }catch(SQLException e){
             e.printStackTrace();
         }
+        return generatedKey;
     }
 
     public void update(Computer c){
@@ -78,20 +73,9 @@ public class DaoComputer {
 
 
             p.setString(1, c.getName());
-            if(intro != null) {
-                p.setTimestamp(2, intro);
-            }
-            else{
-                p.setNull(2, java.sql.Types.TIMESTAMP);
-            }
-            if(disco != null) {
-                p.setTimestamp(3, disco);
-            }
-            else{
-                p.setNull(3, java.sql.Types.TIMESTAMP);
-            }
-            p.setLong(4, c.getCompanyId());
-            p.setLong(5, c.getId());
+            p.setTimestamp(2, intro);
+            p.setTimestamp(3, disco);
+            p.setLong(4, c.getId() );
 
             long affectedRows = p.executeUpdate();
             connect.close();
