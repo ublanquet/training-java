@@ -1,6 +1,8 @@
 package main.java.dao;
 
 import main.java.model.Computer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -16,10 +18,14 @@ public class DaoComputer {
 
     private Connection connect;
 
+    private Logger logger = LoggerFactory.getLogger("main.java.dao.DaoComputer");
+
+
     private Connection getInstance(){
         if(connect == null){
             try {
                 connect = DriverManager.getConnection(url, user, pass);
+                logger.debug("Getting connection");
             } catch (SQLException e) {
                 e.printStackTrace();
             }

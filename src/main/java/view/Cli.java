@@ -2,6 +2,8 @@ package main.java.view;
 
 import main.java.dao.*;
 import main.java.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.time.DateTimeException;
@@ -13,12 +15,17 @@ import java.util.Scanner;
 public class Cli {
     private static DaoComputer daoC = new DaoComputer();
     private static DaoCompany daoComp = new DaoCompany();
+    private static Logger logger = LoggerFactory.getLogger("main.java.dao.Cli");
+
 
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String [] args)
     {
         System.out.println("Welcome to ComputerDataBase CLI");
+
+        //logger = LoggerFactory.getLogger("main.java.dao.Cli");
+        logger.debug("Getting connection");
 
         while(true) {
             String command = waitCommand();
@@ -40,8 +47,6 @@ public class Cli {
     }
 
     public static long getLongInput(String input){
-        //Scanner scanner = new Scanner(System.in);
-        //String input = scanner.nextLine();
         long longInput = -1;
         try{
             longInput = Long.parseLong(input);

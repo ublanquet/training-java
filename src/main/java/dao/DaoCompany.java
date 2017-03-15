@@ -5,6 +5,8 @@ import main.java.model.Company;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DaoCompany {
 
@@ -14,12 +16,15 @@ public class DaoCompany {
 
     private static final String pass = "pass";
 
+    private Logger logger = LoggerFactory.getLogger("main.java.dao.DaoCompany");
+
     private Connection connect;
 
     private Connection getInstance(){
         if(connect == null){
             try {
                 connect = DriverManager.getConnection(url, user, pass);
+                logger.debug("Getting connection");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
