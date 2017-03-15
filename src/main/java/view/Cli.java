@@ -62,9 +62,19 @@ public class Cli {
         }
 
         switch(command){
-            case "getallcomputer": result = displayAllComputers();
+            case "getallcomputer":
+                if(splited.length > 1) {
+                    result = displayAllComputers(splited[1], splited[2]);
+                }else{
+                    result = displayAllComputers("1","1000");
+                }
                 break;
-            case "getallcompany": result = displayAllCompanies();
+            case "getallcompany":
+                if (splited.length > 1) {
+                    result = displayAllCompanies(splited[1], splited[2]);
+                } else {
+                    result = displayAllCompanies("1","1000");
+                }
                 break;
             case "getcomputerbyid":
                 if(splited.length > 0){
@@ -90,11 +100,11 @@ public class Cli {
         return result;
     }
 
-    public static String displayAllCompanies(){
+    public static String displayAllCompanies(String start, String end){
         System.out.println("Displaying all companies stored in DB : ");
 
         try {
-            ArrayList<Company> cList = daoComp.selectAll(0, 1000);
+            ArrayList<Company> cList = daoComp.selectAll( Long.parseLong(start), Long.parseLong(end) );
 
             for (Company c : cList) {
                 System.out.println(c.toString());
@@ -103,11 +113,11 @@ public class Cli {
         return "Command success";
     }
 
-    public static String displayAllComputers () {
+    public static String displayAllComputers (String start, String end) {
         System.out.println("Displaying all computers stored in DB : ");
 
         try {
-            ArrayList<Computer> cList = daoC.selectAll(0, 1000);
+            ArrayList<Computer> cList = daoC.selectAll( Long.parseLong(start), Long.parseLong(end) );
 
             for (Computer c : cList) {
                 System.out.println(c.toString());
