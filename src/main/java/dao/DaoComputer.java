@@ -68,7 +68,7 @@ public enum DaoComputer implements DaoComputerI {
         ResultSet rs;
         try {
             connect = Utils.getConnection(connect);
-            PreparedStatement p = connect.prepareStatement("SELECT * FROM computer c LEFT JOIN company on c.company_id = company.id " +
+            PreparedStatement p = connect.prepareStatement("SELECT * FROM computer LEFT JOIN company on computer.company_id = company.id " +
                     "LIMIT ?, ?");
             p.setLong(1, min);
             p.setLong(2, max);
@@ -76,15 +76,15 @@ public enum DaoComputer implements DaoComputerI {
             rs = p.executeQuery();
 
             while (rs.next()) {
-                Computer c;
-                LocalDateTime intro = rs.getTimestamp("introduced") == null ? null : rs.getTimestamp("introduced").toLocalDateTime();
-                LocalDateTime disco = rs.getTimestamp("discontinued") == null ? null : rs.getTimestamp("discontinued").toLocalDateTime();
-
-                c = new Computer(rs.getLong("id"),
-                        rs.getLong("company_id"),
-                        rs.getString("name"),
-                        intro,
-                        disco);
+                Computer c = GenericBuilder.of(Computer::new)
+                        .with(Computer::setId, rs.getLong("computer.id"))
+                        .with(Computer::setName, rs.getString("computer.name"))
+                        .with(Computer::setIntroducedTimestamp, rs.getTimestamp("introduced"))
+                        .with(Computer::setDiscontinuedTimestamp, rs.getTimestamp("discontinued"))
+                        .with(Computer::setCompanyId, rs.getLong("company_id"))
+                        .with(Computer::setCompany, new Company(rs.getLong("company.id"), rs.getString("company.name")))
+                        .build();
+                resultList.add(c);
                 resultList.add(c);
             }
             p.close();
@@ -133,20 +133,21 @@ public enum DaoComputer implements DaoComputerI {
         Computer c = new Computer();
         try {
             connect = Utils.getConnection(connect);
-            PreparedStatement p = connect.prepareStatement("SELECT * FROM computer WHERE computer.id = ?");
+            PreparedStatement p = connect.prepareStatement("SELECT * FROM computer LEFT JOIN company on computer.company_id = company.id " +
+                    "WHERE computer.id = ?");
             p.setLong(1, id);
 
             rs = p.executeQuery();
 
             while (rs.next()) {
-                LocalDateTime intro = rs.getTimestamp("introduced") == null ? null : rs.getTimestamp("introduced").toLocalDateTime();
-                LocalDateTime disco = rs.getTimestamp("discontinued") == null ? null : rs.getTimestamp("discontinued").toLocalDateTime();
-
-                c = new Computer(rs.getLong("id"),
-                        rs.getLong("company_id"),
-                        rs.getString("name"),
-                        intro,
-                        disco);
+                c = GenericBuilder.of(Computer::new)
+                        .with(Computer::setId, rs.getLong("computer.id"))
+                        .with(Computer::setName, rs.getString("computer.name"))
+                        .with(Computer::setIntroducedTimestamp, rs.getTimestamp("introduced"))
+                        .with(Computer::setDiscontinuedTimestamp, rs.getTimestamp("discontinued"))
+                        .with(Computer::setCompanyId, rs.getLong("company_id"))
+                        .with(Computer::setCompany, new Company(rs.getLong("company.id"), rs.getString("company.name")))
+                        .build();
             }
 
             p.close();
