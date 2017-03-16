@@ -13,9 +13,10 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class Cli {
-    private static DaoComputer daoC = new DaoComputer();
-    private static DaoCompany daoComp = new DaoCompany();
+    private static DaoComputer daoC = DaoComputerI.getInstance();
+    private static DaoCompany daoComp = DaoCompanyI.getInstance();
     private static Logger logger = LoggerFactory.getLogger("main.java.dao.Cli");
+    private static Boolean running = true;
 
 
     private static Scanner scanner = new Scanner(System.in);
@@ -25,7 +26,8 @@ public class Cli {
         System.out.println("Welcome to ComputerDataBase CLI");
         logger.debug("CLI start");
 
-        while(true) {
+
+        while(running) {
             String command = waitCommand();
             System.out.println( execCommand(command) );
         }
@@ -33,7 +35,7 @@ public class Cli {
 
 
     public static String waitCommand(){
-        System.out.println("Available commands (not case sensitive) : getComputerbyId, getAllComputer, getAllCompany, createComputer");
+        System.out.println("Available commands (not case sensitive) : getComputerbyId, getAllComputer, getAllCompany, createComputer, quit");
         System.out.println("Enter your command : ");
         String command = scanner.nextLine();
         return command;
@@ -95,6 +97,9 @@ public class Cli {
                     System.out.println("Enter the computer to create under format : 'companyId name intro disco' the intro and disco dates can be 0");
                     result = createComputer( createComputerObject(getInput()) );
                 }
+                break;
+            case "quit":
+                running = false;
                 break;
             default: result = "Invalid Command";
                 break;

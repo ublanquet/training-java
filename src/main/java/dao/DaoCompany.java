@@ -8,32 +8,25 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DaoCompany {
+public enum DaoCompany implements DaoCompanyI {
+    INSTANCE;
 
-    private static final String url = "jdbc:mysql://localhost:3306/computer-database-db?useSSL=false";
+    private Connection connect = null;
 
-    private static final String user = "root";
-
-    private static final String pass = "pass";
-
-    private Logger logger = LoggerFactory.getLogger("main.java.dao.DaoCompany");
-
-    private Connection connect;
-
-    private Connection getInstance(){
+    private Connection getConnection(){
         if(connect == null){
             try {
                 connect = DriverManager.getConnection(url, user, pass);
                 logger.debug("Getting connection");
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.error("Error getting connection" + e.getMessage() + e.getSQLState() + e.getStackTrace() );
             }
         }
         return connect;
     }
 
     public long create(Company c){
-        this.connect = getInstance();
+        connect = getConnection();
         long generatedKey = 0;
         try {
 
@@ -51,9 +44,9 @@ public class DaoCompany {
             }
             connect.close();
             connect = null;
-            System.out.println("Generated key : " + generatedKey);
+            logger.info(" Company created, generated ID : " +generatedKey);
         }catch(SQLException e){
-            e.printStackTrace();
+            logger.error("Error creating company" + e.getMessage() + e.getSQLState() + e.getStackTrace() );
         }
         return generatedKey;
     }
@@ -61,7 +54,7 @@ public class DaoCompany {
 
     public void update(Company c){
         try {
-            this.connect = getInstance();
+            connect = getConnection();
             PreparedStatement p = connect.prepareStatement("UPDATE company c SET " +
                     "name = ? "+
                     " WHERE c.id = ?");
@@ -71,9 +64,9 @@ public class DaoCompany {
 
             connect.close();
             connect = null;
-            System.out.println("Affected rows : " + affectedRows);
+            logger.info(affectedRows + " rows updated" );
         }catch(SQLException e){
-            e.printStackTrace();
+            logger.error("Error updating entry" + e.getMessage() + e.getSQLState() + e.getStackTrace() );
         }
     }
 
@@ -81,7 +74,7 @@ public class DaoCompany {
         ArrayList<Company> resultList = new ArrayList<>();
         ResultSet rs;
         try {
-            this.connect = getInstance();
+            connect = getConnection();
             PreparedStatement p = connect.prepareStatement("SELECT * FROM company c " +
                     "LIMIT ?, ?");
             p.setLong(1, min);
@@ -97,7 +90,7 @@ public class DaoCompany {
             connect.close();
             connect = null;
         }catch(SQLException e){
-            e.printStackTrace();
+            logger.error("Error retrieving companies" + e.getMessage() + e.getSQLState() + e.getStackTrace() );
         }
 
         return resultList;
@@ -107,7 +100,7 @@ public class DaoCompany {
         ResultSet rs;
         Company c = new Company();
         try {
-            this.connect = getInstance();
+            connect = getConnection();
             PreparedStatement p = connect.prepareStatement("SELECT * FROM computer WHERE computer.id = ?");
             p.setLong(1, id);
 
@@ -125,7 +118,7 @@ public class DaoCompany {
             connect = null;
 
         }catch(SQLException e){
-            e.printStackTrace();
+            logger.error("Error retrieving company of ID "+ id + "%n" + e.getMessage() + e.getSQLState() + e.getStackTrace() );
         }
 
         return c;
@@ -133,7 +126,7 @@ public class DaoCompany {
 
     public void delete(long id){
         try {
-            this.connect = getInstance();
+            connect = getConnection();
             PreparedStatement p = connect.prepareStatement("DELETE FROM company WHERE computer.id = ?");
             p.setLong(1, id);
 
@@ -141,9 +134,9 @@ public class DaoCompany {
 
             connect.close();
             connect = null;
-            System.out.println("Affected rows : " + affectedRows);
+            logger.info(affectedRows + " rows updated" );
         }catch(SQLException e){
-            e.printStackTrace();
+            logger.error("Error deleting company of ID "+ id + "%n" + e.getMessage() + e.getSQLState() + e.getStackTrace() );
         }
 
     }

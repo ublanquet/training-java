@@ -8,17 +8,11 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class DaoComputer {
-
-    private static final String url = "jdbc:mysql://localhost:3306/computer-database-db?useSSL=false";
-
-    private static final String user = "root";
-
-    private static final String pass = "pass";
+public enum DaoComputer implements DaoComputerI {
+    INSTANCE;
 
     private Connection connect;
 
-    private Logger logger = LoggerFactory.getLogger("main.java.dao.DaoComputer");
 
 
     private Connection getInstance(){
@@ -27,7 +21,7 @@ public class DaoComputer {
                 connect = DriverManager.getConnection(url, user, pass);
                 logger.debug("Getting connection");
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.error("Error getting connection" + e.getMessage() + e.getSQLState() + e.getStackTrace() );
             }
         }
         return connect;
@@ -59,10 +53,9 @@ public class DaoComputer {
             }
             connect.close();
             connect = null;
-            System.out.println("Generated ID : " + generatedKey);
-            System.out.println("Affected Rows : " + affectedRows);
+            logger.info(" Computer created, generated ID : " +generatedKey);
         }catch(SQLException e){
-            e.printStackTrace();
+            logger.error("Error creating computer " + e.getMessage() + e.getSQLState() + e.getStackTrace() );
         }
         return generatedKey;
     }
@@ -86,9 +79,9 @@ public class DaoComputer {
             long affectedRows = p.executeUpdate();
             connect.close();
             connect = null;
-            System.out.println("Affected Rows : " + affectedRows);
+            logger.info(affectedRows + " rows updated" );
         }catch(SQLException e){
-            e.printStackTrace();
+            logger.error("Error updating computer of ID " + c.getId() + e.getMessage() + e.getSQLState() + e.getStackTrace() );
         }
     }
 
@@ -119,7 +112,7 @@ public class DaoComputer {
             connect.close();
             connect = null;
         }catch(SQLException e){
-            e.printStackTrace();
+            logger.error("Error getting computers" + e.getMessage() + e.getSQLState() + e.getStackTrace() );
         }
 
         return resultList;
@@ -150,7 +143,7 @@ public class DaoComputer {
             connect = null;
 
         }catch(SQLException e){
-            e.printStackTrace();
+            logger.error("Error retrieving computer of ID "+ id + e.getMessage() + e.getSQLState() + e.getStackTrace() );
         }
 
         return c;
@@ -167,9 +160,9 @@ public class DaoComputer {
 
             connect.close();
             connect = null;
-            System.out.println("Affected rows : " + affectedRows);
+            logger.info(affectedRows + " rows updated" );
         }catch(SQLException e){
-            e.printStackTrace();
+            logger.error("Error deleting computer of ID "+ id + e.getMessage() + e.getSQLState() + e.getStackTrace() );
         }
 
     }
