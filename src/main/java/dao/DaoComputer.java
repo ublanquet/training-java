@@ -13,9 +13,6 @@ public enum DaoComputer implements DaoComputerI {
 
 
     public long create(Computer c){
-        Timestamp intro = c.getIntroduced() == null ? null : Timestamp.valueOf( c.getIntroduced() );
-        Timestamp disco = c.getDiscontinued() == null ? null : Timestamp.valueOf( c.getDiscontinued() );
-
         connect = Utils.getConnection(connect);
         long generatedKey = 0;
         try {
@@ -24,8 +21,8 @@ public enum DaoComputer implements DaoComputerI {
                     "(name, introduced, discontinued, company_id) " +
                     "VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             p.setString(1, c.getName());
-            p.setTimestamp(2, intro);
-            p.setTimestamp(3, disco);
+            p.setTimestamp(2, c.getIntroducedTimestamp());
+            p.setTimestamp(3, c.getDiscontinuedTimestamp());
             p.setLong(4, c.getCompanyId());
 
             long affectedRows = p.executeUpdate();
@@ -43,9 +40,6 @@ public enum DaoComputer implements DaoComputerI {
     }
 
     public void update(Computer c){
-        Timestamp intro = c.getIntroduced() == null ? null : Timestamp.valueOf( c.getIntroduced() );
-        Timestamp disco = c.getDiscontinued() == null ? null : Timestamp.valueOf( c.getDiscontinued() );
-
         try {
             connect = Utils.getConnection(connect);
             PreparedStatement p = connect.prepareStatement("UPDATE computer c SET " +
@@ -54,8 +48,8 @@ public enum DaoComputer implements DaoComputerI {
 
 
             p.setString(1, c.getName());
-            p.setTimestamp(2, intro);
-            p.setTimestamp(3, disco);
+            p.setTimestamp(2, c.getIntroducedTimestamp());
+            p.setTimestamp(3, c.getDiscontinuedTimestamp());
             p.setLong(4, c.getId() );
 
             long affectedRows = p.executeUpdate();
