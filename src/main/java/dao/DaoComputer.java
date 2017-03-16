@@ -16,7 +16,7 @@ public enum DaoComputer implements DaoComputerI {
 
     public long create(Computer c){
         Timestamp intro = c.getIntroduced() == null ? null : Timestamp.valueOf( c.getIntroduced() );
-        Timestamp disco = c.getIntroduced() == null ? null : Timestamp.valueOf( c.getIntroduced() );
+        Timestamp disco = c.getDiscontinued() == null ? null : Timestamp.valueOf( c.getDiscontinued() );
 
         connect = Utils.getConnection(connect);
         long generatedKey = 0;
@@ -48,7 +48,7 @@ public enum DaoComputer implements DaoComputerI {
 
     public void update(Computer c){
         Timestamp intro = c.getIntroduced() == null ? null : Timestamp.valueOf( c.getIntroduced() );
-        Timestamp disco = c.getIntroduced() == null ? null : Timestamp.valueOf( c.getIntroduced() );
+        Timestamp disco = c.getDiscontinued() == null ? null : Timestamp.valueOf( c.getDiscontinued() );
 
         try {
             connect = Utils.getConnection(connect);
