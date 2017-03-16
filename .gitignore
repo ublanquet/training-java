@@ -161,5 +161,6 @@ hs_err_pid*
 modules.xml
 .idea/misc.xml
 *.ipr
-
+.idea/*
+.idea*
 # End of https://www.gitignore.io/api/java,eclipse,intellij,jetbrains
