@@ -14,13 +14,14 @@ public enum DaoCompany implements DaoCompanyI {
     private Connection connect = null;
 
     private Connection getConnection(){
-        if(connect == null){
-            try {
+        try {
+            if(connect == null || connect.isClosed()) {
+
                 connect = DriverManager.getConnection(url, user, pass);
                 logger.debug("Getting connection");
-            } catch (SQLException e) {
-                logger.error("Error getting connection" + e.getMessage() + e.getSQLState() + e.getStackTrace() );
             }
+        }catch (SQLException e) {
+            logger.error("Error getting connection" + e.getMessage() + e.getSQLState() + e.getStackTrace());
         }
         return connect;
     }
@@ -37,13 +38,13 @@ public enum DaoCompany implements DaoCompanyI {
             long affectedRows = p.executeUpdate();
 
             if(affectedRows > 0) {
+                generatedKey = Utils.getGeneratedKey(p);
                 ResultSet rs = p.getGeneratedKeys();
                 rs.next();
                 generatedKey = rs.getLong(1);
                 c.setId(generatedKey);
             }
-            connect.close();
-            connect = null;
+            p.close();
             logger.info(" Company created, generated ID : " +generatedKey);
         }catch(SQLException e){
             logger.error("Error creating company" + e.getMessage() + e.getSQLState() + e.getStackTrace() );
@@ -62,9 +63,9 @@ public enum DaoCompany implements DaoCompanyI {
 
             long affectedRows = p.executeUpdate();
 
-            connect.close();
-            connect = null;
+            p.close();
             logger.info(affectedRows + " rows updated" );
+
         }catch(SQLException e){
             logger.error("Error updating entry" + e.getMessage() + e.getSQLState() + e.getStackTrace() );
         }
@@ -87,8 +88,7 @@ public enum DaoCompany implements DaoCompanyI {
                         rs.getString("name"));
                 resultList.add(c);
             }
-            connect.close();
-            connect = null;
+            p.close();
         }catch(SQLException e){
             logger.error("Error retrieving companies" + e.getMessage() + e.getSQLState() + e.getStackTrace() );
         }
@@ -114,8 +114,7 @@ public enum DaoCompany implements DaoCompanyI {
                         rs.getString("name"));
             }
 
-            connect.close();
-            connect = null;
+            p.close();
 
         }catch(SQLException e){
             logger.error("Error retrieving company of ID "+ id + "%n" + e.getMessage() + e.getSQLState() + e.getStackTrace() );
@@ -132,8 +131,7 @@ public enum DaoCompany implements DaoCompanyI {
 
             long affectedRows = p.executeUpdate();
 
-            connect.close();
-            connect = null;
+            p.close();
             logger.info(affectedRows + " rows updated" );
         }catch(SQLException e){
             logger.error("Error deleting company of ID "+ id + "%n" + e.getMessage() + e.getSQLState() + e.getStackTrace() );

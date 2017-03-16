@@ -5,13 +5,25 @@ import java.time.*;
 public class Computer {
 
     private long id;
+
+
+
     private long companyId;
+    private Company company;
     private String name;
     private LocalDateTime introduced;
     private LocalDateTime discontinued;
 
     public Computer(){
 
+    }
+
+    public Computer(long id, Company company, String name, LocalDateTime introduced, LocalDateTime discontinued) {
+        this.id = id;
+        this.company = company;
+        this.name = name;
+        this.introduced = introduced;
+        this.discontinued = discontinued;
     }
 
     public Computer(long id, long companyId, String name, LocalDateTime introduced, LocalDateTime discontinued) {

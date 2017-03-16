@@ -14,24 +14,11 @@ public enum DaoComputer implements DaoComputerI {
     private Connection connect;
 
 
-
-    private Connection getInstance(){
-        if(connect == null){
-            try {
-                connect = DriverManager.getConnection(url, user, pass);
-                logger.debug("Getting connection");
-            } catch (SQLException e) {
-                logger.error("Error getting connection" + e.getMessage() + e.getSQLState() + e.getStackTrace() );
-            }
-        }
-        return connect;
-    }
-
     public long create(Computer c){
         Timestamp intro = c.getIntroduced() == null ? null : Timestamp.valueOf( c.getIntroduced() );
         Timestamp disco = c.getIntroduced() == null ? null : Timestamp.valueOf( c.getIntroduced() );
 
-        this.connect = getInstance();
+        connect = Utils.getConnection(connect);
         long generatedKey = 0;
         try {
 
@@ -51,8 +38,7 @@ public enum DaoComputer implements DaoComputerI {
                 generatedKey = rs.getLong(1);
                 c.setId(generatedKey);
             }
-            connect.close();
-            connect = null;
+            p.close();
             logger.info(" Computer created, generated ID : " +generatedKey);
         }catch(SQLException e){
             logger.error("Error creating computer " + e.getMessage() + e.getSQLState() + e.getStackTrace() );
@@ -65,7 +51,7 @@ public enum DaoComputer implements DaoComputerI {
         Timestamp disco = c.getIntroduced() == null ? null : Timestamp.valueOf( c.getIntroduced() );
 
         try {
-            this.connect = getInstance();
+            connect = Utils.getConnection(connect);
             PreparedStatement p = connect.prepareStatement("UPDATE computer c SET " +
                     "name = ?, introduced = ?, discontinued = ?, companyId = ?"+
                     "WHERE c.id = ?");
@@ -77,8 +63,7 @@ public enum DaoComputer implements DaoComputerI {
             p.setLong(4, c.getId() );
 
             long affectedRows = p.executeUpdate();
-            connect.close();
-            connect = null;
+            p.close();
             logger.info(affectedRows + " rows updated" );
         }catch(SQLException e){
             logger.error("Error updating computer of ID " + c.getId() + e.getMessage() + e.getSQLState() + e.getStackTrace() );
@@ -89,7 +74,7 @@ public enum DaoComputer implements DaoComputerI {
         ArrayList<Computer> resultList = new ArrayList<>();
         ResultSet rs;
         try {
-            this.connect = getInstance();
+            connect = Utils.getConnection(connect);
             PreparedStatement p = connect.prepareStatement("SELECT * FROM computer c " +
                     "LIMIT ?, ?");
             p.setLong(1, min);
@@ -109,8 +94,7 @@ public enum DaoComputer implements DaoComputerI {
                         disco);
                 resultList.add(c);
             }
-            connect.close();
-            connect = null;
+            p.close();
         }catch(SQLException e){
             logger.error("Error getting computers" + e.getMessage() + e.getSQLState() + e.getStackTrace() );
         }
@@ -122,7 +106,7 @@ public enum DaoComputer implements DaoComputerI {
         ResultSet rs;
         Computer c = new Computer();
         try {
-            this.connect = getInstance();
+            connect = Utils.getConnection(connect);
             PreparedStatement p = connect.prepareStatement("SELECT * FROM computer WHERE computer.id = ?");
             p.setLong(1, id);
 
@@ -139,8 +123,7 @@ public enum DaoComputer implements DaoComputerI {
                         disco);
             }
 
-            connect.close();
-            connect = null;
+            p.close();
 
         }catch(SQLException e){
             logger.error("Error retrieving computer of ID "+ id + e.getMessage() + e.getSQLState() + e.getStackTrace() );
@@ -152,14 +135,13 @@ public enum DaoComputer implements DaoComputerI {
     public void delete(long id){
 
         try {
-            this.connect = getInstance();
+            connect = Utils.getConnection(connect);
             PreparedStatement p = connect.prepareStatement("DELETE FROM computer WHERE computer.id = ?");
             p.setLong(1, id);
 
             long affectedRows = p.executeUpdate();
 
-            connect.close();
-            connect = null;
+            p.close();
             logger.info(affectedRows + " rows updated" );
         }catch(SQLException e){
             logger.error("Error deleting computer of ID "+ id + e.getMessage() + e.getSQLState() + e.getStackTrace() );

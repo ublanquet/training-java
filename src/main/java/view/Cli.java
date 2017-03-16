@@ -7,7 +7,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.time.DateTimeException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
@@ -177,13 +179,15 @@ public class Cli {
             String name = input[startIndex+1];
 
             LocalDateTime intro = null;
-            LocalDateTime disco = null;
+            LocalDateTime disco = null ;
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
 
             if(!Objects.equals(input[startIndex + 2], "0")) {
-                intro = LocalDateTime.parse(input[startIndex+2]);
+                intro = LocalDate.parse(input[startIndex+2], formatter) .atStartOfDay();
             }
             if(!Objects.equals(input[startIndex + 3], "0")) {
-                disco = LocalDateTime.parse(input[startIndex+3]);
+                disco = LocalDate.parse(input[startIndex+2], formatter) .atStartOfDay();
             }
 
             c = new Computer(companyId, name, intro, disco);
