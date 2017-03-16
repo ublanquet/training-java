@@ -3,11 +3,11 @@ package main.java.view;
 import main.java.dao.*;
 import main.java.model.*;
 
+import main.java.services.CompanyService;
 import main.java.services.ComputerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,6 +22,7 @@ public class Cli {
     private static Logger logger = LoggerFactory.getLogger("main.java.dao.Cli");
     private static Boolean running = true;
     private static ComputerService compService = new ComputerService();
+    private static CompanyService companyService = new CompanyService();
 
     private static Scanner scanner = new Scanner(System.in);
 
@@ -116,8 +117,7 @@ public class Cli {
         System.out.println("Displaying all companies stored in DB : ");
 
         try {
-            ArrayList<Company> cList = daoComp.selectAll( Long.parseLong(start), Long.parseLong(end) );
-
+            ArrayList<Company> cList = companyService.getAllCompany(Long.parseLong(start), Long.parseLong(end));
             for (Company c : cList) {
                 System.out.println(c.toString());
             }
