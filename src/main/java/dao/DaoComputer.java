@@ -33,9 +33,7 @@ public enum DaoComputer implements DaoComputerI {
             long affectedRows = p.executeUpdate();
 
             if(affectedRows > 0) {
-                ResultSet rs = p.getGeneratedKeys();
-                rs.next();
-                generatedKey = rs.getLong(1);
+                generatedKey = Utils.getGeneratedKey(p);
                 c.setId(generatedKey);
             }
             p.close();

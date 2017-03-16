@@ -13,21 +13,8 @@ public enum DaoCompany implements DaoCompanyI {
 
     private Connection connect = null;
 
-    private Connection getConnection(){
-        try {
-            if(connect == null || connect.isClosed()) {
-
-                connect = DriverManager.getConnection(url, user, pass);
-                logger.debug("Getting connection");
-            }
-        }catch (SQLException e) {
-            logger.error("Error getting connection" + e.getMessage() + e.getSQLState() + e.getStackTrace());
-        }
-        return connect;
-    }
-
     public long create(Company c){
-        connect = getConnection();
+        connect = Utils.getConnection(connect);
         long generatedKey = 0;
         try {
 
@@ -39,9 +26,6 @@ public enum DaoCompany implements DaoCompanyI {
 
             if(affectedRows > 0) {
                 generatedKey = Utils.getGeneratedKey(p);
-                ResultSet rs = p.getGeneratedKeys();
-                rs.next();
-                generatedKey = rs.getLong(1);
                 c.setId(generatedKey);
             }
             p.close();
@@ -55,7 +39,7 @@ public enum DaoCompany implements DaoCompanyI {
 
     public void update(Company c){
         try {
-            connect = getConnection();
+            connect = Utils.getConnection(connect);
             PreparedStatement p = connect.prepareStatement("UPDATE company c SET " +
                     "name = ? "+
                     " WHERE c.id = ?");
@@ -75,7 +59,7 @@ public enum DaoCompany implements DaoCompanyI {
         ArrayList<Company> resultList = new ArrayList<>();
         ResultSet rs;
         try {
-            connect = getConnection();
+            connect = Utils.getConnection(connect);
             PreparedStatement p = connect.prepareStatement("SELECT * FROM company c " +
                     "LIMIT ?, ?");
             p.setLong(1, min);
@@ -100,7 +84,7 @@ public enum DaoCompany implements DaoCompanyI {
         ResultSet rs;
         Company c = new Company();
         try {
-            connect = getConnection();
+            connect = Utils.getConnection(connect);
             PreparedStatement p = connect.prepareStatement("SELECT * FROM computer WHERE computer.id = ?");
             p.setLong(1, id);
 
@@ -125,7 +109,7 @@ public enum DaoCompany implements DaoCompanyI {
 
     public void delete(long id){
         try {
-            connect = getConnection();
+            connect = Utils.getConnection(connect);
             PreparedStatement p = connect.prepareStatement("DELETE FROM company WHERE computer.id = ?");
             p.setLong(1, id);
 
