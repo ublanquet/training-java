@@ -3,6 +3,7 @@ package main.java.view;
 import main.java.dao.*;
 import main.java.model.*;
 
+import main.java.services.ComputerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +21,7 @@ public class Cli {
     private static DaoCompany daoComp = DaoCompanyI.getInstance();
     private static Logger logger = LoggerFactory.getLogger("main.java.dao.Cli");
     private static Boolean running = true;
-
+    private static ComputerService compService = new ComputerService();
 
     private static Scanner scanner = new Scanner(System.in);
 
@@ -128,7 +129,7 @@ public class Cli {
         System.out.println("Displaying all computers stored in DB : ");
 
         try {
-            ArrayList<Computer> cList = daoC.selectAll( Long.parseLong(start), Long.parseLong(end) );
+            ArrayList<Computer> cList = compService.getAllComputers(Long.parseLong(start), Long.parseLong(end) );
 
             for (Computer c : cList) {
                 System.out.println(c.toString());
@@ -141,9 +142,9 @@ public class Cli {
 
     public static String displayComputerbyId(long id){
         System.out.println("Retrieving computer of ID " + id + ": ");
-
         try {
-            Computer computer = daoC.getById(id);
+            Computer computer = compService.getComputerbyId(id);//daoC.getById(id);
+
             System.out.println(computer.toString());
         } catch (Exception ex) {
             return "Command error "+ex.getMessage();
@@ -188,7 +189,7 @@ public class Cli {
                 intro = LocalDate.parse(input[startIndex+2], formatter) .atStartOfDay();
             }
             if(!Objects.equals(input[startIndex + 3], "0")) {
-                disco = LocalDate.parse(input[startIndex+2], formatter) .atStartOfDay();
+                disco = LocalDate.parse(input[startIndex+3], formatter) .atStartOfDay();
             }
 
             c = new Computer(companyId, name, intro, disco);
@@ -207,7 +208,7 @@ public class Cli {
         }
         long generatedKey = 0;
         try {
-            generatedKey = daoC.create(c);
+            generatedKey = compService.createComputer(c);
             System.out.println(c.toString());
         } catch (Exception ex) {
             return "Command error "+ex.getMessage();
