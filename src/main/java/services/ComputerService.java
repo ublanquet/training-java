@@ -1,9 +1,9 @@
 package services;
 
-import main.java.dao.DaoComputer;
-import main.java.dao.DaoComputerI;
-import main.java.model.Computer;
-import main.java.model.Page;
+import  dao.DaoComputer;
+import  dao.DaoComputerI;
+import  model.Computer;
+import  model.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class ComputerService {
-    private Logger logger = LoggerFactory.getLogger("main.java.services.ComputerService");
+    private Logger logger = LoggerFactory.getLogger(" services.ComputerService");
 
     private DaoComputer daoC = DaoComputerI.getInstance();
 

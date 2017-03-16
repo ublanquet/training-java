@@ -1,6 +1,6 @@
 package dao;
 
-import main.java.model.Computer;
+import  model.Computer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +13,7 @@ public interface DaoComputerI {
 
     String pass = "pass";
 
-    Logger logger = LoggerFactory.getLogger("main.java.dao.DaoComputer");
+    Logger logger = LoggerFactory.getLogger(" dao.DaoComputer");
 
     static DaoComputer getInstance(){
         return DaoComputer.INSTANCE;

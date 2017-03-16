@@ -1,7 +1,7 @@
 package dao;
 
 
-import main.java.model.Company;
+import  model.Company;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +18,7 @@ public interface DaoCompanyI {
 
     String pass = "pass";
 
-    Logger logger = LoggerFactory.getLogger("main.java.dao.DaoCompany");
+    Logger logger = LoggerFactory.getLogger(" dao.DaoCompany");
 
     static DaoCompany getInstance(){
         return DaoCompany.INSTANCE;

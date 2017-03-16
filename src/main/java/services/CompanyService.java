@@ -1,11 +1,11 @@
 package services;
 
 
-import main.java.dao.DaoCompany;
-import main.java.dao.DaoCompanyI;
+import  dao.DaoCompany;
+import  dao.DaoCompanyI;
 
-import main.java.model.Company;
-import main.java.model.Page;
+import  model.Company;
+import  model.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class CompanyService {
 
-    private Logger logger = LoggerFactory.getLogger("main.java.services.CompanyService");
+    private Logger logger = LoggerFactory.getLogger(" services.CompanyService");
 
     private DaoCompany daoC = DaoCompanyI.getInstance();
 

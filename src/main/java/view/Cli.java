@@ -1,10 +1,10 @@
 package view;
 
-import main.java.dao.*;
-import main.java.model.*;
+import  dao.*;
+import  model.*;
 
-import main.java.services.CompanyService;
-import main.java.services.ComputerService;
+import  services.CompanyService;
+import  services.ComputerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +19,7 @@ import java.util.Scanner;
 public class Cli {
     private static DaoComputer daoC = DaoComputerI.getInstance();
     private static DaoCompany daoComp = DaoCompanyI.getInstance();
-    private static Logger logger = LoggerFactory.getLogger("main.java.dao.Cli");
+    private static Logger logger = LoggerFactory.getLogger(" dao.Cli");
     private static Boolean running = true;
     private static ComputerService compService = new ComputerService();
     private static CompanyService companyService = new CompanyService();

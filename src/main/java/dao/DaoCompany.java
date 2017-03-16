@@ -1,6 +1,6 @@
 package dao;
 
-import main.java.model.Company;
+import model.Company;
 
 import java.sql.*;
 import java.time.LocalDateTime;

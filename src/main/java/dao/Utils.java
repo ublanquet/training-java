@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.*;
 
 public class Utils {
-    private static Logger logger = LoggerFactory.getLogger("main.java.dao.utils");
+    private static Logger logger = LoggerFactory.getLogger(" dao.utils");
     private static final String url = "jdbc:mysql://localhost:3306/computer-database-db?useSSL=false";
 
     private static final String user = "root";

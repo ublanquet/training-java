@@ -1,12 +1,11 @@
 package dao;
 
-import main.java.model.Company;
-import main.java.model.Computer;
-import main.java.model.GenericBuilder;
-import main.java.model.Page;
+import  model.Company;
+import  model.Computer;
+import  model.GenericBuilder;
+import  model.Page;
 
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public enum DaoComputer implements DaoComputerI {
