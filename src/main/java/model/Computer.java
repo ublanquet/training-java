@@ -10,6 +10,8 @@ public class Computer {
 
 
     private long companyId;
+
+
     private Company company;
     private String name;
     private LocalDateTime introduced;
@@ -62,6 +64,10 @@ public class Computer {
 
     public void setCompanyId(long companyId) {
         this.companyId = companyId;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
     public String getName() {
@@ -118,6 +124,7 @@ public class Computer {
         return "Computer{" +
                 "id=" + id +
                 ", companyId=" + companyId +
+                ", companyName=" + company.getName() +
                 ", name='" + name + '\'' +
                 ", introduced=" + introduced +
                 ", discontinued=" + discontinued +

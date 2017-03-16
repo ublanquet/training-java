@@ -1,5 +1,6 @@
 package main.java.dao;
 
+import main.java.model.Company;
 import main.java.model.Computer;
 import main.java.model.GenericBuilder;
 import main.java.model.Page;
@@ -67,7 +68,7 @@ public enum DaoComputer implements DaoComputerI {
         ResultSet rs;
         try {
             connect = Utils.getConnection(connect);
-            PreparedStatement p = connect.prepareStatement("SELECT * FROM computer c " +
+            PreparedStatement p = connect.prepareStatement("SELECT * FROM computer c LEFT JOIN company on c.company_id = company.id " +
                     "LIMIT ?, ?");
             p.setLong(1, min);
             p.setLong(2, max);
@@ -99,7 +100,7 @@ public enum DaoComputer implements DaoComputerI {
         ResultSet rs;
         try {
             connect = Utils.getConnection(connect);
-            PreparedStatement p = connect.prepareStatement("SELECT * FROM computer c " +
+            PreparedStatement p = connect.prepareStatement("SELECT * FROM computer LEFT JOIN company on computer.company_id = company.id " +
                     "LIMIT ? OFFSET ?");
             p.setLong(1, page.getNbEntries());
             p.setLong(2, page.getFirstEntryIndex());
@@ -108,11 +109,12 @@ public enum DaoComputer implements DaoComputerI {
 
             while (rs.next()) {
                 Computer c = GenericBuilder.of(Computer::new)
-                        .with(Computer::setId, rs.getLong("id"))
-                        .with(Computer::setName, rs.getString("name"))
+                        .with(Computer::setId, rs.getLong("computer.id"))
+                        .with(Computer::setName, rs.getString("computer.name"))
                         .with(Computer::setIntroducedTimestamp, rs.getTimestamp("introduced"))
                         .with(Computer::setDiscontinuedTimestamp, rs.getTimestamp("discontinued"))
                         .with(Computer::setCompanyId, rs.getLong("company_id"))
+                        .with(Computer::setCompany, new Company(rs.getLong("company.id"), rs.getString("company.name")))
                         .build();
                 resultList.add(c);
             }
