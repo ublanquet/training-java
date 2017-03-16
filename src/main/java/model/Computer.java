@@ -1,5 +1,6 @@
 package main.java.model;
 
+import java.sql.Timestamp;
 import java.time.*;
 
 public class Computer {
@@ -83,8 +84,23 @@ public class Computer {
         return discontinued;
     }
 
+    public Timestamp getIntroducedTimestamp() {
+        return getIntroduced() == null ? null : Timestamp.valueOf( getIntroduced() );
+    }
+
+    public Timestamp getDiscontinuedTimestamp() {
+        return getDiscontinued() == null ? null : Timestamp.valueOf( getDiscontinued() );
+    }
+
     public void setDiscontinued(LocalDateTime discontinued) {
         this.discontinued = discontinued;
+    }
+
+    public void setIntroducedTimestamp(Timestamp introduced) {
+        this.introduced = introduced == null ? null : introduced.toLocalDateTime();
+    }
+    public void setDiscontinuedTimestamp(Timestamp discontinued) {
+        this.discontinued = discontinued == null ? null : discontinued.toLocalDateTime();
     }
 
     @Override
