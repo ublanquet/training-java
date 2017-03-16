@@ -1,4 +1,4 @@
-package main.java.view;
+package view;
 
 import main.java.dao.*;
 import main.java.model.*;

@@ -1,4 +1,4 @@
-package main.java.services;
+package services;
 
 import main.java.dao.DaoComputer;
 import main.java.dao.DaoComputerI;

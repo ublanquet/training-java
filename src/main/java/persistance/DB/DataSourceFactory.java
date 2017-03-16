@@ -1,4 +1,4 @@
-package main.java.persistance.DB;
+package persistance.DB;
 
 public class DataSourceFactory {
 }

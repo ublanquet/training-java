@@ -1,4 +1,4 @@
-package main.java.dao;
+package dao;
 
 import main.java.model.Computer;
 import org.slf4j.Logger;
