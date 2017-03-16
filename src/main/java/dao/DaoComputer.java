@@ -1,6 +1,8 @@
 package main.java.dao;
 
 import main.java.model.Computer;
+import main.java.model.GenericBuilder;
+import main.java.model.Page;
 
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -90,6 +92,38 @@ public enum DaoComputer implements DaoComputerI {
         }
 
         return resultList;
+    }
+
+    public Page<Computer> selectPaginated(Page page){
+        ArrayList<Computer> resultList = new ArrayList<>();
+        ResultSet rs;
+        try {
+            connect = Utils.getConnection(connect);
+            PreparedStatement p = connect.prepareStatement("SELECT * FROM computer c " +
+                    "LIMIT ? OFFSET ?");
+            p.setLong(1, page.getNbEntries());
+            p.setLong(2, page.getFirstEntryIndex());
+
+            rs = p.executeQuery();
+
+            while (rs.next()) {
+                Computer c = GenericBuilder.of(Computer::new)
+                        .with(Computer::setId, rs.getLong("id"))
+                        .with(Computer::setName, rs.getString("name"))
+                        .with(Computer::setIntroducedTimestamp, rs.getTimestamp("introduced"))
+                        .with(Computer::setDiscontinuedTimestamp, rs.getTimestamp("discontinued"))
+                        .with(Computer::setCompanyId, rs.getLong("company_id"))
+                        .build();
+                resultList.add(c);
+            }
+            p.close();
+        }catch(SQLException e){
+            logger.error("Error getting computers" + e.getMessage() + e.getSQLState() + e.getStackTrace() );
+        }
+
+        page.setList(resultList);
+
+        return page;
     }
 
     public Computer getById(long id){

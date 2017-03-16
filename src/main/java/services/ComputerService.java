@@ -3,6 +3,7 @@ package main.java.services;
 import main.java.dao.DaoComputer;
 import main.java.dao.DaoComputerI;
 import main.java.model.Computer;
+import main.java.model.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,6 +54,16 @@ public class ComputerService {
             logger.error("Error retrieving computers" + ex.getMessage());
         }
         return cList;
+    }
+
+    public Page<Computer> getPaginatedComputers (Page<Computer> page) {
+        logger.debug("Retrieving pagniated computers stored in DB : ");
+        try {
+            page = daoC.selectPaginated( page );
+        } catch (Exception ex) {
+            logger.error("Error retrieving computers" + ex.getMessage());
+        }
+        return page;
     }
 
     public Computer createComputerObjectfromArray(String[] input){

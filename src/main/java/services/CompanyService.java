@@ -5,6 +5,7 @@ import main.java.dao.DaoCompany;
 import main.java.dao.DaoCompanyI;
 
 import main.java.model.Company;
+import main.java.model.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,5 +27,15 @@ public class CompanyService {
         }
         return cList;
     }
+
+    /*public Page<Company> getPaginatedCompanies (Page<Company> page) {
+        logger.debug("Retrieving pagniated companies stored in DB : ");
+        try {
+            page = daoC.selectPaginated( page );
+        } catch (Exception ex) {
+            logger.error("Error retrieving computers" + ex.getMessage());
+        }
+        return page;
+    }*/
 
 }

@@ -26,6 +26,10 @@ public class Cli {
 
     private static Scanner scanner = new Scanner(System.in);
 
+    private static Page<Computer> pageComputer = new Page<Computer>(20,0);
+    private static Page<Company> pageCompany = new Page<Company>(20,0);
+
+
     public static void main(String [] args)
     {
         System.out.println("Welcome to ComputerDataBase CLI");
@@ -40,7 +44,7 @@ public class Cli {
 
 
     public static String waitCommand(){
-        System.out.println("Available commands (not case sensitive) : getComputerbyId, getAllComputer, getAllCompany, createComputer, quit");
+        System.out.println("Available commands (not case sensitive) : getComputerbyId, getAllComputer, getAllCompany, createComputer, getallcomputerp, quit");
         System.out.println("Enter your command : ");
         String command = scanner.nextLine();
         return command;
@@ -103,6 +107,16 @@ public class Cli {
                     result = createComputer( createComputerObject(getInput()) );
                 }
                 break;
+            case "getallcomputerp":
+                if (splited.length > 2) {
+                    result = displayAllComputerPaged(splited[1], splited[2]);
+                } else if(splited.length == 2){
+                    result = displayAllComputerPaged(splited[1],"20");
+                }
+                else{
+                    result = displayAllComputerPaged("0","20");
+                }
+                break;
             case "quit":
                 running = false;
                 break;
@@ -122,6 +136,20 @@ public class Cli {
                 System.out.println(c.toString());
             }
         }catch(Exception ex){return "Command error "+ex.getMessage();}
+        return "Command success";
+    }
+
+    public static String displayAllComputerPaged(String pageN, String nb){
+        System.out.println("Displaying all computers stored in DB : ");
+        try {
+            pageComputer.setNbEntries(Integer.parseInt(nb));
+            pageComputer.setCurrentPage(Integer.parseInt(pageN));
+            compService.getPaginatedComputers(pageComputer);
+
+            System.out.println(pageComputer.toString());
+        } catch (Exception ex) {
+            return "Command error "+ex.getMessage();
+        }
         return "Command success";
     }
 
