@@ -1,8 +1,13 @@
 package view;
 
-import  dao.*;
-import  model.*;
+import dao.DaoCompany;
+import dao.DaoCompanyI;
+import dao.DaoComputer;
+import dao.DaoComputerI;
 
+import model.Company;
+import model.Computer;
+import model.Page;
 import  services.CompanyService;
 import  services.ComputerService;
 import org.slf4j.Logger;
@@ -26,8 +31,8 @@ public class Cli {
 
     private static Scanner scanner = new Scanner(System.in);
 
-    private static Page<Computer> pageComputer = new Page<Computer>(20,0);
-    private static Page<Company> pageCompany = new Page<Company>(20,0);
+    private static Page<Computer> pageComputer = new Page<Computer>(20, 0);
+    private static Page<Company> pageCompany = new Page<Company>(20, 0);
 
 
     public static void main(String [] args)
@@ -42,7 +47,10 @@ public class Cli {
         }
     }
 
-
+    /**
+     * display available commands and return user input command
+     * @return
+     */
     public static String waitCommand(){
         System.out.println("Available commands (not case sensitive) : getComputerbyId, getAllComputer, getAllCompany, createComputer, getallcomputerp, quit");
         System.out.println("Enter your command : ");
@@ -50,11 +58,20 @@ public class Cli {
         return command;
     }
 
+    /**
+     * get input
+     * @return
+     */
     public static String getInput(){
         String input = scanner.nextLine();
         return input;
     }
 
+    /**
+     * convert input to long
+     * @param input
+     * @return
+     */
     public static long getLongInput(String input){
         long longInput = -1;
         try{
@@ -66,6 +83,11 @@ public class Cli {
         return longInput;
     }
 
+    /**
+     * controller switch to execute commands
+     * @param command
+     * @return
+     */
     public static String execCommand(String command){
         command = command.toLowerCase();
         String result = "";
@@ -127,6 +149,12 @@ public class Cli {
         return result;
     }
 
+    /**
+     * display all companies
+     * @param start starting index
+     * @param end nb of entries
+     * @return
+     */
     public static String displayAllCompanies(String start, String end){
         System.out.println("Displaying all companies stored in DB : ");
 
@@ -139,6 +167,12 @@ public class Cli {
         return "Command success";
     }
 
+    /**
+     * display computer with pagination
+     * @param pageN
+     * @param nb
+     * @return
+     */
     public static String displayAllComputerPaged(String pageN, String nb){
         System.out.println("Displaying all computers stored in DB : ");
         try {
@@ -153,6 +187,12 @@ public class Cli {
         return "Command success";
     }
 
+    /**
+     * display all computer
+     * @param start offset
+     * @param end nb to return
+     * @return
+     */
     public static String displayAllComputers (String start, String end) {
         System.out.println("Displaying all computers stored in DB : ");
 
@@ -168,6 +208,11 @@ public class Cli {
         return "Command success";
     }
 
+    /**
+     * display computer by id
+     * @param id
+     * @return
+     */
     public static String displayComputerbyId(long id){
         System.out.println("Retrieving computer of ID " + id + ": ");
         try {
@@ -180,6 +225,11 @@ public class Cli {
         return "Command success";
     }
 
+    /**
+     * create a computer obj from input string
+     * @param input
+     * @return
+     */
     public static Computer createComputerObject(String input){
         Computer c = null;
 
@@ -196,6 +246,11 @@ public class Cli {
         return c;
     }
 
+    /**
+     * create computer obj for an array of strings
+     * @param input
+     * @return
+     */
     public static Computer createComputerObjectfromArray(String[] input){
         Computer c = null;
         int startIndex = 0;
@@ -230,6 +285,11 @@ public class Cli {
         return c;
     }
 
+    /**
+     * create computer in db
+     * @param c
+     * @return
+     */
     public static String createComputer(Computer c){
         if ( c == null ){
             return "Command error : error creating computer object, check args";
