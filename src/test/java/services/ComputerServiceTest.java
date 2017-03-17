@@ -7,6 +7,8 @@ import model.Page;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 
@@ -16,11 +18,12 @@ public class ComputerServiceTest {
     protected ComputerService service;
     protected Computer computer, computer2, computer10;
     protected Company company, company2, companyNull;
-    protected GenericBuilder builder;
     protected Page<Computer> page;
 
     @Before
     public void setUp() {
+        MockitoAnnotations.initMocks(this);
+
         service = new ComputerService();
 
         company = new Company( 1, "Apple Inc.");
@@ -46,7 +49,7 @@ public class ComputerServiceTest {
                 .with(Computer::setCompany, companyNull)
                 .build();
 
-        page = new Page<Computer>(10);
+        page = new Page<>(10);
     }
 
     @After
@@ -64,6 +67,9 @@ public class ComputerServiceTest {
 
     @Test
     public void testGetAllComputerPaginated() throws Exception {
+        //Mockito.when(computer.toString()).thenReturn("");
+        Mockito.when(computer.toString()).thenCallRealMethod();
+
 
         page = service.getPaginatedComputers(page);
 
