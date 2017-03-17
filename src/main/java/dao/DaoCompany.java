@@ -2,18 +2,25 @@ package dao;
 
 import model.Company;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public enum DaoCompany implements DaoCompanyI {
     INSTANCE;
 
     private Connection connect = null;
 
-    public long create(Company c){
+    /**
+     * create company in db.
+     * @param c company obj
+     * @return generated id
+     */
+    public long create(Company c) {
         connect = Utils.getConnection(connect);
         long generatedKey = 0;
         try {
@@ -24,38 +31,47 @@ public enum DaoCompany implements DaoCompanyI {
             p.setString(1, c.getName());
             long affectedRows = p.executeUpdate();
 
-            if(affectedRows > 0) {
+            if (affectedRows > 0) {
                 generatedKey = Utils.getGeneratedKey(p);
                 c.setId(generatedKey);
             }
             p.close();
-            logger.info(" Company created, generated ID : " +generatedKey);
-        }catch(SQLException e){
-            logger.error("Error creating company" + e.getMessage() + e.getSQLState() + e.getStackTrace() );
+            LOGGER.info(" Company created, generated ID : " + generatedKey);
+        } catch (SQLException e) {
+            LOGGER.error("Error creating company" + e.getMessage() + e.getSQLState() + e.getStackTrace());
         }
         return generatedKey;
     }
 
-
-    public void update(Company c){
+    /**
+     * uate company in db.
+     * @param c company obj
+     */
+    public void update(Company c) {
         try {
             connect = Utils.getConnection(connect);
             PreparedStatement p = connect.prepareStatement("UPDATE company c SET " +
-                    "name = ? "+
+                    "name = ? " +
                     " WHERE c.id = ?");
             p.setString(1, c.getName());
 
             long affectedRows = p.executeUpdate();
 
             p.close();
-            logger.info(affectedRows + " rows updated" );
+            LOGGER.info(affectedRows + " rows updated");
 
-        }catch(SQLException e){
-            logger.error("Error updating entry" + e.getMessage() + e.getSQLState() + e.getStackTrace() );
+        } catch (SQLException e) {
+            LOGGER.error("Error updating entry" + e.getMessage() + e.getSQLState() + e.getStackTrace());
         }
     }
 
-    public ArrayList<Company> selectAll(long min, long max){
+    /**
+     * retrieve all companies.
+     * @param min offset
+     * @param max nb to return
+     * @return companies list
+     */
+    public ArrayList<Company> selectAll(long min, long max) {
         ArrayList<Company> resultList = new ArrayList<>();
         ResultSet rs;
         try {
@@ -73,14 +89,19 @@ public enum DaoCompany implements DaoCompanyI {
                 resultList.add(c);
             }
             p.close();
-        }catch(SQLException e){
-            logger.error("Error retrieving companies" + e.getMessage() + e.getSQLState() + e.getStackTrace() );
+        } catch (SQLException e) {
+            LOGGER.error("Error retrieving companies" + e.getMessage() + e.getSQLState() + e.getStackTrace());
         }
 
         return resultList;
     }
 
-    public Company getById(long id){
+    /**
+     * retrieve company by id.
+     * @param id id
+     * @return company obj
+     */
+    public Company getById(long id) {
         ResultSet rs;
         Company c = new Company();
         try {
@@ -100,14 +121,18 @@ public enum DaoCompany implements DaoCompanyI {
 
             p.close();
 
-        }catch(SQLException e){
-            logger.error("Error retrieving company of ID "+ id + "%n" + e.getMessage() + e.getSQLState() + e.getStackTrace() );
+        } catch (SQLException e) {
+            LOGGER.error("Error retrieving company of ID " + id + "%n" + e.getMessage() + e.getSQLState() + e.getStackTrace());
         }
 
         return c;
     }
 
-    public void delete(long id){
+    /**
+     * delete from db.
+     * @param id id
+     */
+    public void delete(long id) {
         try {
             connect = Utils.getConnection(connect);
             PreparedStatement p = connect.prepareStatement("DELETE FROM company WHERE computer.id = ?");
@@ -116,9 +141,9 @@ public enum DaoCompany implements DaoCompanyI {
             long affectedRows = p.executeUpdate();
 
             p.close();
-            logger.info(affectedRows + " rows updated" );
-        }catch(SQLException e){
-            logger.error("Error deleting company of ID "+ id + "%n" + e.getMessage() + e.getSQLState() + e.getStackTrace() );
+            LOGGER.info(affectedRows + " rows updated");
+        } catch (SQLException e) {
+            LOGGER.error("Error deleting company of ID " + id + "%n" + e.getMessage() + e.getSQLState() + e.getStackTrace());
         }
 
     }

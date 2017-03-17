@@ -1,11 +1,9 @@
 package services;
 
 
-import  dao.DaoCompany;
-import  dao.DaoCompanyI;
-
-import  model.Company;
-import  model.Page;
+import dao.DaoCompany;
+import dao.DaoCompanyI;
+import model.Company;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,23 +15,29 @@ public class CompanyService {
 
     private DaoCompany daoC = DaoCompanyI.getInstance();
 
+    /**
+     * get all companies.
+     * @param start offset
+     * @param end nb
+     * @return list companies
+     */
     public ArrayList<Company> getAllCompany(long start, long end) {
         logger.debug("Displaying all companies stored in DB : ");
-        ArrayList<Company> cList= null;
+        ArrayList<Company> cList = null;
         try {
             cList = daoC.selectAll(start, end);
         } catch (Exception ex) {
-            logger.error("All Company retrieval failure "+ex.getMessage());
+            logger.error("All Company retrieval failure " + ex.getMessage());
         }
         return cList;
     }
 
     /*public Page<Company> getPaginatedCompanies (Page<Company> page) {
-        logger.debug("Retrieving pagniated companies stored in DB : ");
+        LOGGER.debug("Retrieving pagniated companies stored in DB : ");
         try {
             page = daoC.selectPaginated( page );
         } catch (Exception ex) {
-            logger.error("Error retrieving computers" + ex.getMessage());
+            LOGGER.error("Error retrieving computers" + ex.getMessage());
         }
         return page;
     }*/

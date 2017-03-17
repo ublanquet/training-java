@@ -6,13 +6,25 @@ public class Company {
     private long id;
     private String name;
 
+    /**
+     * Basic constructor.
+     */
     public Company() {
     }
 
+    /**
+     * basic construcor.
+     * @param name name
+     */
     public Company(String name) {
         this.name = name;
     }
 
+    /**
+     * basic constrcutor.
+     * @param id id
+     * @param name name
+     */
     public Company(long id, String name) {
         this.id = id;
         this.name = name;
@@ -36,13 +48,23 @@ public class Company {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Company company = (Company) o;
 
         return getId() == company.getId();
     }
+
+    @Override
+    public int hashCode() {
+        return (int) (getId() ^ (getId() >>> 32));
+    }
+
 
     @Override
     public String toString() {

@@ -1,11 +1,15 @@
 package dao;
 
-import  model.Company;
-import  model.Computer;
-import  model.GenericBuilder;
-import  model.Page;
+import model.Company;
+import model.Computer;
+import model.GenericBuilder;
+import model.Page;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public enum DaoComputer implements DaoComputerI {
@@ -13,8 +17,12 @@ public enum DaoComputer implements DaoComputerI {
 
     private Connection connect;
 
-
-    public long create(Computer c){
+    /**
+     * create in db.
+     * @param c computer
+     * @return generated id
+     */
+    public long create(Computer c) {
         connect = Utils.getConnection(connect);
         long generatedKey = 0;
         try {
@@ -29,40 +37,50 @@ public enum DaoComputer implements DaoComputerI {
 
             long affectedRows = p.executeUpdate();
 
-            if(affectedRows > 0) {
+            if (affectedRows > 0) {
                 generatedKey = Utils.getGeneratedKey(p);
                 c.setId(generatedKey);
             }
             p.close();
-            logger.info(" Computer created, generated ID : " +generatedKey);
-        }catch(SQLException e){
-            logger.error("Error creating computer " + e.getMessage() + e.getSQLState() + e.getStackTrace() );
+            LOGGER.info(" Computer created, generated ID : " + generatedKey);
+        } catch (SQLException e) {
+            LOGGER.error("Error creating computer " + e.getMessage() + e.getSQLState() + e.getStackTrace());
         }
         return generatedKey;
     }
 
-    public void update(Computer c){
+    /**
+     * update.
+     * @param c computer
+     */
+    public void update(Computer c) {
         try {
             connect = Utils.getConnection(connect);
             PreparedStatement p = connect.prepareStatement("UPDATE computer c SET " +
-                    "name = ?, introduced = ?, discontinued = ?, companyId = ?"+
+                    "name = ?, introduced = ?, discontinued = ?, companyId = ?" +
                     "WHERE c.id = ?");
 
 
             p.setString(1, c.getName());
             p.setTimestamp(2, c.getIntroducedTimestamp());
             p.setTimestamp(3, c.getDiscontinuedTimestamp());
-            p.setLong(4, c.getId() );
+            p.setLong(4, c.getId());
 
             long affectedRows = p.executeUpdate();
             p.close();
-            logger.info(affectedRows + " rows updated" );
-        }catch(SQLException e){
-            logger.error("Error updating computer of ID " + c.getId() + e.getMessage() + e.getSQLState() + e.getStackTrace() );
+            LOGGER.info(affectedRows + " rows updated");
+        } catch (SQLException e) {
+            LOGGER.error("Error updating computer of ID " + c.getId() + e.getMessage() + e.getSQLState() + e.getStackTrace());
         }
     }
 
-    public ArrayList<Computer> selectAll(long min, long max){
+    /**
+     * select all.
+     * @param min offset
+     * @param max nb to return
+     * @return list
+     */
+    public ArrayList<Computer> selectAll(long min, long max) {
         ArrayList<Computer> resultList = new ArrayList<>();
         ResultSet rs;
         try {
@@ -87,14 +105,19 @@ public enum DaoComputer implements DaoComputerI {
                 resultList.add(c);
             }
             p.close();
-        }catch(SQLException e){
-            logger.error("Error getting computers" + e.getMessage() + e.getSQLState() + e.getStackTrace() );
+        } catch (SQLException e) {
+            LOGGER.error("Error getting computers" + e.getMessage() + e.getSQLState() + e.getStackTrace());
         }
 
         return resultList;
     }
 
-    public Page<Computer> selectPaginated(Page page){
+    /**
+     * get computer list paged.
+     * @param page the page
+     * @return the filled page
+     */
+    public Page<Computer> selectPaginated(Page page) {
         ArrayList<Computer> resultList = new ArrayList<>();
         ResultSet rs;
         try {
@@ -118,8 +141,8 @@ public enum DaoComputer implements DaoComputerI {
                 resultList.add(c);
             }
             p.close();
-        }catch(SQLException e){
-            logger.error("Error getting computers" + e.getMessage() + e.getSQLState() + e.getStackTrace() );
+        } catch (SQLException e) {
+            LOGGER.error("Error getting computers" + e.getMessage() + e.getSQLState() + e.getStackTrace());
         }
 
         page.setList(resultList);
@@ -127,7 +150,12 @@ public enum DaoComputer implements DaoComputerI {
         return page;
     }
 
-    public Computer getById(long id){
+    /**
+     * get by id.
+     * @param id id
+     * @return computer
+     */
+    public Computer getById(long id) {
         ResultSet rs;
         Computer c = new Computer();
         try {
@@ -151,14 +179,18 @@ public enum DaoComputer implements DaoComputerI {
 
             p.close();
 
-        }catch(SQLException e){
-            logger.error("Error retrieving computer of ID "+ id + e.getMessage() + e.getSQLState() + e.getStackTrace() );
+        } catch (SQLException e) {
+            LOGGER.error("Error retrieving computer of ID " + id + e.getMessage() + e.getSQLState() + e.getStackTrace());
         }
 
         return c;
     }
 
-    public void delete(long id){
+    /**
+     * delete.
+     * @param id id
+     */
+    public void delete(long id) {
 
         try {
             connect = Utils.getConnection(connect);
@@ -168,9 +200,9 @@ public enum DaoComputer implements DaoComputerI {
             long affectedRows = p.executeUpdate();
 
             p.close();
-            logger.info(affectedRows + " rows updated" );
-        }catch(SQLException e){
-            logger.error("Error deleting computer of ID "+ id + e.getMessage() + e.getSQLState() + e.getStackTrace() );
+            LOGGER.info(affectedRows + " rows updated");
+        } catch (SQLException e) {
+            LOGGER.error("Error deleting computer of ID " + id + e.getMessage() + e.getSQLState() + e.getStackTrace());
         }
 
     }
