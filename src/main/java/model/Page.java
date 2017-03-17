@@ -3,12 +3,12 @@ package model;
 import java.util.ArrayList;
 
 public class Page<T> {
-    private ArrayList<T> list;
+    public ArrayList<T> list;
 
 
     private int nbEntries;
     private int maxPage;
-    private int currentPage;
+    public int currentPage;
 
     public Page (){
     }
