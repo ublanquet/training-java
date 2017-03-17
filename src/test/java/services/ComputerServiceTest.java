@@ -7,12 +7,11 @@ import model.Page;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class ComputerServiceTest {
     protected ComputerService service;
@@ -22,14 +21,11 @@ public class ComputerServiceTest {
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
-
         service = new ComputerService();
 
         company = new Company( 1, "Apple Inc.");
         companyNull = null;
         company2 = new Company(2, "Thinking Machines");
-
 
         computer = GenericBuilder.of(Computer::new)
                 .with(Computer::setId, (long)1)
@@ -67,14 +63,17 @@ public class ComputerServiceTest {
 
     @Test
     public void testGetAllComputerPaginated() throws Exception {
-        //Mockito.when(computer.toString()).thenReturn("");
-        Mockito.when(computer.toString()).thenCallRealMethod();
-
-
         page = service.getPaginatedComputers(page);
 
         assertEquals(computer.toString(), page.list.get(0).toString());
         assertEquals(computer2.toString(), page.list.get(1).toString());
         assertEquals(computer10.toString(), page.list.get(9).toString());
+
+        page = null;
+        try{
+            page = service.getPaginatedComputers(page);
+            fail("if page null, should throw nullpointer");
+        }catch (NullPointerException ex) {}
+
     }
 }

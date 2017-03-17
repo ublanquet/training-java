@@ -79,11 +79,8 @@ public class ComputerService {
      */
     public Page<Computer> getPaginatedComputers(Page<Computer> page) {
         logger.debug("Retrieving pagniated computers stored in DB : ");
-        try {
-            page = daoC.selectPaginated(page);
-        } catch (Exception ex) {
-            logger.error("Error retrieving computers" + ex.getMessage());
-        }
+        page = daoC.selectPaginated(page);
+
         return page;
     }
 
