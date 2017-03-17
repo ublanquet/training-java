@@ -19,6 +19,7 @@ public enum DaoComputer implements DaoComputerI {
 
     /**
      * create in db.
+     *
      * @param c computer
      * @return generated id
      */
@@ -51,6 +52,7 @@ public enum DaoComputer implements DaoComputerI {
 
     /**
      * update.
+     *
      * @param c computer
      */
     public void update(Computer c) {
@@ -76,6 +78,7 @@ public enum DaoComputer implements DaoComputerI {
 
     /**
      * select all.
+     *
      * @param min offset
      * @param max nb to return
      * @return list
@@ -99,9 +102,8 @@ public enum DaoComputer implements DaoComputerI {
                         .with(Computer::setIntroducedTimestamp, rs.getTimestamp("introduced"))
                         .with(Computer::setDiscontinuedTimestamp, rs.getTimestamp("discontinued"))
                         .with(Computer::setCompanyId, rs.getLong("company_id"))
-                        .with(Computer::setCompany, new Company(rs.getLong("company.id"), rs.getString("company.name")))
+                        .with(Computer::setCompany, rs.getLong("company.id") != 0 ? new Company(rs.getLong("company.id"), rs.getString("company.name")) : null)
                         .build();
-                resultList.add(c);
                 resultList.add(c);
             }
             p.close();
@@ -114,6 +116,7 @@ public enum DaoComputer implements DaoComputerI {
 
     /**
      * get computer list paged.
+     *
      * @param page the page
      * @return the filled page
      */
@@ -136,7 +139,7 @@ public enum DaoComputer implements DaoComputerI {
                         .with(Computer::setIntroducedTimestamp, rs.getTimestamp("introduced"))
                         .with(Computer::setDiscontinuedTimestamp, rs.getTimestamp("discontinued"))
                         .with(Computer::setCompanyId, rs.getLong("company_id"))
-                        .with(Computer::setCompany, new Company(rs.getLong("company.id"), rs.getString("company.name")))
+                        .with(Computer::setCompany, rs.getLong("company.id") != 0 ? new Company(rs.getLong("company.id"), rs.getString("company.name")) : null)
                         .build();
                 resultList.add(c);
             }
@@ -152,6 +155,7 @@ public enum DaoComputer implements DaoComputerI {
 
     /**
      * get by id.
+     *
      * @param id id
      * @return computer
      */
@@ -173,7 +177,7 @@ public enum DaoComputer implements DaoComputerI {
                         .with(Computer::setIntroducedTimestamp, rs.getTimestamp("introduced"))
                         .with(Computer::setDiscontinuedTimestamp, rs.getTimestamp("discontinued"))
                         .with(Computer::setCompanyId, rs.getLong("company_id"))
-                        .with(Computer::setCompany, new Company(rs.getLong("company.id"), rs.getString("company.name")))
+                        .with(Computer::setCompany, rs.getLong("company.id") != 0 ? new Company(rs.getLong("company.id"), rs.getString("company.name")) : null)
                         .build();
             }
 
@@ -188,6 +192,7 @@ public enum DaoComputer implements DaoComputerI {
 
     /**
      * delete.
+     *
      * @param id id
      */
     public void delete(long id) {

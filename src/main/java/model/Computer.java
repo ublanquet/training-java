@@ -21,10 +21,11 @@ public class Computer {
 
     /**
      * constructor.
-     * @param id id
-     * @param company company
-     * @param name name
-     * @param introduced date intro
+     *
+     * @param id           id
+     * @param company      company
+     * @param name         name
+     * @param introduced   date intro
      * @param discontinued date disco
      */
     public Computer(long id, Company company, String name, LocalDateTime introduced, LocalDateTime discontinued) {
@@ -37,10 +38,11 @@ public class Computer {
 
     /**
      * Constructor.
-     * @param id id
-     * @param companyId company id
-     * @param name name
-     * @param introduced date intro
+     *
+     * @param id           id
+     * @param companyId    company id
+     * @param name         name
+     * @param introduced   date intro
      * @param discontinued date disco
      */
     public Computer(long id, long companyId, String name, LocalDateTime introduced, LocalDateTime discontinued) {
@@ -53,9 +55,10 @@ public class Computer {
 
     /**
      * constructor.
-     * @param companyId company id
-     * @param name name
-     * @param introduced date intro
+     *
+     * @param companyId    company id
+     * @param name         name
+     * @param introduced   date intro
      * @param discontinued date disco
      */
     public Computer(long companyId, String name, LocalDateTime introduced, LocalDateTime discontinued) {
@@ -67,9 +70,10 @@ public class Computer {
 
     /**
      * constructor.
-     * @param id id
+     *
+     * @param id        id
      * @param companyId company id
-     * @param name name
+     * @param name      name
      */
     public Computer(long id, long companyId, String name) {
         this.id = id;
@@ -93,8 +97,16 @@ public class Computer {
         this.companyId = companyId;
     }
 
+    /**
+     * set company adn companyId.
+     *
+     * @param company company
+     */
     public void setCompany(Company company) {
         this.company = company;
+        if (company != null) {
+            this.companyId = company.getId();
+        }
     }
 
     public String getName() {
@@ -155,8 +167,8 @@ public class Computer {
     public String toString() {
         return "Computer{" +
                 "id=" + id +
-                ", companyId=" + companyId +
-                ", companyName=" + company.getName() +
+                ", companyId=" + (company != null ? company.getId() : "null") +
+                ", companyName=" + (company != null ? company.getName() : "null") +
                 ", name='" + name + '\'' +
                 ", introduced=" + introduced +
                 ", discontinued=" + discontinued +
