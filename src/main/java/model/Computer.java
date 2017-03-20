@@ -109,6 +109,10 @@ public class Computer {
         }
     }
 
+    public Company getCompany() {
+        return company;
+    }
+
     public String getName() {
         return name;
     }

@@ -1,3 +1,9 @@
+<%@ taglib prefix="c"
+           uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt"
+           uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,7 +18,7 @@
 <body>
 <header class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="dashboard.html"> Application - Computer Database </a>
+        <a class="navbar-brand" href="dashboard.jsp"> Application - Computer Database </a>
     </div>
 </header>
 
@@ -75,6 +81,21 @@
             </thead>
             <!-- Browse attribute computers -->
             <tbody id="results">
+
+            <c:forEach items="${list}" var="item">
+                <tr>
+                    <td class="editMode">
+                        <input type="checkbox" name="cb" class="cb" value="0">
+                    </td>
+                    <td>
+                        <a href="editComputer.html" onclick="">${item.getName()}</a>
+                    </td>
+                    <td>${item.getIntroduced()}</td>
+                    <td>${item.getDiscontinued()}</td>
+                    <td>${item.getCompany().getName()}</td>
+                </tr>
+            </c:forEach>
+            <!--
             <tr>
                 <td class="editMode">
                     <input type="checkbox" name="cb" class="cb" value="0">
@@ -218,7 +239,7 @@
                 <td></td>
                 <td>Nintendo</td>
 
-            </tr>
+            </tr>-->
 
             </tbody>
         </table>
@@ -250,7 +271,7 @@
             <button type="button" class="btn btn-default">50</button>
             <button type="button" class="btn btn-default">100</button>
         </div>
-
+    </div>
 </footer>
 <script src="../js/jquery.min.js"></script>
 <script src="../js/bootstrap.min.js"></script>

@@ -1,4 +1,4 @@
-package view;
+package cli;
 
 import dao.DaoCompany;
 import dao.DaoCompanyI;

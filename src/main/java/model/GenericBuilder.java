@@ -7,6 +7,8 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+//http://stackoverflow.com/a/31754787
+
 /**
  * Generic static builder class, can be used to build any mutable obj.
  * @param <T> classtype, not necessary

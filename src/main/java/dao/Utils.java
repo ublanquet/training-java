@@ -22,6 +22,11 @@ public class Utils {
      */
     public static Connection getConnection(Connection connect) {
         try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+        } catch (Exception e) {
+            logger.error("Error getting connection driver " + e.getMessage() + e.getStackTrace());
+        }
+        try {
             if (connect == null || connect.isClosed()) {
 
                 connect = DriverManager.getConnection(URL, USER, PASS);
