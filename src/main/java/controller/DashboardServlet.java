@@ -38,6 +38,7 @@ public class DashboardServlet extends HttpServlet {
     Page<Computer> page = new Page(20);
     page = computerService.getPaginatedComputers(page);
     request.setAttribute("list", page.getListPage());
+    request.setAttribute("totalCount", computerService.getCount());
     request.getRequestDispatcher("/views/dashboard.jsp").forward(request, response);
 
   }

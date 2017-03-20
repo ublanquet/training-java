@@ -115,6 +115,50 @@ public enum DaoComputer implements DaoComputerI {
     }
 
     /**
+     * Get the number of computers in DB.
+     * @return count
+     */
+    public long getCount() {
+        Long count = null;
+        ResultSet rs;
+        try {
+            connect = Utils.getConnection(connect);
+            PreparedStatement p = connect.prepareStatement(" SELECT COUNT(*) FROM computer;");
+            rs = p.executeQuery();
+            while (rs.next()) {
+                count = rs.getLong(1);
+            }
+            p.close();
+        } catch (SQLException e) {
+            LOGGER.error("Error getting computers count " + e.getMessage() + e.getSQLState() + e.getStackTrace());
+        }
+        return count;
+    }
+
+    /**
+     * Get the number of computers in DB with name like param.
+     * @param name name
+     * @return count
+     */
+    public long getCount(String name) {
+        Long count = null;
+        ResultSet rs;
+        try {
+            connect = Utils.getConnection(connect);
+            PreparedStatement p = connect.prepareStatement(" SELECT COUNT(*) FROM computer WHERE name LIKE %?%;");
+            p.setString(1, name);
+            rs = p.executeQuery();
+            while (rs.next()) {
+                count = rs.getLong(1);
+            }
+            p.close();
+        } catch (SQLException e) {
+            LOGGER.error("Error getting computers count by name " + e.getMessage() + e.getSQLState() + e.getStackTrace());
+        }
+        return count;
+    }
+
+    /**
      * get computer list paged.
      *
      * @param page the page

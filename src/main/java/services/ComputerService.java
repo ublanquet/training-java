@@ -36,6 +36,37 @@ public class ComputerService {
         return computer;
     }
 
+  /**
+   * Get count.
+   * @return count
+   */
+  public long getCount() {
+    logger.info("Retrieving computer count");
+    long count = 0;
+    try {
+      count = daoC.getCount();
+    } catch (Exception ex) {
+      logger.error("Error retrieving computer" + ex.getMessage() + ex.getStackTrace());
+    }
+    return count;
+  }
+
+  /**
+   * Get count of comp with name like param.
+   * @param name name
+   * @return count
+   */
+  public long getCount(String name) {
+    logger.info("Retrieving computer count");
+    long count = 0;
+    try {
+      count = daoC.getCount(name);
+    } catch (Exception ex) {
+      logger.error("Error retrieving computer" + ex.getMessage() + ex.getStackTrace());
+    }
+    return count;
+  }
+
     /**
      * create in db.
      * @param c compuetr
