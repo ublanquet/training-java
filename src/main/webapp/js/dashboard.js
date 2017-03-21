@@ -22,6 +22,37 @@ $(function () {
         }
     });
 
+
+    var pageN = 0;
+    var perPage = 10;
+    var table = $("tbody");
+
+    $("ul.pagination li").eq(1).addClass("active");
+
+    //Pagination
+    $("ul.pagination a").click(function () {
+        $("ul.pagination li").removeClass("active");
+        $(this).parent().addClass("active");
+        pageN = $(this).text();
+        //console.log( this.text() );
+        console.log( pageN );
+
+        $.post("/dashboard/ajax", {
+            pageN: pageN,
+            perPage: perPage
+        }, function(response) {
+            table.html(response);
+            $(".editMode").hide();
+        });
+
+    });
+
+    $("button.nbEntries").click(function () {
+        $("button.nbEntries").removeClass("active");
+        $(this).addClass("active");
+        perPage = $(this).text();
+    });
+
 });
 
 

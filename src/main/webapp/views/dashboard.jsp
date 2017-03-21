@@ -108,11 +108,9 @@
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
-            <li><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
+            <c:forEach items="${totalNums}" var="item">
+                <li><a href="#">${item}</a></li>
+            </c:forEach>
             <li>
                 <a href="#" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
@@ -121,9 +119,9 @@
         </ul>
 
         <div class="btn-group btn-group-sm pull-right" role="group">
-            <button type="button" class="btn btn-default">10</button>
-            <button type="button" class="btn btn-default">50</button>
-            <button type="button" class="btn btn-default">100</button>
+            <button type="button" class="btn btn-default nbEntries active">10</button>
+            <button type="button" class="btn btn-default nbEntries">50</button>
+            <button type="button" class="btn btn-default nbEntries">100</button>
         </div>
     </div>
 </footer>
