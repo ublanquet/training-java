@@ -145,10 +145,11 @@ public enum DaoComputer implements DaoComputerI {
         ResultSet rs;
         try {
             connect = Utils.getConnection(connect);
-            PreparedStatement p = connect.prepareStatement(" SELECT COUNT(*) FROM computer WHERE name LIKE %?%;");
-            p.setString(1, name);
+            PreparedStatement p = connect.prepareStatement(" SELECT COUNT(*) FROM computer WHERE name LIKE ?;");
+            p.setString(1, "%" + name + "%");
             rs = p.executeQuery();
             while (rs.next()) {
+
                 count = rs.getLong(1);
             }
             p.close();
@@ -196,6 +197,47 @@ public enum DaoComputer implements DaoComputerI {
 
         return page;
     }
+
+  /**
+   * get computer list paged and filtered by name.
+   * @param name name filter
+   * @param page the page
+   * @return the filled page
+   */
+  public Page<Computer> selectFiltered(Page page, String name) {
+    ArrayList<Computer> resultList = new ArrayList<>();
+    ResultSet rs;
+    try {
+      connect = Utils.getConnection(connect);
+      PreparedStatement p = connect.prepareStatement("SELECT * FROM computer LEFT JOIN company on computer.company_id = company.id WHERE computer.name LIKE ? " +
+          "LIMIT ? OFFSET ?");
+      LOGGER.debug("search filter : " + name);
+      p.setString(1, "%" + name + "%");
+      p.setLong(2, page.getNbEntries());
+      p.setLong(3, page.getFirstEntryIndex());
+
+      rs = p.executeQuery();
+
+      while (rs.next()) {
+        Computer c = GenericBuilder.of(Computer::new)
+            .with(Computer::setId, rs.getLong("computer.id"))
+            .with(Computer::setName, rs.getString("computer.name"))
+            .with(Computer::setIntroducedTimestamp, rs.getTimestamp("introduced"))
+            .with(Computer::setDiscontinuedTimestamp, rs.getTimestamp("discontinued"))
+            .with(Computer::setCompanyId, rs.getLong("company_id"))
+            .with(Computer::setCompany, rs.getLong("company.id") != 0 ? new Company(rs.getLong("company.id"), rs.getString("company.name")) : null)
+            .build();
+        resultList.add(c);
+      }
+      p.close();
+    } catch (SQLException e) {
+      LOGGER.error("Error getting computers" + e.getMessage() + e.getSQLState() + e.getStackTrace());
+    }
+
+    page.setList(resultList);
+
+    return page;
+  }
 
     /**
      * get by id.

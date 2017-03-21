@@ -26,6 +26,8 @@ $(function () {
     var pageN = 0;
     var perPage = 10;
     var table = $("tbody");
+    var totalCount = $("#totalCount").val();
+    var filteredCount = $("#filteredCount").val();
 
     $("ul.pagination li").eq(1).addClass("active");
 
@@ -34,33 +36,58 @@ $(function () {
         $("ul.pagination li").removeClass("active");
         $(this).parent().addClass("active");
         pageN = $(this).text();
+        var filter = $("#searchbox").val();
         //console.log( this.text() );
         console.log( pageN );
 
-        $.post("/dashboard/ajax", {
-            pageN: pageN,
-            perPage: perPage
-        }, function(response) {
-            table.html(response);
-            $(".editMode").hide();
-        });
-
+        ajaxTableReload();
     });
 
     $("button.nbEntries").click(function () {
         $("button.nbEntries").removeClass("active");
         $(this).addClass("active");
         perPage = $(this).text();
-        var totalCount = $("#totalCount").val();
-        var maxPages = totalCount / perPage;
-        $("ul.pagination li").each(function (i){
-            if(i > maxPages+1){
-                $(this).hide();
-            }
-        });
+        setPages();
     });
 
+    $("#searchsubmit").click(function () {
+        ajaxTableReload();
+    });
+
+    $("#searchForm").submit(function () {
+        ajaxTableReload();
+    });
+
+    function ajaxTableReload() {
+        var filter = $("#searchbox").val();
+        $.post("/dashboard/ajax", {
+            pageN: pageN,
+            perPage: perPage,
+            search: filter
+        }, function(response) {
+            table.html(response);
+            $(".editMode").hide();
+            filteredCount = $("#filteredCount").val();
+            var count = filteredCount || totalCount;
+            $("#homeTitle").text( count + " Computers found");
+            setPages();
+        });
+    }
+
+    function setPages () {
+            var count = filteredCount || totalCount;
+            var maxPages = count / perPage;
+            $("ul.pagination li").each(function (i){
+                if(i > maxPages+1){
+                    $(this).hide();
+                }else{
+                    $(this).show();
+                }
+            });
+     }
+
 });
+
 
 
 // Function setCheckboxValues

@@ -11,6 +11,8 @@
 <%@ taglib prefix="fmt"
            uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<input type="hidden" id="filteredCount" value="${filteredCount}">
+
 <c:forEach items="${list}" var="item">
     <tr>
         <td class="editMode">

@@ -30,10 +30,10 @@
         <input type="hidden" id="totalCount" value="${totalCount}">
         <div id="actions" class="form-horizontal">
             <div class="pull-left">
-                <form id="searchForm" action="#" method="GET" class="form-inline">
+                <form id="searchForm" action="#" class="form-inline">
 
-                    <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name"/>
-                    <input type="submit" id="searchsubmit" value="Filter by name"
+                    <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" />
+                    <input type="button" id="searchsubmit" value="Filter by name"
                            class="btn btn-primary"/>
                 </form>
             </div>

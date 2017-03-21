@@ -29,17 +29,24 @@ public class DashboardAjaxServlet extends HttpServlet {
     if (request.getParameter("pageN") != null) {
       int pageN = Integer.parseInt(request.getParameter("pageN"));
       page.setCurrentPage(pageN);
-      request.setAttribute("pageN", pageN);
+      //request.setAttribute("pageN", pageN);
     }
     if (request.getParameter("perPage") != null) {
       int perPage = Integer.parseInt(request.getParameter("perPage"));
       page.setNbEntries(perPage);
-      request.setAttribute("perPage", perPage);
+      //request.setAttribute("perPage", perPage);
     }
 
-    page = computerService.getPaginatedComputers(page);
+    if (request.getParameter("search") != null && request.getParameter("search") != "") {
+      //request.setAttribute("search", request.getParameter("search"));
+      page = computerService.getFilteredComputers(page, request.getParameter("search"));
+      request.setAttribute("filteredCount", computerService.getCount(request.getParameter("search")));
+    } else {
+      page = computerService.getPaginatedComputers(page);
+    }
+
+
     request.setAttribute("list", page.getListPage());
-    //TODO return right page number
     request.getRequestDispatcher("/views/dashboardTable.jsp").forward(request, response);
   }
 

@@ -15,29 +15,31 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class ComputerService {
-    private Logger logger = LoggerFactory.getLogger(" services.ComputerService");
+  private Logger logger = LoggerFactory.getLogger(" services.ComputerService");
 
-    private DaoComputer daoC = DaoComputerI.getInstance();
+  private DaoComputer daoC = DaoComputerI.getInstance();
 
-    /**
-     * get by id.
-     * @param id id
-     * @return computer
-     */
-    public Computer getComputerbyId(long id) {
-        logger.info("Retrieving computer of ID " + id + ": ");
-        Computer computer = null;
-        try {
-            computer = daoC.getById(id);
-            logger.debug(computer.toString());
-        } catch (Exception ex) {
-            logger.error("Error retrieving computer" + ex.getMessage() + ex.getStackTrace());
-        }
-        return computer;
+  /**
+   * get by id.
+   *
+   * @param id id
+   * @return computer
+   */
+  public Computer getComputerbyId(long id) {
+    logger.info("Retrieving computer of ID " + id + ": ");
+    Computer computer = null;
+    try {
+      computer = daoC.getById(id);
+      logger.debug(computer.toString());
+    } catch (Exception ex) {
+      logger.error("Error retrieving computer" + ex.getMessage() + ex.getStackTrace());
     }
+    return computer;
+  }
 
   /**
    * Get count.
+   *
    * @return count
    */
   public long getCount() {
@@ -53,11 +55,15 @@ public class ComputerService {
 
   /**
    * Get count of comp with name like param.
+   *
    * @param name name
    * @return count
    */
   public long getCount(String name) {
     logger.info("Retrieving computer count");
+    if (name == null) {
+      name = "";
+    }
     long count = 0;
     try {
       count = daoC.getCount(name);
@@ -67,89 +73,107 @@ public class ComputerService {
     return count;
   }
 
-    /**
-     * create in db.
-     * @param c compuetr
-     * @return created id
-     */
-    public long createComputer(Computer c) {
-        if (c == null) {
-            logger.error("Error persisting computer : received null object");
-        }
-        long generatedKey = 0;
-        try {
-            generatedKey = daoC.create(c);
-        } catch (Exception ex) {
-            logger.error("Error persisting computer " + ex.getMessage());
-        }
-        logger.debug("Computer persist success, generated ID : " + generatedKey);
-        return generatedKey;
+  /**
+   * create in db.
+   *
+   * @param c compuetr
+   * @return created id
+   */
+  public long createComputer(Computer c) {
+    if (c == null) {
+      logger.error("Error persisting computer : received null object");
+    }
+    long generatedKey = 0;
+    try {
+      generatedKey = daoC.create(c);
+    } catch (Exception ex) {
+      logger.error("Error persisting computer " + ex.getMessage());
+    }
+    logger.debug("Computer persist success, generated ID : " + generatedKey);
+    return generatedKey;
+  }
+
+  /**
+   * get all computers.
+   *
+   * @param start offset
+   * @param end   nb
+   * @return list computers
+   */
+  public ArrayList<Computer> getAllComputers(long start, long end) {
+    logger.debug("Retrieving all computers stored in DB : ");
+    ArrayList<Computer> cList = new ArrayList<>();
+    try {
+      cList = daoC.selectAll(start, end);
+    } catch (Exception ex) {
+      logger.error("Error retrieving computers" + ex.getMessage());
+    }
+    return cList;
+  }
+
+  /**
+   * get page compuetr.
+   *
+   * @param page page
+   * @return filled page
+   */
+  public Page<Computer> getPaginatedComputers(Page<Computer> page) {
+    logger.debug("Retrieving pagniated computers stored in DB : ");
+    page = daoC.selectPaginated(page);
+
+    return page;
+  }
+
+  /**
+   * get filtered page compuetr.
+   *
+   * @param name name filter
+   * @param page page
+   * @return filled page
+   */
+  public Page<Computer> getFilteredComputers(Page<Computer> page, String name) {
+    logger.debug("Retrieving pagniated computers stored in DB : ");
+    page = daoC.selectFiltered(page, name != null ? name : "");
+
+    return page;
+  }
+
+  /**
+   * create computer obj from string array.
+   *
+   * @param input input
+   * @return computer obj
+   */
+  public Computer createComputerObjectfromArray(String[] input) {
+    Computer c = null;
+    if (input.length > 4 || input.length == 0) {
+      logger.error("Computer object creation error, wrong input array, length " + input.length + " expected 4");
+      return c;
     }
 
-    /**
-     * get all computers.
-     * @param start offset
-     * @param end nb
-     * @return list computers
-     */
-    public ArrayList<Computer> getAllComputers(long start, long end) {
-        logger.debug("Retrieving all computers stored in DB : ");
-        ArrayList<Computer> cList = new ArrayList<>();
-        try {
-            cList = daoC.selectAll(start, end);
-        } catch (Exception ex) {
-            logger.error("Error retrieving computers" + ex.getMessage());
-        }
-        return cList;
+    try {
+      long companyId = Long.parseLong(input[0]);
+      String name = input[1];
+
+      LocalDateTime intro = null;
+      LocalDateTime disco = null;
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+
+      if (!Objects.equals(input[2], "0")) {
+        intro = LocalDate.parse(input[2], formatter).atStartOfDay();
+      }
+      if (!Objects.equals(input[3], "0")) {
+        disco = LocalDate.parse(input[2], formatter).atStartOfDay();
+      }
+
+      c = new Computer(companyId, name, intro, disco);
+      logger.debug("computer object created" + c.toString());
+    } catch (DateTimeException ex) {
+      logger.error("Computer object creation error, check dates " + ex.getMessage());
+    } catch (Exception ex) {
+      logger.error("Computer object creation error " + ex.getMessage());
     }
-
-    /**
-     * get page compuetr.
-     * @param page page
-     * @return filled page
-     */
-    public Page<Computer> getPaginatedComputers(Page<Computer> page) {
-        logger.debug("Retrieving pagniated computers stored in DB : ");
-        page = daoC.selectPaginated(page);
-
-        return page;
-    }
-
-    /**
-     * create computer obj from string array.
-     * @param input input
-     * @return computer obj
-     */
-    public Computer createComputerObjectfromArray(String[] input) {
-        Computer c = null;
-        if (input.length > 4 || input.length == 0) {
-            logger.error("Computer object creation error, wrong input array, length " + input.length + " expected 4");
-            return c;
-        }
-
-        try {
-            long companyId = Long.parseLong(input[0]);
-            String name = input[1];
-
-            LocalDateTime intro = null;
-            LocalDateTime disco = null;
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-
-            if (!Objects.equals(input[2], "0")) {
-                intro = LocalDate.parse(input[2], formatter).atStartOfDay();
-            }
-            if (!Objects.equals(input[3], "0")) {
-                disco = LocalDate.parse(input[2], formatter).atStartOfDay();
-            }
-
-            c = new Computer(companyId, name, intro, disco);
-            logger.debug("computer object created" + c.toString());
-        } catch (DateTimeException ex) {
-            logger.error("Computer object creation error, check dates " + ex.getMessage());
-        } catch (Exception ex) {
-            logger.error("Computer object creation error " + ex.getMessage());
-        }
-        return c;
-    }
+    return c;
+  }
 }
