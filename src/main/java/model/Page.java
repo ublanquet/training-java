@@ -63,12 +63,12 @@ public class Page<T> {
         this.nbEntries = nbEntries;
     }
 
-    public long getFirstEntryIndex() {
-        return currentPage * nbEntries;
+    public Long getFirstEntryIndex() {
+        return (long) currentPage * nbEntries;
     }
 
-    public long getLastEntryIndex() {
-        return currentPage * nbEntries + nbEntries;
+    public Long getLastEntryIndex() {
+        return (long) currentPage * nbEntries + nbEntries;
     }
 
     public int getNextPageIndex() {

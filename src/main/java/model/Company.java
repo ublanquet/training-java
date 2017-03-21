@@ -3,7 +3,7 @@ package model;
 
 public class Company {
 
-    private long id;
+    private Long id;
     private String name;
 
     /**
@@ -25,16 +25,16 @@ public class Company {
      * @param id id
      * @param name name
      */
-    public Company(long id, String name) {
+    public Company(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

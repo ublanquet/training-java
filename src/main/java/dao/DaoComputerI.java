@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 
 public interface DaoComputerI {
-    Logger LOGGER = LoggerFactory.getLogger(" dao.DaoComputer");
+    Logger LOGGER = LoggerFactory.getLogger("dao.DaoComputer");
 
     /**
      * get unique instance.
@@ -22,7 +22,7 @@ public interface DaoComputerI {
      * @param c computer
      * @return generated id
      */
-    long create(Computer c);
+    Long create(Computer c);
 
     /**
      * update.
@@ -36,18 +36,18 @@ public interface DaoComputerI {
      * @param max nb to return
      * @return list
      */
-    ArrayList<Computer> selectAll(long min, long max);
+    ArrayList<Computer> selectAll(Long min, Long max);
 
     /**
      * get computer by id.
      * @param id id
      * @return computer
      */
-    Computer getById(long id);
+    Computer getById(Long id);
 
     /**
      * delete.
      * @param id id
      */
-    void delete(long id);
+    void delete(Long id);
 }

@@ -23,9 +23,9 @@ public class ComputerServiceTest {
     public void setUp() {
         service = new ComputerService();
 
-        company = new Company( 1, "Apple Inc.");
+        company = new Company( (long)1, "Apple Inc.");
         companyNull = null;
-        company2 = new Company(2, "Thinking Machines");
+        company2 = new Company((long)2, "Thinking Machines");
 
         computer = GenericBuilder.of(Computer::new)
                 .with(Computer::setId, (long)1)
@@ -54,7 +54,7 @@ public class ComputerServiceTest {
 
     @Test
     public void testGetAllComputer() throws Exception {
-        ArrayList<Computer> computers = service.getAllComputers(0, 10);
+        ArrayList<Computer> computers = service.getAllComputers( (long) 0, (long) 10);
 
         assertEquals(computer.toString(), computers.get(0).toString());
         assertEquals(computer2.toString(), computers.get(1).toString());

@@ -25,7 +25,7 @@ public class ComputerService {
    * @param id id
    * @return computer
    */
-  public Computer getComputerbyId(long id) {
+  public Computer getComputerbyId(Long id) {
     logger.info("Retrieving computer of ID " + id + ": ");
     Computer computer = null;
     try {
@@ -42,7 +42,7 @@ public class ComputerService {
    *
    * @return count
    */
-  public long getCount() {
+  public Long getCount() {
     logger.info("Retrieving computer count");
     long count = 0;
     try {
@@ -59,7 +59,7 @@ public class ComputerService {
    * @param name name
    * @return count
    */
-  public long getCount(String name) {
+  public Long getCount(String name) {
     logger.info("Retrieving computer count");
     if (name == null) {
       name = "";
@@ -79,7 +79,7 @@ public class ComputerService {
    * @param c compuetr
    * @return created id
    */
-  public long createComputer(Computer c) {
+  public Long createComputer(Computer c) {
     if (c == null) {
       logger.error("Error persisting computer : received null object");
     }
@@ -89,6 +89,11 @@ public class ComputerService {
     } catch (Exception ex) {
       logger.error("Error persisting computer " + ex.getMessage());
     }
+    if (generatedKey == 0) {
+      logger.error("Error persisting computer");
+      return generatedKey;
+    }
+
     logger.debug("Computer persist success, generated ID : " + generatedKey);
     return generatedKey;
   }
@@ -100,7 +105,7 @@ public class ComputerService {
    * @param end   nb
    * @return list computers
    */
-  public ArrayList<Computer> getAllComputers(long start, long end) {
+  public ArrayList<Computer> getAllComputers(Long start, Long end) {
     logger.debug("Retrieving all computers stored in DB : ");
     ArrayList<Computer> cList = new ArrayList<>();
     try {
@@ -152,7 +157,7 @@ public class ComputerService {
     }
 
     try {
-      long companyId = Long.parseLong(input[0]);
+      Long companyId = Long.parseLong(input[0]);
       String name = input[1];
 
       LocalDateTime intro = null;

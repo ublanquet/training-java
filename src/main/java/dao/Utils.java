@@ -43,7 +43,7 @@ public class Utils {
      * @param p statement
      * @return generated ID
      */
-    public static long getGeneratedKey(Statement p) {
+    public static Long getGeneratedKey(Statement p) {
         long generatedKey = 0;
         try {
             ResultSet rs = p.getGeneratedKeys();

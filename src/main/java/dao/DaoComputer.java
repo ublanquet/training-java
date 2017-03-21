@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 
 public enum DaoComputer implements DaoComputerI {
@@ -23,7 +24,7 @@ public enum DaoComputer implements DaoComputerI {
      * @param c computer
      * @return generated id
      */
-    public long create(Computer c) {
+    public Long create(Computer c) {
         connect = Utils.getConnection(connect);
         long generatedKey = 0;
         try {
@@ -34,7 +35,11 @@ public enum DaoComputer implements DaoComputerI {
             p.setString(1, c.getName());
             p.setTimestamp(2, c.getIntroducedTimestamp());
             p.setTimestamp(3, c.getDiscontinuedTimestamp());
-            p.setLong(4, c.getCompanyId());
+            if (c.getCompanyId() != 0 && c.getCompanyId() != null) {
+              p.setLong(4, c.getCompanyId());
+            } else {
+              p.setNull(4, Types.BIGINT);
+            }
 
             long affectedRows = p.executeUpdate();
 
@@ -83,7 +88,7 @@ public enum DaoComputer implements DaoComputerI {
      * @param max nb to return
      * @return list
      */
-    public ArrayList<Computer> selectAll(long min, long max) {
+    public ArrayList<Computer> selectAll(Long min, Long max) {
         ArrayList<Computer> resultList = new ArrayList<>();
         ResultSet rs;
         try {
@@ -118,7 +123,7 @@ public enum DaoComputer implements DaoComputerI {
      * Get the number of computers in DB.
      * @return count
      */
-    public long getCount() {
+    public Long getCount() {
         Long count = null;
         ResultSet rs;
         try {
@@ -140,7 +145,7 @@ public enum DaoComputer implements DaoComputerI {
      * @param name name
      * @return count
      */
-    public long getCount(String name) {
+    public Long getCount(String name) {
         Long count = null;
         ResultSet rs;
         try {
@@ -241,11 +246,10 @@ public enum DaoComputer implements DaoComputerI {
 
     /**
      * get by id.
-     *
      * @param id id
      * @return computer
      */
-    public Computer getById(long id) {
+    public Computer getById(Long id) {
         ResultSet rs;
         Computer c = new Computer();
         try {
@@ -266,7 +270,6 @@ public enum DaoComputer implements DaoComputerI {
                         .with(Computer::setCompany, rs.getLong("company.id") != 0 ? new Company(rs.getLong("company.id"), rs.getString("company.name")) : null)
                         .build();
             }
-
             p.close();
 
         } catch (SQLException e) {
@@ -281,7 +284,7 @@ public enum DaoComputer implements DaoComputerI {
      *
      * @param id id
      */
-    public void delete(long id) {
+    public void delete(Long id) {
 
         try {
             connect = Utils.getConnection(connect);

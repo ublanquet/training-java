@@ -24,7 +24,7 @@ public interface DaoCompanyI {
      * @param c company
      * @return generated id
      */
-    long create(Company c);
+    Long create(Company c);
 
     /**
      * update.
@@ -38,20 +38,20 @@ public interface DaoCompanyI {
      * @param max number to get
      * @return list company
      */
-    ArrayList<Company> selectAll(long min, long max);
+    ArrayList<Company> selectAll(Long min, Long max);
 
     /**
      * get by id.
      * @param id id.
      * @return company
      */
-    Company getById(long id);
+    Company getById(Long id);
 
     /**
      * delete.
      * @param id id
      */
-    void delete(long id);
+    void delete(Long id);
 
 
 }

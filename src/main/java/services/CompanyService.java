@@ -21,11 +21,26 @@ public class CompanyService {
      * @param end nb
      * @return list companies
      */
-    public ArrayList<Company> getAllCompany(long start, long end) {
+    public ArrayList<Company> getAllCompany(Long start, Long end) {
         logger.debug("Displaying all companies stored in DB : ");
         ArrayList<Company> cList = null;
         try {
             cList = daoC.selectAll(start, end);
+        } catch (Exception ex) {
+            logger.error("All Company retrieval failure " + ex.getMessage());
+        }
+        return cList;
+    }
+
+    /**
+     * get all companies.
+     * @return list companies
+     */
+    public ArrayList<Company> getAllCompany() {
+        logger.debug("Displaying all companies stored in DB : ");
+        ArrayList<Company> cList = null;
+        try {
+            cList = daoC.selectAll();
         } catch (Exception ex) {
             logger.error("All Company retrieval failure " + ex.getMessage());
         }

@@ -20,7 +20,7 @@ public enum DaoCompany implements DaoCompanyI {
      * @param c company obj
      * @return generated id
      */
-    public long create(Company c) {
+    public Long create(Company c) {
         connect = Utils.getConnection(connect);
         long generatedKey = 0;
         try {
@@ -71,7 +71,7 @@ public enum DaoCompany implements DaoCompanyI {
      * @param max nb to return
      * @return companies list
      */
-    public ArrayList<Company> selectAll(long min, long max) {
+    public ArrayList<Company> selectAll(Long min, Long max) {
         ArrayList<Company> resultList = new ArrayList<>();
         ResultSet rs;
         try {
@@ -97,11 +97,37 @@ public enum DaoCompany implements DaoCompanyI {
     }
 
     /**
+     * retrieve all companies.
+     * @return companies list
+     */
+    public ArrayList<Company> selectAll() {
+        ArrayList<Company> resultList = new ArrayList<>();
+        ResultSet rs;
+        try {
+            connect = Utils.getConnection(connect);
+            PreparedStatement p = connect.prepareStatement("SELECT * FROM company;");
+
+            rs = p.executeQuery();
+
+            while (rs.next()) {
+                Company c = new Company(rs.getLong("id"),
+                    rs.getString("name"));
+                resultList.add(c);
+            }
+            p.close();
+        } catch (SQLException e) {
+            LOGGER.error("Error retrieving companies" + e.getMessage() + e.getSQLState() + e.getStackTrace());
+        }
+
+        return resultList;
+    }
+
+    /**
      * retrieve company by id.
      * @param id id
      * @return company obj
      */
-    public Company getById(long id) {
+    public Company getById(Long id) {
         ResultSet rs;
         Company c = new Company();
         try {
@@ -132,7 +158,7 @@ public enum DaoCompany implements DaoCompanyI {
      * delete from db.
      * @param id id
      */
-    public void delete(long id) {
+    public void delete(Long id) {
         try {
             connect = Utils.getConnection(connect);
             PreparedStatement p = connect.prepareStatement("DELETE FROM company WHERE computer.id = ?");

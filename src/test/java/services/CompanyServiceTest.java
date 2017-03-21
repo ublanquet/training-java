@@ -15,8 +15,8 @@ public class CompanyServiceTest {
     @Before
     public void setUp() {
         service = new CompanyService();
-        company = new Company( 1, "Apple Inc.");
-        company10 = new Company( 10, "Digital Equipment Corporation");
+        company = new Company( (long) 1, "Apple Inc.");
+        company10 = new Company( (long) 10, "Digital Equipment Corporation");
     }
 
     @After
@@ -25,7 +25,7 @@ public class CompanyServiceTest {
 
     @Test
     public void testGetAllCompany() throws Exception {
-        ArrayList<Company> companies = service.getAllCompany(0, 10);
+        ArrayList<Company> companies = service.getAllCompany( (long) 0, (long) 10);
 
         assertEquals(company.toString(), companies.get(0).toString());
         assertEquals(company10.toString(), companies.get(9).toString());

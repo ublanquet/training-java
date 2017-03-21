@@ -4,8 +4,8 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 public class Computer {
-    private long id;
-    private long companyId;
+    private Long id;
+    private Long companyId;
 
     private Company company;
     private String name;
@@ -28,7 +28,7 @@ public class Computer {
      * @param introduced   date intro
      * @param discontinued date disco
      */
-    public Computer(long id, Company company, String name, LocalDateTime introduced, LocalDateTime discontinued) {
+    public Computer(Long id, Company company, String name, LocalDateTime introduced, LocalDateTime discontinued) {
         this.id = id;
         this.company = company;
         this.name = name;
@@ -45,7 +45,7 @@ public class Computer {
      * @param introduced   date intro
      * @param discontinued date disco
      */
-    public Computer(long id, long companyId, String name, LocalDateTime introduced, LocalDateTime discontinued) {
+    public Computer(Long id, Long companyId, String name, LocalDateTime introduced, LocalDateTime discontinued) {
         this.id = id;
         this.companyId = companyId;
         this.name = name;
@@ -61,7 +61,7 @@ public class Computer {
      * @param introduced   date intro
      * @param discontinued date disco
      */
-    public Computer(long companyId, String name, LocalDateTime introduced, LocalDateTime discontinued) {
+    public Computer(Long companyId, String name, LocalDateTime introduced, LocalDateTime discontinued) {
         this.companyId = companyId;
         this.name = name;
         this.introduced = introduced;
@@ -75,25 +75,25 @@ public class Computer {
      * @param companyId company id
      * @param name      name
      */
-    public Computer(long id, long companyId, String name) {
+    public Computer(Long id, Long companyId, String name) {
         this.id = id;
         this.companyId = companyId;
         this.name = name;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getCompanyId() {
+    public Long getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(long companyId) {
+    public void setCompanyId(Long companyId) {
         this.companyId = companyId;
     }
 

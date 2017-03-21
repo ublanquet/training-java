@@ -73,12 +73,12 @@ public class Cli {
     }
 
     /**
-     * convert input to long.
+     * convert input to Long.
      *
      * @param input input
-     * @return long input
+     * @return Long input
      */
-    public static long getLongInput(String input) {
+    public static Long getLongInput(String input) {
         long longInput = -1;
         try {
             longInput = Long.parseLong(input);
@@ -126,7 +126,7 @@ public class Cli {
                     result = displayComputerbyId(getLongInput(splited[1]));
                 } else {
                     System.out.println("Enter the computer ID to retrieve");
-                    long id = getLongInput(getInput());
+                    Long id = getLongInput(getInput());
                     result = displayComputerbyId(id);
                 }
                 break;
@@ -228,7 +228,7 @@ public class Cli {
      * @param id id
      * @return command success status string
      */
-    public static String displayComputerbyId(long id) {
+    public static String displayComputerbyId(Long id) {
         System.out.println("Retrieving computer of ID " + id + ": ");
         try {
             Computer computer = compService.getComputerbyId(id);
@@ -276,7 +276,7 @@ public class Cli {
         }
 
         try {
-            long companyId = Long.parseLong(input[startIndex]);
+            Long companyId = Long.parseLong(input[startIndex]);
             String name = input[startIndex + 1];
 
             LocalDateTime intro = null;
