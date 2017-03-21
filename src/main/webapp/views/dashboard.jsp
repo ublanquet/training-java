@@ -27,6 +27,7 @@
         <h1 id="homeTitle">
             ${totalCount} Computers found
         </h1>
+        <input type="hidden" id="totalCount" value="${totalCount}">
         <div id="actions" class="form-horizontal">
             <div class="pull-left">
                 <form id="searchForm" action="#" method="GET" class="form-inline">

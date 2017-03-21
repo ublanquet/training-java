@@ -51,6 +51,13 @@ $(function () {
         $("button.nbEntries").removeClass("active");
         $(this).addClass("active");
         perPage = $(this).text();
+        var totalCount = $("#totalCount").val();
+        var maxPages = totalCount / perPage;
+        $("ul.pagination li").each(function (i){
+            if(i > maxPages+1){
+                $(this).hide();
+            }
+        });
     });
 
 });
