@@ -3,6 +3,7 @@ package controller;
 import model.Computer;
 import model.Page;
 import services.ComputerService;
+import services.Validate;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,14 +28,25 @@ public class DashboardServlet extends HttpServlet {
    */
   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     HttpSession session = request.getSession();
-    if (request.getAttribute("selection") != null) {
-      
-
+    if (request.getParameter("selection") != null) {
+      String message = "Computers deleted, id : ";
+      String[] idToDelete =  request.getParameter("selection").split(",");
+      for (String selection : idToDelete) {
+        try {
+          if (computerService.deleteComputer(Validate.parseLong(selection)) > 0) {
+            message = message + selection + ", ";
+          } else {
+            message = message + " id not found : '" + selection + "', ";
+          }
+        } catch (NullPointerException ex) {
+          message = message + " INVALID ID : '" + selection + "', ";
+        }
+      }
       session.setAttribute("messageHide", false);
       session.setAttribute("messageLevel", "info");
-      session.setAttribute("message", "Computers deleted, id : ");
+      session.setAttribute("message", message);
     }
-
+    doGet(request, response);
   }
 
   /**

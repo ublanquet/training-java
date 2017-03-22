@@ -92,7 +92,7 @@
             <c:forEach items="${list}" var="item">
                 <tr>
                     <td class="editMode">
-                        <input type="checkbox" name="cb" class="cb" value="0">
+                        <input type="checkbox" name="cb" class="cb" value="${item.id}" >
                     </td>
                     <td>
                         <a href="editComputer.html" onclick="">${item.getName()}</a>

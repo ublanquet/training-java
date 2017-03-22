@@ -30,6 +30,7 @@ $(function () {
     var filteredCount = $("#filteredCount").val();
 
     $("ul.pagination li").eq(1).addClass("active");
+    setPages();
 
     //Pagination
     $("ul.pagination a").click(function () {
@@ -77,8 +78,9 @@ $(function () {
     function setPages () {
             var count = filteredCount || totalCount;
             var maxPages = count / perPage;
+            var lastPage = count % perPage == 0 ? 0 : 1;
             $("ul.pagination li").each(function (i){
-                if(i > maxPages+1){
+                if(i > maxPages+lastPage){
                     $(this).hide();
                 }else{
                     $(this).show();

@@ -283,22 +283,24 @@ public enum DaoComputer implements DaoComputerI {
      * delete.
      *
      * @param id id
+     * @return nb affected rows, 0 fail, 1 success
      */
-    public void delete(Long id) {
+    public int delete(Long id) {
+      int affectedRows = 0;
 
-        try {
+      try {
             connect = Utils.getConnection(connect);
             PreparedStatement p = connect.prepareStatement("DELETE FROM computer WHERE computer.id = ?");
             p.setLong(1, id);
 
-            long affectedRows = p.executeUpdate();
+            affectedRows = p.executeUpdate();
 
             p.close();
             LOGGER.info(affectedRows + " rows updated");
         } catch (SQLException e) {
             LOGGER.error("Error deleting computer of ID " + id + e.getMessage() + e.getSQLState() + e.getStackTrace());
         }
-
+      return affectedRows;
     }
 
 

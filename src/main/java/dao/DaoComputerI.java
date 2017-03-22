@@ -48,6 +48,7 @@ public interface DaoComputerI {
     /**
      * delete.
      * @param id id
+     * @return nb affected rows, 0 fail, 1 success
      */
-    void delete(Long id);
+    int delete(Long id);
 }

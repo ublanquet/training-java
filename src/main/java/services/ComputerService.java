@@ -181,4 +181,18 @@ public class ComputerService {
     }
     return c;
   }
+
+  /**
+   * delete by id.
+   * @param id id to delete
+   * @return nb affected rows, 0 fail, 1 success
+   */
+  public int deleteComputer(long id) {
+    logger.debug("deleting computer of id : " + id);
+    int affectedRow = daoC.delete(id);
+    if (affectedRow == 0) {
+      logger.error("No Computer deleted, incorrect id");
+    }
+    return affectedRow;
+  }
 }
