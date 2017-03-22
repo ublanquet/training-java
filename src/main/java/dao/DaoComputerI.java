@@ -27,8 +27,9 @@ public interface DaoComputerI {
     /**
      * update.
      * @param c computer
+     * @return nb affected rows, 0 fail, 1 success
      */
-    void update(Computer c);
+    int update(Computer c);
 
     /**
      * select all computers.

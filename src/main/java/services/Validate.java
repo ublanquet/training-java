@@ -58,7 +58,6 @@ public class Validate {
         LocalDateTime date = null;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-
         try {
             if (!Objects.equals(input, "0") && !Objects.equals(input, "")) {
                 date = LocalDate.parse(input, formatter).atStartOfDay();
@@ -68,6 +67,8 @@ public class Validate {
             }
         } catch (DateTimeException ex) {
             logger.error("Date validation error, check dates " + ex.getMessage());
+        } catch (NullPointerException ex) {
+            logger.error("Date validation error, null input ");
         }
 
         return date;

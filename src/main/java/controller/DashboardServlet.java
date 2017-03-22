@@ -71,8 +71,17 @@ public class DashboardServlet extends HttpServlet {
     request.setAttribute("totalPages", pageCount);
     request.setAttribute("totalNums", pageNums);
 
-    if (session.getAttribute("messageHide") == null) {
+    if (session.getAttribute("messageHide") == null) { // actions feedback messages
       session.setAttribute("messageHide", true);
+    } else {
+      if (session.getAttribute("messageDisplayNb") == null) {
+        session.setAttribute("messageDisplayNb", 0);
+      } else {
+        session.setAttribute("messageDisplayNb", (int) session.getAttribute("messageDisplayNb") + 1);
+      }
+      if ((int) session.getAttribute("messageDisplayNb") > 0) {
+        session.setAttribute("messageHide", true);
+      }
     }
     request.getRequestDispatcher("/views/dashboard.jsp").forward(request, response);
   }

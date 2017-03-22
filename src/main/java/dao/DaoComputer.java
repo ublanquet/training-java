@@ -59,26 +59,35 @@ public enum DaoComputer implements DaoComputerI {
      * update.
      *
      * @param c computer
+     * @return nb affected rows, 0 fail, 1 success
      */
-    public void update(Computer c) {
+    public int update(Computer c) {
+      int affectedRows = 0;
         try {
             connect = Utils.getConnection(connect);
-            PreparedStatement p = connect.prepareStatement("UPDATE computer c SET " +
-                    "name = ?, introduced = ?, discontinued = ?, companyId = ?" +
-                    "WHERE c.id = ?");
+            PreparedStatement p = connect.prepareStatement("UPDATE computer SET " +
+                    "name = ?, introduced = ?, discontinued = ?, company_id = ?" +
+                    " WHERE computer.id = ?");
 
 
             p.setString(1, c.getName());
             p.setTimestamp(2, c.getIntroducedTimestamp());
             p.setTimestamp(3, c.getDiscontinuedTimestamp());
-            p.setLong(4, c.getId());
 
-            long affectedRows = p.executeUpdate();
+            if (c.getCompanyId() != null && c.getCompanyId() != 0) {
+              p.setLong(4, c.getCompanyId());
+            } else {
+              p.setNull(4, Types.BIGINT);
+            }
+            p.setLong(5, c.getId());
+
+            affectedRows = p.executeUpdate();
             p.close();
             LOGGER.info(affectedRows + " rows updated");
         } catch (SQLException e) {
             LOGGER.error("Error updating computer of ID " + c.getId() + e.getMessage() + e.getSQLState() + e.getStackTrace());
         }
+        return affectedRows;
     }
 
     /**

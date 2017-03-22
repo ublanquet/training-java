@@ -13,7 +13,7 @@
             <input type="checkbox" name="cb" class="cb" value="${item.id}">
         </td>
         <td>
-            <a href="editComputer.html" onclick="">${item.getName()}</a>
+            <a href="editcomputer?id=${item.id}" onclick="">${item.getName()}</a>
         </td>
         <td>${item.getIntroduced()}</td>
         <td>${item.getDiscontinued()}</td>
