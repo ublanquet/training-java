@@ -33,21 +33,12 @@ public class AddComputerServlet extends HttpServlet {
     HttpSession session = request.getSession();
 
     if (request.getParameter("computerName") != null) {
-      Computer c = GenericBuilder.of(Computer::new)
-          .with(Computer::setCompanyId, Long.valueOf(request.getParameter("companyId")))
-          .with(Computer::setIntroduced, Validate.parseDate(request.getParameter("introduced")))
-          .with(Computer::setDiscontinued, Validate.parseDate(request.getParameter("discontinued")))
-          .with(Computer::setName, request.getParameter("computerName"))
-          .build();
+      Computer c = Utils.buildComputerFromParams(request);
       newId = computerService.createComputer(c);
-      if (newId == 0 || newId == null) {
-        session.setAttribute("messageHide", false);
-        session.setAttribute("messageLevel", "warning");
-        session.setAttribute("message", "Error creating computer");
+      if (newId == null || newId == 0) {
+        Utils.setMessage("warning", "Error creating computer", session);
       } else {
-        session.setAttribute("messageHide", false);
-        session.setAttribute("messageLevel", "info");
-        session.setAttribute("message", "Computer created, id : " + newId);
+        Utils.setMessage("info", "Computer created, id : " + newId, session);
       }
     }
     response.sendRedirect("/dashboard");

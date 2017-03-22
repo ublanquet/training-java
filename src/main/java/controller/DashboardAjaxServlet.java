@@ -36,7 +36,6 @@ public class DashboardAjaxServlet extends HttpServlet {
       page.setNbEntries(perPage);
     }
     if (request.getParameter("search") != null && request.getParameter("search") != "") {
-      //request.setAttribute("search", request.getParameter("search"));
       page = computerService.getFilteredComputers(page, request.getParameter("search"));
     } else {
       page = computerService.getPaginatedComputers(page);

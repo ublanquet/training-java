@@ -35,29 +35,17 @@ public class EditComputerServlet extends HttpServlet {
    */
   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     int affectedRow = 0;
-    Computer c = new Computer();
     HttpSession session = request.getSession();
+    Computer c = Utils.buildComputerFromParams(request);
     try {
-
-      c = GenericBuilder.of(Computer::new)
-          .with(Computer::setId, Validate.parseLong(request.getParameter("id")))
-          .with(Computer::setCompanyId, Validate.parseLong(request.getParameter("companyId")))
-          .with(Computer::setIntroduced, Validate.parseDate(request.getParameter("introduced")))
-          .with(Computer::setDiscontinued, Validate.parseDate(request.getParameter("discontinued")))
-          .with(Computer::setName, request.getParameter("computerName"))
-          .build();
       affectedRow = computerService.updateComputer(c);
     } catch (Exception ex) {
       logger.error("Error updating computer : " + ex.getMessage() + ex.getStackTrace() + ex.getClass());
     }
     if (affectedRow == 0) {
-      session.setAttribute("messageHide", false);
-      session.setAttribute("messageLevel", "warning");
-      session.setAttribute("message", "Error updating computer");
+      Utils.setMessage("warning", "Error updating computer", session);
     } else {
-      session.setAttribute("messageHide", false);
-      session.setAttribute("messageLevel", "info");
-      session.setAttribute("message", "Computer updated, id : " + c.getId());
+      Utils.setMessage("info", "Computer updated, id : " + c.getId(), session);
     }
 
     response.sendRedirect("/dashboard");
