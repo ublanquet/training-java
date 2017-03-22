@@ -15,7 +15,7 @@ import static org.junit.Assert.fail;
 
 public class ComputerServiceTest {
     protected ComputerService service;
-    protected Computer computer, computer2, computer10;
+    protected Computer computer, computer2, computer10, computerToCreate;
     protected Company company, company2, companyNull;
     protected Page<Computer> page;
 
@@ -44,6 +44,11 @@ public class ComputerServiceTest {
                 .with(Computer::setName, "Apple IIc Plus")
                 .with(Computer::setCompany, companyNull)
                 .build();
+
+        computerToCreate = GenericBuilder.of(Computer::new)
+            .with(Computer::setName, "Apple IIc Plus")
+            .with(Computer::setCompany, companyNull)
+            .build();
 
         page = new Page<>(10);
     }
@@ -75,5 +80,20 @@ public class ComputerServiceTest {
             fail("if page null, should throw nullpointer");
         }catch (NullPointerException ex) {}
 
+    }
+
+    @Test
+    public void testCreateDeleteComputer() throws Exception {
+        long createdId = service.createComputer(computerToCreate);
+        if (createdId == 0) {
+            fail("failed computer creation");
+        }
+        Computer created = service.getComputerbyId(createdId);
+        assertEquals(computerToCreate.toString(), created.toString());
+
+        long nbDelete = service.deleteComputer(computerToCreate.getId());
+        if (nbDelete == 0) {
+            fail("failed computer delete");
+        }
     }
 }

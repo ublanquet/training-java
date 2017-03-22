@@ -44,9 +44,7 @@ public class DashboardServlet extends HttpServlet {
           message = message + " INVALID ID : '" + selection + "', ";
         }
       }
-      session.setAttribute("messageHide", false);
-      session.setAttribute("messageLevel", "info");
-      session.setAttribute("message", message);
+      Utils.setMessage("info", message, session);
     }
     doGet(request, response);
   }
@@ -74,18 +72,8 @@ public class DashboardServlet extends HttpServlet {
     request.setAttribute("totalPages", pageCount);
     request.setAttribute("totalNums", pageNums);
 
-    if (session.getAttribute("messageHide") == null) { // actions feedback messages
-      session.setAttribute("messageHide", true);
-    } else {
-      if (session.getAttribute("messageDisplayNb") == null) {
-        session.setAttribute("messageDisplayNb", 0);
-      } else {
-        session.setAttribute("messageDisplayNb", (int) session.getAttribute("messageDisplayNb") + 1);
-      }
-      if ((int) session.getAttribute("messageDisplayNb") > 0) {
-        session.setAttribute("messageHide", true);
-      }
-    }
+    Utils.cleanMessage(session);
+
     request.getRequestDispatcher("/views/dashboard.jsp").forward(request, response);
   }
 }

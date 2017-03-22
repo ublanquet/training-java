@@ -35,7 +35,7 @@ public enum DaoComputer implements DaoComputerI {
             p.setString(1, c.getName());
             p.setTimestamp(2, c.getIntroducedTimestamp());
             p.setTimestamp(3, c.getDiscontinuedTimestamp());
-            if (c.getCompanyId() != 0 && c.getCompanyId() != null) {
+            if (c.getCompanyId() != null && c.getCompanyId() != 0) {
               p.setLong(4, c.getCompanyId());
             } else {
               p.setNull(4, Types.BIGINT);
@@ -68,19 +68,15 @@ public enum DaoComputer implements DaoComputerI {
             PreparedStatement p = connect.prepareStatement("UPDATE computer SET " +
                     "name = ?, introduced = ?, discontinued = ?, company_id = ?" +
                     " WHERE computer.id = ?");
-
-
             p.setString(1, c.getName());
             p.setTimestamp(2, c.getIntroducedTimestamp());
             p.setTimestamp(3, c.getDiscontinuedTimestamp());
-
             if (c.getCompanyId() != null && c.getCompanyId() != 0) {
               p.setLong(4, c.getCompanyId());
             } else {
               p.setNull(4, Types.BIGINT);
             }
             p.setLong(5, c.getId());
-
             affectedRows = p.executeUpdate();
             p.close();
             LOGGER.info(affectedRows + " rows updated");

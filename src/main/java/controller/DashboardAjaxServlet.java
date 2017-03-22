@@ -26,29 +26,22 @@ public class DashboardAjaxServlet extends HttpServlet {
    * @throws IOException      r
    */
   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
     Page<Computer> page = new Page(10);
-
     if (request.getParameter("pageN") != null) {
       int pageN = Integer.parseInt(request.getParameter("pageN"));
       page.setCurrentPage(pageN);
-      //request.setAttribute("pageN", pageN);
     }
     if (request.getParameter("perPage") != null) {
       int perPage = Integer.parseInt(request.getParameter("perPage"));
       page.setNbEntries(perPage);
-      //request.setAttribute("perPage", perPage);
     }
-
     if (request.getParameter("search") != null && request.getParameter("search") != "") {
       //request.setAttribute("search", request.getParameter("search"));
       page = computerService.getFilteredComputers(page, request.getParameter("search"));
     } else {
       page = computerService.getPaginatedComputers(page);
     }
-
     Page<ComputerDto> pageDto = Mapper.convertPageDto(page);
-
     request.setAttribute("list", pageDto.getListPage());
     request.getRequestDispatcher("/views/dashboardTable.jsp").forward(request, response);
   }
