@@ -2,10 +2,8 @@ package controller;
 
 import model.Company;
 import model.Computer;
-import model.GenericBuilder;
 import services.CompanyService;
 import services.ComputerService;
-import services.Validate;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

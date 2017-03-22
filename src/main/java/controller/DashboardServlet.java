@@ -59,9 +59,9 @@ public class DashboardServlet extends HttpServlet {
    */
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     HttpSession session = request.getSession();
-    //Page<Computer> page = new Page(10);
     Page<ComputerDto> page;
     page = Mapper.convertPageDto(computerService.getPaginatedComputers(new Page<Computer>(10)));
+    request.setAttribute("page", page);
     request.setAttribute("list", page.getListPage());
     request.setAttribute("totalCount", computerService.getCount());
     Long pageCount = computerService.getCount() / 10;

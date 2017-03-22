@@ -110,6 +110,11 @@ $(function () {
         $("ul.pagination li").last().show();
      }
 
+    $('#searchForm').keypress(function(e) {
+        if (e.which == '13') {
+            ajaxTableReload();
+        }
+    });
 });
 
 
