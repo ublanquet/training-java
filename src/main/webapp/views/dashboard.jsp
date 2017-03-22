@@ -95,11 +95,11 @@
                         <input type="checkbox" name="cb" class="cb" value="${item.id}" >
                     </td>
                     <td>
-                        <a href="editcomputer?id=${item.id}" onclick="">${item.getName()}</a>
+                        <a href="editcomputer?id=${item.id}" onclick="">${item.name}</a>
                     </td>
-                    <td>${item.getIntroduced()}</td>
-                    <td>${item.getDiscontinued()}</td>
-                    <td>${item.getCompany().getName()}</td>
+                    <td>${item.introduced}</td>
+                    <td>${item.discontinued}</td>
+                    <td>${item.companyName}</td>
                 </tr>
             </c:forEach>
             </tbody>
@@ -116,7 +116,7 @@
                 </a>
             </li>
             <c:forEach items="${totalNums}" var="item">
-                <li><a href="#">${item}</a></li>
+                <li id="p${item}"><a href="#">${item}</a></li>
             </c:forEach>
             <li>
                 <a href="#" aria-label="Next">

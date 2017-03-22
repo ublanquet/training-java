@@ -1,13 +1,11 @@
 package model.DTO;
 
-import model.Company;
-
 public class ComputerDto {
 
   private String id;
   private String companyId;
 
-  private Company company;
+  private String companyName;
   private String name;
   private String introduced;
   private String discontinued;
@@ -47,12 +45,12 @@ public class ComputerDto {
     this.companyId = companyId;
   }
 
-  public Company getCompany() {
-    return company;
+  public String getCompanyName() {
+    return companyName;
   }
 
-  public void setCompany(Company company) {
-    this.company = company;
+  public void setCompanyName(String companyName) {
+    this.companyName = companyName;
   }
 
   public String getName() {

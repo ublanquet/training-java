@@ -28,6 +28,7 @@ $(function () {
     var table = $("tbody");
     var totalCount = $("#totalCount").val();
     var filteredCount = $("#filteredCount").val();
+    var pageMax = 1;
 
     $("ul.pagination li").eq(1).addClass("active");
     setPages();
@@ -42,6 +43,25 @@ $(function () {
         console.log( pageN );
 
         ajaxTableReload();
+    });
+
+    $("ul.pagination a").first().unbind( "click" ).click(function () {
+        if (pageN > 0) {
+            pageN--;
+            var filter = $("#searchbox").val();
+            $("ul.pagination li").removeClass("active");
+            $("#p"+pageN).addClass("active")
+            ajaxTableReload();
+        }
+    });
+    $("ul.pagination a").last().unbind( "click" ).click(function () {
+        if (pageN < pageMax-1) {
+            pageN++;
+            var filter = $("#searchbox").val();
+            $("ul.pagination li").removeClass("active");
+            $("#p" + pageN).addClass("active")
+            ajaxTableReload();
+        }
     });
 
     $("button.nbEntries").click(function () {
@@ -79,6 +99,7 @@ $(function () {
             var count = filteredCount || totalCount;
             var maxPages = count / perPage;
             var lastPage = count % perPage == 0 ? 0 : 1;
+            pageMax = maxPages+lastPage-1;
             $("ul.pagination li").each(function (i){
                 if(i > maxPages+lastPage){
                     $(this).hide();
@@ -86,6 +107,7 @@ $(function () {
                     $(this).show();
                 }
             });
+        $("ul.pagination li").last().show();
      }
 
 });

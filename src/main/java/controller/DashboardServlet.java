@@ -1,8 +1,10 @@
 package controller;
 
 import model.Computer;
+import model.DTO.ComputerDto;
 import model.Page;
 import services.ComputerService;
+import services.Mapper;
 import services.Validate;
 
 import javax.servlet.ServletException;
@@ -59,8 +61,9 @@ public class DashboardServlet extends HttpServlet {
    */
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     HttpSession session = request.getSession();
-    Page<Computer> page = new Page(10);
-    page = computerService.getPaginatedComputers(page);
+    //Page<Computer> page = new Page(10);
+    Page<ComputerDto> page;
+    page = Mapper.convertPageDto(computerService.getPaginatedComputers(new Page<Computer>(10)));
     request.setAttribute("list", page.getListPage());
     request.setAttribute("totalCount", computerService.getCount());
     Long pageCount = computerService.getCount() / 10;

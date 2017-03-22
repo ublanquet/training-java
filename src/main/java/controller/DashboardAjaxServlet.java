@@ -1,8 +1,10 @@
 package controller;
 
 import model.Computer;
+import model.DTO.ComputerDto;
 import model.Page;
 import services.ComputerService;
+import services.Mapper;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,6 +28,7 @@ public class DashboardAjaxServlet extends HttpServlet {
   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     Page<Computer> page = new Page(10);
+
     if (request.getParameter("pageN") != null) {
       int pageN = Integer.parseInt(request.getParameter("pageN"));
       page.setCurrentPage(pageN);
@@ -40,13 +43,13 @@ public class DashboardAjaxServlet extends HttpServlet {
     if (request.getParameter("search") != null && request.getParameter("search") != "") {
       //request.setAttribute("search", request.getParameter("search"));
       page = computerService.getFilteredComputers(page, request.getParameter("search"));
-      request.setAttribute("filteredCount", computerService.getCount(request.getParameter("search")));
     } else {
       page = computerService.getPaginatedComputers(page);
     }
 
+    Page<ComputerDto> pageDto = Mapper.convertPageDto(page);
 
-    request.setAttribute("list", page.getListPage());
+    request.setAttribute("list", pageDto.getListPage());
     request.getRequestDispatcher("/views/dashboardTable.jsp").forward(request, response);
   }
 
