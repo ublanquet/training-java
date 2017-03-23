@@ -1,11 +1,13 @@
 package services;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -15,13 +17,18 @@ import java.util.function.Function;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-public class SeleniumTests {
+public class SeleniumTest {
   WebDriver driver;
 
   @Before
   public void setUp() {
     System.setProperty("webdriver.gecko.driver", "/home/ebiz/Téléchargements/geckodriver-v0.15");
-    //driver = new FirefoxDriver();
+    driver = new FirefoxDriver();
+
+    /*System.setProperty("webdriver.gecko.driver","/home/ebiz/Téléchargements/geckodriver-v0.15");
+    DesiredCapabilities capabilities=DesiredCapabilities.firefox();
+    capabilities.setCapability("marionette", true);
+    driver = new FirefoxDriver(capabilities);*/
   }
 
   @After
@@ -70,11 +77,12 @@ public class SeleniumTests {
     // Should see: "cheese! - Google Search"
     System.out.println("Page title is: " + driver.getTitle());
 
+    driver.close();
     //Close the browser
     driver.quit();
 
-    assertEquals(0, 0);
-    fail();
+    //assertEquals(0, 0);
+    //fail();
   }
 
   public WebElement getWhenVisible(By locator, int timeout) {
