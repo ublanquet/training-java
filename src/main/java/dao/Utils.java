@@ -10,10 +10,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Utils {
-  private static final String URL = "jdbc:mysql://localhost:3306/computer-database-db?useSSL=false";
-  private static final String USER = "root";
-  private static final String PASS = "pass";
-  private static Logger logger = LoggerFactory.getLogger(" dao.utils");
+  private static final String URL = services.ConfigReader.getProperty("URL"); //"jdbc:mysql://localhost:3306/computer-database-db?useSSL=false";
+  private static final String USER = services.ConfigReader.getProperty("USER"); //"root";
+  private static final String PASS = services.ConfigReader.getProperty("PASS"); //"pass";
+  private static Logger logger = LoggerFactory.getLogger("dao.utils");
 
   /**
    * get connection obj.
@@ -22,6 +22,9 @@ public class Utils {
    * @return conected connection obj
    */
   public static Connection getConnection(Connection connect) {
+
+    //logger.debug("Config url" + services.ConfigReader.getProperty("URL"));
+
     try {
       Class.forName("com.mysql.jdbc.Driver").newInstance();
     } catch (Exception e) {
