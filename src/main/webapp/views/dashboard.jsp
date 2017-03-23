@@ -89,7 +89,9 @@
             </thead>
             <!-- Browse attribute computers -->
             <tbody id="results">
+            <my:dashboard list="${list}"></my:dashboard>
 
+            <!--
             <c:forEach items="${list}" var="item">
                 <tr>
                     <td class="editMode">
@@ -103,6 +105,7 @@
                     <td>${item.companyName}</td>
                 </tr>
             </c:forEach>
+            -->
             </tbody>
         </table>
     </div>

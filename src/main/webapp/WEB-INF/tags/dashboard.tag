@@ -1,16 +1,13 @@
-
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c"
            uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt"
            uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
+<%@ attribute name="list" type="java.util.ArrayList" required="true" %>
+<%@ attribute name="filteredCount" required="false" %>
 
-<my:dashboard list="${list}" filteredCount="${filteredCount}" ></my:dashboard>
-
-<!--
-<input type="hidden" id="filteredCount" value="${filteredCount}">
-
+<c:if test="${not empty filteredCount}">
+    <input type="hidden" id="filteredCount" value="${filteredCount}">
+</c:if>
 <c:forEach items="${list}" var="item">
     <tr>
         <td class="editMode">
@@ -24,5 +21,3 @@
         <td>${item.companyName}</td>
     </tr>
 </c:forEach>
-
--->

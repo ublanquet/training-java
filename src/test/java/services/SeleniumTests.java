@@ -20,7 +20,7 @@ public class SeleniumTests {
 
   @Before
   public void setUp() {
-    System.setProperty("webdriver.gecko.driver", "/home/ebiz/Téléchargements/geckodriver-v0.14");
+    System.setProperty("webdriver.gecko.driver", "/home/ebiz/Téléchargements/geckodriver-v0.15");
     //driver = new FirefoxDriver();
   }
 
