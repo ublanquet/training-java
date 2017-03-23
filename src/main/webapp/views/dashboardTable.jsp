@@ -7,22 +7,3 @@
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
 
 <my:dashboard list="${list}" filteredCount="${filteredCount}" ></my:dashboard>
-
-<!--
-<input type="hidden" id="filteredCount" value="${filteredCount}">
-
-<c:forEach items="${list}" var="item">
-    <tr>
-        <td class="editMode">
-            <input type="checkbox" name="cb" class="cb" value="${item.id}">
-        </td>
-        <td>
-            <a href="editcomputer?id=${item.id}" onclick="">${item.name}</a>
-        </td>
-        <td>${item.introduced}</td>
-        <td>${item.discontinued}</td>
-        <td>${item.companyName}</td>
-    </tr>
-</c:forEach>
-
--->

@@ -90,22 +90,6 @@
             <!-- Browse attribute computers -->
             <tbody id="results">
             <my:dashboard list="${list}"></my:dashboard>
-
-            <!--
-            <c:forEach items="${list}" var="item">
-                <tr>
-                    <td class="editMode">
-                        <input type="checkbox" name="cb" class="cb" value="${item.id}" >
-                    </td>
-                    <td>
-                        <a href="editcomputer?id=${item.id}" onclick="">${item.name}</a>
-                    </td>
-                    <td>${item.introduced}</td>
-                    <td>${item.discontinued}</td>
-                    <td>${item.companyName}</td>
-                </tr>
-            </c:forEach>
-            -->
             </tbody>
         </table>
     </div>
@@ -114,22 +98,6 @@
 <footer class="navbar-fixed-bottom">
     <div class="container text-center">
         <my:pagesNumbers nbPages="${totalPages}"></my:pagesNumbers>
-
-        <!--ul class="pagination">
-            <li>
-                <a href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li>
-            <c:forEach items="${totalNums}" var="item">
-                <li id="p${item}"><a href="#">${item}</a></li>
-            </c:forEach>
-            <li>
-                <a href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
-        </ul-->
 
         <div class="btn-group btn-group-sm pull-right" role="group">
             <button type="button" class="btn btn-default nbEntries active">10</button>
