@@ -1,4 +1,4 @@
-package Selenium;
+package services;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,14 +21,14 @@ public class SeleniumTests {
   @Before
   public void setUp() {
     System.setProperty("webdriver.gecko.driver", "/home/ebiz/Téléchargements/geckodriver-v0.14");
-    driver = new FirefoxDriver();
+    //driver = new FirefoxDriver();
   }
 
   @After
   public void tearDown() {
   }
 
-  //@Test
+  @Test
   public void test() throws Exception {
     // Create a new instance of the Firefox driver
     // Notice that the remainder of the code relies on the interface,
@@ -54,35 +54,38 @@ public class SeleniumTests {
 
     // Google's search is rendered dynamically with JavaScript.
     // Wait for the page to load, timeout after 10 seconds
-    (new WebDriverWait(driver, 10)).until(new ExpectedCondition<Boolean>() {
+    /*(new WebDriverWait(driver, 10)).until(new ExpectedCondition<Boolean>() {
       public Boolean apply(WebDriver d) {
         return d.getTitle().toLowerCase().startsWith("cheese!");
       }
-    });
+    });*/
 
-    /*(new WebDriverWait(driver, 10)).until(new Function<WebDriver, Boolean>() {
+    (new WebDriverWait(driver, 10)).until(new Function<WebDriver, Boolean>() {
       public Boolean apply(WebDriver d) {
         return d.getTitle().toLowerCase().startsWith("cheese!");
       }
     });
-    (new WebDriverWait(driver, 10)).until(d -> d.getTitle().toLowerCase().startsWith("cheese!"));*/
+    //(new WebDriverWait(driver, 10)).until(d -> d.getTitle().toLowerCase().startsWith("cheese!"));
 
     // Should see: "cheese! - Google Search"
     System.out.println("Page title is: " + driver.getTitle());
 
     //Close the browser
     driver.quit();
+
+    assertEquals(0, 0);
+    fail();
   }
 
   public WebElement getWhenVisible(By locator, int timeout) {
     WebElement element = null;
     WebDriverWait wait = new WebDriverWait(driver, timeout);
-    element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+    //element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
     return element;
   }
   public void clickWhenReady(By locator, int timeout) {
     WebDriverWait wait = new WebDriverWait(driver, timeout);
-    WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
-    element.click();
+    //WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
+    //element.click();
   }
 }

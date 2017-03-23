@@ -7,6 +7,7 @@ public class Page<T> {
     public int currentPage;
     private int nbEntries;
     private int maxPage;
+    private long allPagesItemCount;
 
     /**
      * basic constructor.

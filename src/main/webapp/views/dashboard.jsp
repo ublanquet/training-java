@@ -2,6 +2,7 @@
            uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt"
            uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!DOCTYPE html>
@@ -109,7 +110,9 @@
 
 <footer class="navbar-fixed-bottom">
     <div class="container text-center">
-        <ul class="pagination">
+        <my:pagesNumbers nbPages="${totalPages}"></my:pagesNumbers>
+
+        <!--ul class="pagination">
             <li>
                 <a href="#" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
@@ -123,7 +126,7 @@
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
-        </ul>
+        </ul-->
 
         <div class="btn-group btn-group-sm pull-right" role="group">
             <button type="button" class="btn btn-default nbEntries active">10</button>
