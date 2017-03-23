@@ -75,7 +75,9 @@ $(function () {
         ajaxTableReload();
     });
 
+    //$("#searchForm").submit().
     $("#searchForm").submit(function () {
+        event.preventDefault();
         ajaxTableReload();
     });
 
@@ -112,6 +114,14 @@ $(function () {
 
     $('#searchForm').keypress(function(e) {
         if (e.which == '13') {
+            e.preventDefault();
+            ajaxTableReload();
+        }
+    });
+
+    $('#searchBox').keypress(function(e) {
+        if (e.which == '13') {
+            e.preventDefault();
             ajaxTableReload();
         }
     });
