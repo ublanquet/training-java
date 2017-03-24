@@ -99,7 +99,7 @@
     <div class="container text-center">
         <my:pagesNumbers nbPages="${totalPages}"></my:pagesNumbers>
 
-        <div class="btn-group btn-group-sm pull-right" role="group">
+        <div class="btn-group btn-group-sm pull-right top-right" role="group">
             <button type="button" class="btn btn-default nbEntries active">10</button>
             <button type="button" class="btn btn-default nbEntries">50</button>
             <button type="button" class="btn btn-default nbEntries">100</button>

@@ -14,11 +14,13 @@ footer {
 }
 
 footer .pagination {
-    margin: 10px 0px;
+    margin: 5px 0px 0px;
 }
 
 footer .btn-group {
-    margin: 10px 10px;
+    padding-top: 10px;
+    margin: 0px 0px;
+    display: inline-block;
 }
 
 input[type='checkbox'] {

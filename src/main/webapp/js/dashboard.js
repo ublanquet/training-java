@@ -93,6 +93,7 @@ $(function () {
             filteredCount = $("#filteredCount").val();
             var count = filteredCount || totalCount;
             $("#homeTitle").text( count + " Computers found");
+            toggleEditMode();
             setPages();
         });
     }
