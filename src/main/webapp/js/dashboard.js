@@ -64,19 +64,19 @@ $(function () {
         }
     });
 
-    $("button.nbEntries").click(function () {
+    $("button.nbEntries").click(function (event) {
         $("button.nbEntries").removeClass("active");
         $(this).addClass("active");
         perPage = $(this).text();
         setPages();
     });
 
-    $("#searchsubmit").click(function () {
+    $("#searchsubmit").click(function (event) {
         ajaxTableReload();
     });
 
     //$("#searchForm").submit().
-    $("#searchForm").submit(function () {
+    $("#searchForm").submit(function (event) {
         event.preventDefault();
         ajaxTableReload();
     });
