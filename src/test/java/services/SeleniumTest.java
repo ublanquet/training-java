@@ -14,6 +14,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 import static org.junit.Assert.assertEquals;
 
@@ -55,13 +56,21 @@ public class SeleniumTest {
     System.out.println("Page first result is: " + result.getText());
 
     //check elements/page
+
     List<WebElement> perPage = driver.findElements(By.className("nbEntries"));
     perPage.get(2).click();
     WebElement firstPage = driver.findElement(By.id("p0"));
     firstPage.findElement(By.tagName("a")).click();
+    //GOTTA WAIT
+    //driver.wait(1);
+    (new WebDriverWait(driver, 10)).until(new Function<WebDriver, Boolean>() {
+      public Boolean apply(WebDriver d) {
+        return (d.findElements(By.tagName("tr")).size() > 11);
+      }
+    });
     int pageSize = driver.findElements(By.tagName("tr")).size();
     System.out.println("Items per page: " + pageSize);
-    assertEquals(100, pageSize);
+    assertEquals(101, pageSize);
 
     // Enter something to search for
     searchBox.sendKeys("CM");
@@ -84,6 +93,7 @@ public class SeleniumTest {
     (new WebDriverWait(driver, 10)).until(new Function<WebDriver, Boolean>() {
       public Boolean apply(WebDriver d) {
         return (computerNb.getText().length() > 12);
+        return driver.findElements(By.tagName("tr")).size() > 11;
       }
     });
 */

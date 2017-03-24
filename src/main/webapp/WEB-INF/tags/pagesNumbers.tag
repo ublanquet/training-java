@@ -2,7 +2,7 @@
 <%@ attribute name="nbPages" required="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<ul class="pagination">
+<ul class="pagination col-xs-10">
     <li>
         <a href="#" aria-label="Previous">
             <span aria-hidden="true">&laquo;</span>
