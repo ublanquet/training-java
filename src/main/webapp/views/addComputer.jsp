@@ -26,7 +26,7 @@
         <div class="row">
             <div class="col-xs-8 col-xs-offset-2 box">
                 <h1>Add Computer</h1>
-                <form action="addcomputer" method="POST">
+                <form action="addcomputer" method="POST" onsubmit="return validateDates();">
                     <fieldset>
                         <div class="form-group">
                             <label for="computerName">Computer name</label>
@@ -61,5 +61,10 @@
         </div>
     </div>
 </section>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/validate.js"></script>
+
 </body>
 </html>
+

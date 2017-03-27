@@ -29,7 +29,7 @@
                 </div>
                 <h1>Edit Computer</h1>
 
-                <form action="editcomputer" method="POST">
+                <form action="editcomputer" method="POST" onsubmit="return validateDates();">
                     <input type="hidden" value="${computer.id}" name="id" id="id"/>
                     <fieldset>
                         <div class="form-group">
@@ -64,5 +64,8 @@
         </div>
     </div>
 </section>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/validate.js"></script>
 </body>
 </html>
