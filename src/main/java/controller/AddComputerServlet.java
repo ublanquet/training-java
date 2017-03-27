@@ -17,7 +17,7 @@ import java.util.ArrayList;
 @WebServlet(name = "AddComputerServlet", urlPatterns = "/addcomputer")
 public class AddComputerServlet extends HttpServlet {
   CompanyService companyService = new CompanyService();
-  ComputerService computerService = new ComputerService();
+  ComputerService computerService = ComputerService.getInstance();
 
   /**
    * r.

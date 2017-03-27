@@ -15,7 +15,7 @@ import java.io.IOException;
 
 @WebServlet(name = "DashboardAjaxServlet", urlPatterns = "/dashboard/ajax")
 public class DashboardAjaxServlet extends HttpServlet {
-  ComputerService computerService = new ComputerService();
+  ComputerService computerService = ComputerService.getInstance();
 
   /**
    * post.

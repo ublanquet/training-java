@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 @WebServlet(name = "DashboardServlet", urlPatterns = "/dashboard")
 public class DashboardServlet extends HttpServlet {
-  private ComputerService computerService = new ComputerService();
+  private ComputerService computerService = ComputerService.getInstance();
 
   /**
    * r.

@@ -21,7 +21,7 @@ import java.util.ArrayList;
 @WebServlet(name = "EditComputerServlet", urlPatterns = "/editcomputer")
 public class EditComputerServlet extends HttpServlet {
   CompanyService companyService = new CompanyService();
-  ComputerService computerService = new ComputerService();
+  ComputerService computerService = ComputerService.getInstance();
   Logger logger = LoggerFactory.getLogger("controller.EditComputerServlet");
 
 

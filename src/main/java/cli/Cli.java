@@ -25,7 +25,7 @@ public class Cli {
     private static DaoCompany daoComp = DaoCompanyI.getInstance();
     private static Logger logger = LoggerFactory.getLogger(" dao.Cli");
     private static Boolean running = true;
-    private static ComputerService compService = new ComputerService();
+    private static ComputerService compService = ComputerService.getInstance();
     private static CompanyService companyService = new CompanyService();
 
     private static Scanner scanner = new Scanner(System.in);

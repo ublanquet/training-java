@@ -14,10 +14,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class ComputerService {
+public enum ComputerService {
+  INSTANCE;
   private Logger logger = LoggerFactory.getLogger(" services.ComputerService");
 
   private DaoComputer daoC = DaoComputerI.getInstance();
+
+
+  public static ComputerService getInstance() {
+    return ComputerService.INSTANCE;
+  }
 
   /**
    * get by id.
@@ -80,8 +86,9 @@ public class ComputerService {
    * @return created id
    */
   public Long createComputer(Computer c) {
-    if (c == null) {
-      logger.error("Error persisting computer : received null object");
+    if (!Validate.isValidComputer(c)) {
+      logger.error("Error persisting computer : invalid object");
+      return null;
     }
     long generatedKey = 0;
     try {
@@ -203,9 +210,13 @@ public class ComputerService {
    */
   public int updateComputer(Computer c) {
     logger.debug("Updating computer of id : " + c.getId());
+    if (!Validate.isValidComputer(c)) {
+      logger.error("No Computer updated, incorrect object");
+      return 0;
+    }
     int affectedRow = daoC.update(c);
     if (affectedRow == 0) {
-      logger.error("No Computer deleted, incorrect id");
+      logger.error("No Computer updated, error");
     }
     return affectedRow;
   }

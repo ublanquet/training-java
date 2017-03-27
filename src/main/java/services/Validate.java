@@ -1,5 +1,6 @@
 package services;
 
+import model.Computer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,103 +12,141 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Validate {
-    private static Logger logger = LoggerFactory.getLogger("services.Validate");
+  private static Logger logger = LoggerFactory.getLogger("services.Validate");
 
-    /**
-     * check valid string to Long.
-     *
-     * @param input input string
-     * @return is valid Long ?
-     */
-    public static Boolean isValidLong(String input) {
-        Long longInput;
-        try {
-            longInput = Long.parseLong(input);
-        } catch (NumberFormatException ex) {
-            logger.error("Long validation error, input : " + input);
-            return false;
-        }
-
-        return true;
+  /**
+   * check valid string to Long.
+   *
+   * @param input input string
+   * @return is valid Long ?
+   */
+  public static Boolean isValidLong(String input) {
+    Long longInput;
+    try {
+      longInput = Long.parseLong(input);
+    } catch (NumberFormatException ex) {
+      logger.error("Long validation error, input : " + input);
+      return false;
     }
 
-    /**
-     * parse a Long from string.
-     *
-     * @param input input
-     * @return converted number or null
-     */
-    public static Long parseLong(String input) {
-        Long longInput = null;
-        try {
-            longInput = Long.parseLong(input);
-        } catch (NumberFormatException ex) {
-            logger.error("Long parsing error, input : " + input);
-        }
+    return true;
+  }
 
-        return longInput;
+  /**
+   * parse a Long from string.
+   *
+   * @param input input
+   * @return converted number or null
+   */
+  public static Long parseLong(String input) {
+    Long longInput = null;
+    try {
+      longInput = Long.parseLong(input);
+    } catch (NumberFormatException ex) {
+      logger.error("Long parsing error, input : " + input);
     }
 
-    /**
-     * parse a date, format dd/MM/yyyy.
-     *
-     * @param input input string
-     * @return date obj or null if invalid
-     */
-    public static LocalDateTime parseDate(String input) {
-        LocalDateTime date = null;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    return longInput;
+  }
 
-        try {
-            if (!Objects.equals(input, "0") && !Objects.equals(input, "")) {
-                date = LocalDate.parse(input, formatter).atStartOfDay();
-                if (!isValidTimestamp(date)) {
-                    throw new DateTimeException("Invalid timestamp");
-                }
-            }
-        } catch (DateTimeException ex) {
-            logger.error("Date validation error, check dates " + ex.getMessage());
-        } catch (NullPointerException ex) {
-            logger.error("Date validation error, null input ");
+  /**
+   * parse a date, format dd/MM/yyyy.
+   *
+   * @param input input string
+   * @return date obj or null if invalid
+   */
+  public static LocalDateTime parseDate(String input) {
+    LocalDateTime date = null;
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+    try {
+      if (!Objects.equals(input, "0") && !Objects.equals(input, "")) {
+        date = LocalDate.parse(input, formatter).atStartOfDay();
+        if (!isValidTimestamp(date)) {
+          throw new DateTimeException("Invalid timestamp");
         }
-
-        return date;
+      }
+    } catch (DateTimeException ex) {
+      logger.error("Date validation error, check dates " + ex.getMessage());
+    } catch (NullPointerException ex) {
+      logger.error("Date validation error, null input ");
     }
 
-    /**
-     * check if a date is valid.
-     *
-     * @param input input
-     * @return true/false
-     */
-    public static Boolean isValidDate(String input) {
-        LocalDateTime date = null;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        try {
-            date = LocalDate.parse(input, formatter).atStartOfDay();
-        } catch (DateTimeException ex) {
-            logger.error("Date validation error, check input :" + input + ex.getMessage());
-            return false;
-        }
+    return date;
+  }
 
-        return true;
+  /**
+   * check if a date is valid.
+   *
+   * @param input input
+   * @return true/false
+   */
+  public static Boolean isValidDate(String input) {
+    LocalDateTime date = null;
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    try {
+      date = LocalDate.parse(input, formatter).atStartOfDay();
+    } catch (DateTimeException ex) {
+      logger.error("Date validation error, check input :" + input + ex.getMessage());
+      return false;
     }
 
-    /**
-     * check if a date is valid.
-     *
-     * @param input input
-     * @return true/false
-     */
-    public static Boolean isValidTimestamp(LocalDateTime input) {
-        Timestamp ts;
-        try {
-            ts = Timestamp.valueOf(input);
-        } catch (Exception ex) {
-            logger.error("Date timestamp validation error, check input : " + input + ex.getMessage());
-            return false;
-        }
+    return true;
+  }
 
-        return true;
+  /**
+   * check if a date is valid.
+   *
+   * @param input input
+   * @return true/false
+   */
+  public static Boolean isValidTimestamp(LocalDateTime input) {
+    Timestamp ts;
+    try {
+      ts = Timestamp.valueOf(input);
+    } catch (Exception ex) {
+      logger.error("Date timestamp validation error, check input : " + input + ex.getMessage());
+      return false;
     }
+
+    return true;
+  }
+
+  /**
+   * Validate a computer obj to make sure it's OK before persit.
+   * @param c computer to validate
+   * @return bool
+   */
+  public static Boolean isValidComputer(Computer c) {
+    try {
+      if (c == null) {
+        return false;
+      }
+      if (c.getIntroduced() != null && !Validate.isValidTimestamp(c.getIntroduced())) {
+        logger.error("Computer obj validation error : Date incorrect timestamp  : " + c.getIntroduced());
+        return false;
+      }
+      if (c.getDiscontinued() != null && !Validate.isValidTimestamp(c.getDiscontinued())) {
+        logger.error("Computer obj validation error : Date incorrect timestamp  : " + c.getDiscontinued());
+        return false;
+      }
+      if (c.getIntroduced() != null && c.getDiscontinued() != null && c.getIntroduced().isAfter(c.getDiscontinued())) {
+        logger.error("Computer obj validation error : date intro after date disco : " + c.getIntroduced() + "--" + c.getDiscontinued());
+        return false;
+      }
+      if (c.getName() == null || c.getName().length() < 2) {
+        logger.error("Computer obj validation error : name");
+        return false;
+      }
+      if ((c.getCompany() != null && c.getCompanyId() != null) && c.getCompany().getId() == c.getCompanyId()) {
+        logger.error("Computer obj validation error : mismatch companyID and company obj");
+        return false;
+      }
+    } catch (Exception ex) {
+      logger.error("Object validation error : " + c.toString() + ex.getMessage());
+      return false;
+    }
+
+    return true;
+  }
 }
