@@ -219,12 +219,15 @@ public enum DaoComputer implements DaoComputerI {
     ResultSet rs;
     try {
       connect = Utils.getConnection(connect);
-      PreparedStatement p = connect.prepareStatement("SELECT * FROM computer LEFT JOIN company on computer.company_id = company.id WHERE computer.name LIKE ? " +
+      PreparedStatement p = connect.prepareStatement("SELECT * FROM computer LEFT JOIN company on computer.company_id = company.id " +
+          "WHERE ( computer.name LIKE ? " +
+          " OR company.name LIKE ? ) " +
           "LIMIT ? OFFSET ?");
       LOGGER.debug("search filter : " + name);
       p.setString(1, "%" + name + "%");
-      p.setLong(2, page.getNbEntries());
-      p.setLong(3, page.getFirstEntryIndex());
+      p.setString(2, "%" + name + "%");
+      p.setLong(3, page.getNbEntries());
+      p.setLong(4, page.getFirstEntryIndex());
 
       rs = p.executeQuery();
 
