@@ -21,7 +21,7 @@ public enum DaoCompany implements DaoCompanyI {
      * @return generated id
      */
     public Long create(Company c) {
-        connect = Utils.getConnection(connect);
+        connect = Utils.getConnection();
         long generatedKey = 0;
         try {
 
@@ -50,10 +50,10 @@ public enum DaoCompany implements DaoCompanyI {
      */
     public void update(Company c) {
         try {
-            connect = Utils.getConnection(connect);
-            PreparedStatement p = connect.prepareStatement("UPDATE company c SET " +
+            connect = Utils.getConnection();
+            PreparedStatement p = connect.prepareStatement("UPDATE company SET " +
                     "name = ? " +
-                    " WHERE c.id = ?");
+                    " WHERE company.id = ?");
             p.setString(1, c.getName());
 
             long affectedRows = p.executeUpdate();
@@ -77,8 +77,8 @@ public enum DaoCompany implements DaoCompanyI {
         ArrayList<Company> resultList = new ArrayList<>();
         ResultSet rs;
         try {
-            connect = Utils.getConnection(connect);
-            PreparedStatement p = connect.prepareStatement("SELECT * FROM company c " +
+            connect = Utils.getConnection();
+            PreparedStatement p = connect.prepareStatement("SELECT * FROM company " +
                     "LIMIT ?, ?");
             p.setLong(1, min);
             p.setLong(2, max);
@@ -107,7 +107,7 @@ public enum DaoCompany implements DaoCompanyI {
         ArrayList<Company> resultList = new ArrayList<>();
         ResultSet rs;
         try {
-            connect = Utils.getConnection(connect);
+            connect = Utils.getConnection();
             PreparedStatement p = connect.prepareStatement("SELECT * FROM company;");
 
             rs = p.executeQuery();
@@ -135,8 +135,8 @@ public enum DaoCompany implements DaoCompanyI {
         ResultSet rs;
         Company c = new Company();
         try {
-            connect = Utils.getConnection(connect);
-            PreparedStatement p = connect.prepareStatement("SELECT * FROM computer WHERE computer.id = ?");
+            connect = Utils.getConnection();
+            PreparedStatement p = connect.prepareStatement("SELECT * FROM company WHERE company.id = ?");
             p.setLong(1, id);
 
             rs = p.executeQuery();
@@ -161,21 +161,42 @@ public enum DaoCompany implements DaoCompanyI {
     /**
      * delete from db.
      * @param id id
+     * @return deleted rows numbers
      */
-    public void delete(Long id) {
+    public int delete(Long id) {
         try {
-            connect = Utils.getConnection(connect);
-            PreparedStatement p = connect.prepareStatement("DELETE FROM company WHERE computer.id = ?");
+            connect = Utils.getConnection();
+            connect.setAutoCommit(false);
+            PreparedStatement p = connect.prepareStatement("DELETE FROM computer " +
+                "WHERE company_id = ?");
             p.setLong(1, id);
 
-            long affectedRows = p.executeUpdate();
+            int affectedComputersRows = p.executeUpdate();
 
+            p = connect.prepareStatement("DELETE FROM company WHERE company.id = ?");
+            p.setLong(1, id);
+
+            int affectedRows = p.executeUpdate();
+            connect.commit();
             p.close();
-            connect.close();
-            LOGGER.info(affectedRows + " rows updated");
+            LOGGER.info(affectedComputersRows + " computers rows deleted");
+            LOGGER.info(affectedRows + " company deleted, id : " + id);
+            return affectedComputersRows + affectedRows;
         } catch (SQLException e) {
+            try {
+                connect.rollback();
+            } catch (SQLException ex) {
+              LOGGER.error("Error during transaction rollback");
+            }
             LOGGER.error("Error deleting company of ID " + id + "%n" + e.getMessage() + e.getSQLState() + e.getStackTrace());
+        } finally {
+            try {
+              connect.setAutoCommit(true);
+              connect.close();
+            } catch (SQLException ex) {
+              LOGGER.error("Error closing connection");
+            }
         }
-
+        return 0;
     }
 }

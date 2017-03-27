@@ -19,18 +19,16 @@ public class Utils {
 
   /**
    * get connection obj.
-   *
-   * @param connect connection obj to fill
    * @return conected connection obj
    */
-  public static Connection getConnection(Connection connect) {
+  public static Connection getConnection() {
     try {
-        connect = DS.getConnection();
-        logger.debug("Getting connection");
+      logger.debug("Getting connection");
+      return DS.getConnection();
     } catch (SQLException e) {
       logger.error("Error getting connection" + e.getMessage() + e.getSQLState() + e.getStackTrace());
     }
-    return connect;
+    return null;
   }
 
   /**

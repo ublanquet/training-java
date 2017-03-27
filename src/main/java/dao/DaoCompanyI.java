@@ -48,10 +48,11 @@ public interface DaoCompanyI {
     Company getById(Long id);
 
     /**
-     * delete.
+     * delete a company and all associated computers.
      * @param id id
+     * @return nb of deleted rows.
      */
-    void delete(Long id);
+    int delete(Long id);
 
 
 }

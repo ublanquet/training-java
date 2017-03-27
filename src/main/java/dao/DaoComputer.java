@@ -25,7 +25,7 @@ public enum DaoComputer implements DaoComputerI {
      * @return generated id
      */
     public Long create(Computer c) {
-        connect = Utils.getConnection(connect);
+        connect = Utils.getConnection();
         long generatedKey = 0;
         try {
 
@@ -65,7 +65,7 @@ public enum DaoComputer implements DaoComputerI {
     public int update(Computer c) {
       int affectedRows = 0;
         try {
-            connect = Utils.getConnection(connect);
+            connect = Utils.getConnection();
             PreparedStatement p = connect.prepareStatement("UPDATE computer SET " +
                     "name = ?, introduced = ?, discontinued = ?, company_id = ?" +
                     " WHERE computer.id = ?");
@@ -99,7 +99,7 @@ public enum DaoComputer implements DaoComputerI {
         ArrayList<Computer> resultList = new ArrayList<>();
         ResultSet rs;
         try {
-            connect = Utils.getConnection(connect);
+            connect = Utils.getConnection();
             PreparedStatement p = connect.prepareStatement("SELECT * FROM computer LEFT JOIN company on computer.company_id = company.id " +
                     "LIMIT ?, ?");
             p.setLong(1, min);
@@ -135,7 +135,7 @@ public enum DaoComputer implements DaoComputerI {
         Long count = null;
         ResultSet rs;
         try {
-            connect = Utils.getConnection(connect);
+            connect = Utils.getConnection();
             PreparedStatement p = connect.prepareStatement(" SELECT COUNT(*) FROM computer;");
             rs = p.executeQuery();
             while (rs.next()) {
@@ -158,7 +158,7 @@ public enum DaoComputer implements DaoComputerI {
         Long count = null;
         ResultSet rs;
         try {
-            connect = Utils.getConnection(connect);
+            connect = Utils.getConnection();
             PreparedStatement p = connect.prepareStatement(" SELECT COUNT(*) FROM computer WHERE name LIKE ?;");
             p.setString(1, "%" + name + "%");
             rs = p.executeQuery();
@@ -184,7 +184,7 @@ public enum DaoComputer implements DaoComputerI {
         ArrayList<Computer> resultList = new ArrayList<>();
         ResultSet rs;
         try {
-            connect = Utils.getConnection(connect);
+            connect = Utils.getConnection();
             PreparedStatement p = connect.prepareStatement("SELECT * FROM computer LEFT JOIN company on computer.company_id = company.id " +
                     "LIMIT ? OFFSET ?");
             p.setLong(1, page.getNbEntries());
@@ -224,7 +224,7 @@ public enum DaoComputer implements DaoComputerI {
     ArrayList<Computer> resultList = new ArrayList<>();
     ResultSet rs;
     try {
-      connect = Utils.getConnection(connect);
+      connect = Utils.getConnection();
       PreparedStatement p = connect.prepareStatement("SELECT * FROM computer LEFT JOIN company on computer.company_id = company.id " +
           "WHERE ( computer.name LIKE ? " +
           " OR company.name LIKE ? ) " +
@@ -268,7 +268,7 @@ public enum DaoComputer implements DaoComputerI {
         ResultSet rs;
         Computer c = new Computer();
         try {
-            connect = Utils.getConnection(connect);
+            connect = Utils.getConnection();
             PreparedStatement p = connect.prepareStatement("SELECT * FROM computer LEFT JOIN company on computer.company_id = company.id " +
                     "WHERE computer.id = ?");
             p.setLong(1, id);
@@ -304,7 +304,7 @@ public enum DaoComputer implements DaoComputerI {
       int affectedRows = 0;
 
       try {
-            connect = Utils.getConnection(connect);
+            connect = Utils.getConnection();
             PreparedStatement p = connect.prepareStatement("DELETE FROM computer WHERE computer.id = ?");
             p.setLong(1, id);
 

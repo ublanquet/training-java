@@ -56,7 +56,7 @@ public class Cli {
      * @return user input command
      */
     public static String waitCommand() {
-        System.out.println("Available commands (not case sensitive) : getComputerbyId, getAllComputer, getAllCompany, createComputer, getallcomputerp, quit");
+        System.out.println("Available commands (not case sensitive) : getComputerbyId, getAllComputer, getAllCompany, createComputer, getallcomputerp, deleteCompany, quit");
         System.out.println("Enter your command : ");
         String command = scanner.nextLine();
         return command;
@@ -147,6 +147,15 @@ public class Cli {
                     result = displayAllComputerPaged("0", "20");
                 }
                 break;
+            case "deletecompany":
+              if (splited.length > 0) {
+                result = deleteCompany(getLongInput(splited[1]));
+              } else {
+                System.out.println("Enter the company ID to delete");
+                Long id = getLongInput(getInput());
+                result = deleteCompany(id);
+              }
+              break;
             case "quit":
                 running = false;
                 break;
@@ -319,5 +328,20 @@ public class Cli {
             return "Command error " + ex.getMessage();
         }
         return "Command success, generated ID : " + generatedKey;
+    }
+
+  /**
+   * delete a company and all computers of that company.
+   * @param id company id to delete
+   * @return command return status string
+   */
+    public static String deleteCompany(long id) {
+      int deletedRows = 0;
+      try {
+        deletedRows = companyService.deleteCompany(id);
+      } catch (Exception ex) {
+        return "Command error " + ex.getMessage();
+      }
+      return "Command success, deleted rows : " + deletedRows;
     }
 }

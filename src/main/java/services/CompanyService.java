@@ -47,6 +47,21 @@ public class CompanyService {
         return cList;
     }
 
+  /**
+   * delete a company and all associated computers.
+   * @param id id
+   * @return deleted rows
+   */
+    public int deleteCompany(long id) {
+        logger.debug("Deleting company of ID : " + id);
+        try {
+          return daoC.delete(id);
+        } catch (Exception ex) {
+          logger.error("Error deleting company of ID : " + id);
+        }
+        return 0;
+    }
+
     /*public Page<Company> getPaginatedCompanies (Page<Company> page) {
         LOGGER.debug("Retrieving pagniated companies stored in DB : ");
         try {
