@@ -36,10 +36,10 @@ public class DashboardAjaxServlet extends HttpServlet {
       page.setNbEntries(perPage);
     }
     if (request.getParameter("search") != null && request.getParameter("search") != "") {
-      page = computerService.getFilteredComputers(page, request.getParameter("search"));
+      page = computerService.getFiltered(page, request.getParameter("search"));
       request.setAttribute("filteredCount", computerService.getCount(request.getParameter("search")));
     } else {
-      page = computerService.getPaginatedComputers(page);
+      page = computerService.getPaginated(page);
     }
     Page<ComputerDto> pageDto = Mapper.convertPageDto(page);
     request.setAttribute("list", pageDto.getListPage());

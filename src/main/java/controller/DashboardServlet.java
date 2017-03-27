@@ -35,7 +35,7 @@ public class DashboardServlet extends HttpServlet {
       String[] idToDelete =  request.getParameter("selection").split(",");
       for (String selection : idToDelete) {
         try {
-          if (computerService.deleteComputer(Validate.parseLong(selection)) > 0) {
+          if (computerService.delete(Validate.parseLong(selection)) > 0) {
             message = message + selection + ", ";
           } else {
             message = message + " id not found : '" + selection + "', ";
@@ -60,7 +60,7 @@ public class DashboardServlet extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     HttpSession session = request.getSession();
     Page<ComputerDto> page;
-    page = Mapper.convertPageDto(computerService.getPaginatedComputers(new Page<Computer>(10)));
+    page = Mapper.convertPageDto(computerService.getPaginated(new Page<Computer>(10)));
     request.setAttribute("page", page);
     request.setAttribute("list", page.getListPage());
     request.setAttribute("totalCount", computerService.getCount());

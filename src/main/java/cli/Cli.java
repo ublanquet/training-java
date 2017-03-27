@@ -178,7 +178,7 @@ public class Cli {
         System.out.println("Displaying all companies stored in DB : ");
 
         try {
-            ArrayList<Company> cList = companyService.getAllCompany(Long.parseLong(start), Long.parseLong(end));
+            ArrayList<Company> cList = companyService.getAll(Long.parseLong(start), Long.parseLong(end));
             for (Company c : cList) {
                 System.out.println(c.toString());
             }
@@ -200,7 +200,7 @@ public class Cli {
         try {
             pageComputer.setNbEntries(Integer.parseInt(nb));
             pageComputer.setCurrentPage(Integer.parseInt(pageN));
-            compService.getPaginatedComputers(pageComputer);
+            compService.getPaginated(pageComputer);
 
             System.out.println(pageComputer.toString());
         } catch (Exception ex) {
@@ -220,7 +220,7 @@ public class Cli {
         System.out.println("Displaying all computers stored in DB : ");
 
         try {
-            ArrayList<Computer> cList = compService.getAllComputers(Long.parseLong(start), Long.parseLong(end));
+            ArrayList<Computer> cList = compService.getAll(Long.parseLong(start), Long.parseLong(end));
 
             for (Computer c : cList) {
                 System.out.println(c.toString());
@@ -240,7 +240,7 @@ public class Cli {
     public static String displayComputerbyId(Long id) {
         System.out.println("Retrieving computer of ID " + id + ": ");
         try {
-            Computer computer = compService.getComputerbyId(id);
+            Computer computer = compService.getById(id);
             System.out.println(computer.toString());
         } catch (Exception ex) {
             return "Command error " + ex.getMessage();
@@ -322,7 +322,7 @@ public class Cli {
         }
         long generatedKey = 0;
         try {
-            generatedKey = compService.createComputer(c);
+            generatedKey = compService.create(c);
             System.out.println(c.toString());
         } catch (Exception ex) {
             return "Command error " + ex.getMessage();
@@ -338,7 +338,7 @@ public class Cli {
     public static String deleteCompany(long id) {
       int deletedRows = 0;
       try {
-        deletedRows = companyService.deleteCompany(id);
+        deletedRows = companyService.delete(id);
       } catch (Exception ex) {
         return "Command error " + ex.getMessage();
       }

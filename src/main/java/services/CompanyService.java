@@ -21,7 +21,7 @@ public class CompanyService {
      * @param end nb
      * @return list companies
      */
-    public ArrayList<Company> getAllCompany(Long start, Long end) {
+    public ArrayList<Company> getAll(Long start, Long end) {
         logger.debug("Displaying all companies stored in DB : ");
         ArrayList<Company> cList = null;
         try {
@@ -36,7 +36,7 @@ public class CompanyService {
      * get all companies.
      * @return list companies
      */
-    public ArrayList<Company> getAllCompany() {
+    public ArrayList<Company> getAll() {
         logger.debug("Displaying all companies stored in DB : ");
         ArrayList<Company> cList = null;
         try {
@@ -52,7 +52,7 @@ public class CompanyService {
    * @param id id
    * @return deleted rows
    */
-    public int deleteCompany(long id) {
+    public int delete(long id) {
         logger.debug("Deleting company of ID : " + id);
         try {
           return daoC.delete(id);

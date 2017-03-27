@@ -59,7 +59,7 @@ public class ComputerServiceTest {
 
     @Test
     public void testGetAllComputer() throws Exception {
-        ArrayList<Computer> computers = service.getAllComputers( (long) 0, (long) 10);
+        ArrayList<Computer> computers = service.getAll( (long) 0, (long) 10);
 
         assertEquals(computer.toString(), computers.get(0).toString());
         assertEquals(computer2.toString(), computers.get(1).toString());
@@ -68,7 +68,7 @@ public class ComputerServiceTest {
 
     @Test
     public void testGetAllComputerPaginated() throws Exception {
-        page = service.getPaginatedComputers(page);
+        page = service.getPaginated(page);
 
         assertEquals(computer.toString(), page.list.get(0).toString());
         assertEquals(computer2.toString(), page.list.get(1).toString());
@@ -76,7 +76,7 @@ public class ComputerServiceTest {
 
         page = null;
         try{
-            page = service.getPaginatedComputers(page);
+            page = service.getPaginated(page);
             fail("if page null, should throw nullpointer");
         }catch (NullPointerException ex) {}
 
@@ -84,14 +84,14 @@ public class ComputerServiceTest {
 
     @Test
     public void testCreateDeleteComputer() throws Exception {
-        long createdId = service.createComputer(computerToCreate);
+        long createdId = service.create(computerToCreate);
         if (createdId == 0) {
             fail("failed computer creation");
         }
-        Computer created = service.getComputerbyId(createdId);
+        Computer created = service.getById(createdId);
         assertEquals(computerToCreate.toString(), created.toString());
 
-        long nbDelete = service.deleteComputer(computerToCreate.getId());
+        long nbDelete = service.delete(computerToCreate.getId());
         if (nbDelete == 0) {
             fail("failed computer delete");
         }

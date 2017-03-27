@@ -25,7 +25,7 @@ public class CompanyServiceTest {
 
     @Test
     public void testGetAllCompany() throws Exception {
-        ArrayList<Company> companies = service.getAllCompany( (long) 0, (long) 10);
+        ArrayList<Company> companies = service.getAll( (long) 0, (long) 10);
 
         assertEquals(company.toString(), companies.get(0).toString());
         assertEquals(company10.toString(), companies.get(9).toString());

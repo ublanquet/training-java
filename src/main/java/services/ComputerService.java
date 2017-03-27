@@ -31,7 +31,7 @@ public enum ComputerService {
    * @param id id
    * @return computer
    */
-  public Computer getComputerbyId(Long id) {
+  public Computer getById(Long id) {
     logger.info("Retrieving computer of ID " + id + ": ");
     Computer computer = null;
     try {
@@ -85,7 +85,7 @@ public enum ComputerService {
    * @param c compuetr
    * @return created id
    */
-  public Long createComputer(Computer c) {
+  public Long create(Computer c) {
     if (!Validate.isValidComputer(c)) {
       logger.error("Error persisting computer : invalid object");
       return null;
@@ -112,7 +112,7 @@ public enum ComputerService {
    * @param end   nb
    * @return list computers
    */
-  public ArrayList<Computer> getAllComputers(Long start, Long end) {
+  public ArrayList<Computer> getAll(Long start, Long end) {
     logger.debug("Retrieving all computers stored in DB : ");
     ArrayList<Computer> cList = new ArrayList<>();
     try {
@@ -129,7 +129,7 @@ public enum ComputerService {
    * @param page page
    * @return filled page
    */
-  public Page<Computer> getPaginatedComputers(Page<Computer> page) {
+  public Page<Computer> getPaginated(Page<Computer> page) {
     logger.debug("Retrieving pagniated computers stored in DB : ");
     page = daoC.selectPaginated(page);
 
@@ -143,7 +143,7 @@ public enum ComputerService {
    * @param page page
    * @return filled page
    */
-  public Page<Computer> getFilteredComputers(Page<Computer> page, String name) {
+  public Page<Computer> getFiltered(Page<Computer> page, String name) {
     logger.debug("Retrieving pagniated computers stored in DB : ");
     page = daoC.selectFiltered(page, name != null ? name : "");
 
@@ -194,7 +194,7 @@ public enum ComputerService {
    * @param id id to delete
    * @return nb affected rows, 0 fail, 1 success
    */
-  public int deleteComputer(long id) {
+  public int delete(long id) {
     logger.debug("deleting computer of id : " + id);
     int affectedRow = daoC.delete(id);
     if (affectedRow == 0) {
@@ -208,7 +208,7 @@ public enum ComputerService {
    * @param c obj to delete
    * @return nb affected rows, 0 fail, 1 success
    */
-  public int updateComputer(Computer c) {
+  public int update(Computer c) {
     logger.debug("Updating computer of id : " + c.getId());
     if (!Validate.isValidComputer(c)) {
       logger.error("No Computer updated, incorrect object");

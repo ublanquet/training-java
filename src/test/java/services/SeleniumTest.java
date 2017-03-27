@@ -123,6 +123,12 @@ public class SeleniumTest {
     long secondCount = service.getCount("test-selenium");
     assertEquals(firstCount + 1, secondCount);
 
+    (new WebDriverWait(driver, 10)).until(new Function<WebDriver, Boolean>() {
+      public Boolean apply(WebDriver d) {
+        return (d.findElement(By.id("searchbox")) != null);
+      }
+    });
+
     WebElement searchBox = driver.findElement(By.id("searchbox"));
     WebElement searchSubmit = driver.findElement(By.id("searchsubmit"));
 

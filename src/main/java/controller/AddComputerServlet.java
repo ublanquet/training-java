@@ -32,7 +32,7 @@ public class AddComputerServlet extends HttpServlet {
 
     if (request.getParameter("computerName") != null) {
       Computer c = Utils.buildComputerFromParams(request);
-      newId = computerService.createComputer(c);
+      newId = computerService.create(c);
       if (newId == null || newId == 0) {
         Utils.setMessage("warning", "Error creating computer", session);
       } else {
@@ -50,7 +50,7 @@ public class AddComputerServlet extends HttpServlet {
    * @throws IOException r
    */
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    ArrayList<Company> companies = companyService.getAllCompany();
+    ArrayList<Company> companies = companyService.getAll();
     request.setAttribute("companies", companies);
     request.getRequestDispatcher("/views/addComputer.jsp").forward(request, response);
   }

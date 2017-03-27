@@ -37,7 +37,7 @@ public class EditComputerServlet extends HttpServlet {
     HttpSession session = request.getSession();
     Computer c = Utils.buildComputerFromParams(request);
     try {
-      affectedRow = computerService.updateComputer(c);
+      affectedRow = computerService.update(c);
     } catch (Exception ex) {
       logger.error("Error updating computer : " + ex.getMessage() + ex.getStackTrace() + ex.getClass());
     }
@@ -64,9 +64,9 @@ public class EditComputerServlet extends HttpServlet {
     } catch (Exception ex) {
       response.sendRedirect("/dashboard");
     }
-    ArrayList<Company> companies = companyService.getAllCompany();
+    ArrayList<Company> companies = companyService.getAll();
     request.setAttribute("companies", companies);
-    request.setAttribute("computer", computerService.getComputerbyId(id));
+    request.setAttribute("computer", computerService.getById(id));
     request.getRequestDispatcher("/views/editComputer.jsp").forward(request, response);
   }
 }

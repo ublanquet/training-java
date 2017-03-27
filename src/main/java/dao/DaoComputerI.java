@@ -1,6 +1,7 @@
 package dao;
 
 import model.Computer;
+import model.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,4 +53,21 @@ public interface DaoComputerI {
      * @return nb affected rows, 0 fail, 1 success
      */
     int delete(Long id);
+
+  /**
+   * get computer list paged.
+   *
+   * @param page the page
+   * @return the filled page
+   */
+    Page<Computer> selectPaginated(Page page);
+
+  /**
+   * get computer list paged and filtered by name.
+   * @param name name filter
+   * @param page the page
+   * @return the filled page
+   */
+  Page<Computer> selectFiltered(Page page, String name);
+
 }
