@@ -77,6 +77,11 @@ public class SeleniumTest {
     searchSubmit.click();
     // Now submit the form. WebDriver will find the form for us from the element
     //searchBox.submit();
+    (new WebDriverWait(driver, 10)).until(new Function<WebDriver, Boolean>() {
+      public Boolean apply(WebDriver d) {
+        return (d.findElement(By.id("filteredCount")) != null);
+      }
+    });
 
     //refresh our selectors after the search (js modify a lot of them)
     computerNb = driver.findElement(By.id("homeTitle"));
@@ -173,7 +178,7 @@ public class SeleniumTest {
     deleteButton.click();
     driver.switchTo().alert().accept();
     driver.get("http://localhost:8080/dashboard");
-    //secondCount = service.getCount("test-selenium");
-    //assertEquals(firstCount, secondCount);
+    secondCount = service.getCount("test-selenium");
+    assertEquals(firstCount, secondCount);
   }
 }

@@ -1,19 +1,21 @@
 package dao;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Utils {
-  private static final String URL = services.ConfigReader.getProperty("URL"); //"jdbc:mysql://localhost:3306/computer-database-db?useSSL=false";
-  private static final String USER = services.ConfigReader.getProperty("USER"); //"root";
-  private static final String PASS = services.ConfigReader.getProperty("PASS"); //"pass";
+  private static final String CONFIGFILE = "/db.properties";
+  private static final HikariConfig CFG = new HikariConfig(CONFIGFILE);
+  private static final HikariDataSource DS = new HikariDataSource(CFG);
   private static Logger logger = LoggerFactory.getLogger("dao.utils");
+
 
   /**
    * get connection obj.
@@ -22,20 +24,9 @@ public class Utils {
    * @return conected connection obj
    */
   public static Connection getConnection(Connection connect) {
-
-    //logger.debug("Config url" + services.ConfigReader.getProperty("URL"));
-
     try {
-      Class.forName("com.mysql.jdbc.Driver").newInstance();
-    } catch (Exception e) {
-      logger.error("Error getting connection driver " + e.getMessage() + e.getStackTrace());
-    }
-    try {
-      if (connect == null || connect.isClosed()) {
-
-        connect = DriverManager.getConnection(URL, USER, PASS);
+        connect = DS.getConnection();
         logger.debug("Getting connection");
-      }
     } catch (SQLException e) {
       logger.error("Error getting connection" + e.getMessage() + e.getSQLState() + e.getStackTrace());
     }
