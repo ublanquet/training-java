@@ -40,6 +40,12 @@ public enum DaoCompany implements DaoCompanyI {
             LOGGER.info(" Company created, generated ID : " + generatedKey);
         } catch (SQLException e) {
             LOGGER.error("Error creating company" + e.getMessage() + e.getSQLState() + e.getStackTrace());
+        } finally {
+          try {
+            connect.close();
+          } catch (SQLException ex) {
+            LOGGER.error("Error closing connection");
+          }
         }
         return generatedKey;
     }
@@ -64,6 +70,12 @@ public enum DaoCompany implements DaoCompanyI {
 
         } catch (SQLException e) {
             LOGGER.error("Error updating entry" + e.getMessage() + e.getSQLState() + e.getStackTrace());
+        } finally {
+          try {
+            connect.close();
+          } catch (SQLException ex) {
+            LOGGER.error("Error closing connection");
+          }
         }
     }
 
@@ -94,6 +106,12 @@ public enum DaoCompany implements DaoCompanyI {
             connect.close();
         } catch (SQLException e) {
             LOGGER.error("Error retrieving companies" + e.getMessage() + e.getSQLState() + e.getStackTrace());
+        } finally {
+          try {
+            connect.close();
+          } catch (SQLException ex) {
+            LOGGER.error("Error closing connection");
+          }
         }
 
         return resultList;
@@ -121,6 +139,12 @@ public enum DaoCompany implements DaoCompanyI {
             connect.close();
         } catch (SQLException e) {
             LOGGER.error("Error retrieving companies" + e.getMessage() + e.getSQLState() + e.getStackTrace());
+        } finally {
+          try {
+            connect.close();
+          } catch (SQLException ex) {
+            LOGGER.error("Error closing connection");
+          }
         }
 
         return resultList;
@@ -153,6 +177,12 @@ public enum DaoCompany implements DaoCompanyI {
             connect.close();
         } catch (SQLException e) {
             LOGGER.error("Error retrieving company of ID " + id + "%n" + e.getMessage() + e.getSQLState() + e.getStackTrace());
+        } finally {
+          try {
+            connect.close();
+          } catch (SQLException ex) {
+            LOGGER.error("Error closing connection");
+          }
         }
 
         return c;

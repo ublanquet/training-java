@@ -48,10 +48,15 @@ public enum DaoComputer implements DaoComputerI {
                 c.setId(generatedKey);
             }
             p.close();
-            connect.close();
             LOGGER.info(" Computer created, generated ID : " + generatedKey);
         } catch (SQLException e) {
             LOGGER.error("Error creating computer " + e.getMessage() + e.getSQLState() + e.getStackTrace());
+        } finally {
+          try {
+            connect.close();
+          } catch (SQLException ex) {
+            LOGGER.error("Error closing connection");
+          }
         }
         return generatedKey;
     }
@@ -80,10 +85,15 @@ public enum DaoComputer implements DaoComputerI {
             p.setLong(5, c.getId());
             affectedRows = p.executeUpdate();
             p.close();
-            connect.close();
           LOGGER.info(affectedRows + " rows updated");
         } catch (SQLException e) {
             LOGGER.error("Error updating computer of ID " + c.getId() + e.getMessage() + e.getSQLState() + e.getStackTrace());
+        } finally {
+          try {
+            connect.close();
+          } catch (SQLException ex) {
+            LOGGER.error("Error closing connection");
+          }
         }
         return affectedRows;
     }
@@ -119,9 +129,14 @@ public enum DaoComputer implements DaoComputerI {
                 resultList.add(c);
             }
             p.close();
-            connect.close();
         } catch (SQLException e) {
             LOGGER.error("Error getting computers" + e.getMessage() + e.getSQLState() + e.getStackTrace());
+        } finally {
+          try {
+            connect.close();
+          } catch (SQLException ex) {
+            LOGGER.error("Error closing connection");
+          }
         }
 
         return resultList;
@@ -142,9 +157,14 @@ public enum DaoComputer implements DaoComputerI {
                 count = rs.getLong(1);
             }
             p.close();
-            connect.close();
         } catch (SQLException e) {
             LOGGER.error("Error getting computers count " + e.getMessage() + e.getSQLState() + e.getStackTrace());
+        } finally {
+          try {
+            connect.close();
+          } catch (SQLException ex) {
+            LOGGER.error("Error closing connection");
+          }
         }
         return count;
     }
@@ -167,9 +187,14 @@ public enum DaoComputer implements DaoComputerI {
                 count = rs.getLong(1);
             }
             p.close();
-            connect.close();
         } catch (SQLException e) {
             LOGGER.error("Error getting computers count by name " + e.getMessage() + e.getSQLState() + e.getStackTrace());
+        } finally {
+          try {
+            connect.close();
+          } catch (SQLException ex) {
+            LOGGER.error("Error closing connection");
+          }
         }
         return count;
     }
@@ -204,9 +229,14 @@ public enum DaoComputer implements DaoComputerI {
                 resultList.add(c);
             }
             p.close();
-            connect.close();
         } catch (SQLException e) {
             LOGGER.error("Error getting computers" + e.getMessage() + e.getSQLState() + e.getStackTrace());
+        } finally {
+          try {
+            connect.close();
+          } catch (SQLException ex) {
+            LOGGER.error("Error closing connection");
+          }
         }
 
         page.setList(resultList);
@@ -249,9 +279,14 @@ public enum DaoComputer implements DaoComputerI {
         resultList.add(c);
       }
       p.close();
-      connect.close();
     } catch (SQLException e) {
       LOGGER.error("Error getting computers" + e.getMessage() + e.getSQLState() + e.getStackTrace());
+    } finally {
+      try {
+        connect.close();
+      } catch (SQLException ex) {
+        LOGGER.error("Error closing connection");
+      }
     }
 
     page.setList(resultList);
@@ -286,9 +321,14 @@ public enum DaoComputer implements DaoComputerI {
                         .build();
             }
             p.close();
-            connect.close();
         } catch (SQLException e) {
             LOGGER.error("Error retrieving computer of ID " + id + e.getMessage() + e.getSQLState() + e.getStackTrace());
+        } finally {
+          try {
+            connect.close();
+          } catch (SQLException ex) {
+            LOGGER.error("Error closing connection");
+          }
         }
 
         return c;
@@ -311,11 +351,16 @@ public enum DaoComputer implements DaoComputerI {
             affectedRows = p.executeUpdate();
 
             p.close();
-            connect.close();
         LOGGER.info(affectedRows + " rows updated");
         } catch (SQLException e) {
             LOGGER.error("Error deleting computer of ID " + id + e.getMessage() + e.getSQLState() + e.getStackTrace());
+        } finally {
+        try {
+          connect.close();
+        } catch (SQLException ex) {
+          LOGGER.error("Error closing connection");
         }
+      }
       return affectedRows;
     }
 
