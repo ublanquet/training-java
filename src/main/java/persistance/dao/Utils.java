@@ -15,16 +15,34 @@ public class Utils {
   private static final HikariConfig CFG = new HikariConfig(CONFIGFILE);
   private static final HikariDataSource DS = new HikariDataSource(CFG);
   private static Logger logger = LoggerFactory.getLogger("persistance.dao.utils");
-
+  private static ThreadLocal<Connection> connectionThreadLocal = new ThreadLocal<Connection>();
 
   /**
    * get connection obj.
    * @return conected connection obj
    */
-  public static Connection getConnection() {
+  public static Connection getConnectionDeprecated() {
     try {
       logger.debug("Getting connection");
       return DS.getConnection();
+    } catch (SQLException e) {
+      logger.error("Error getting connection" + e.getMessage() + e.getSQLState() + e.getStackTrace());
+    }
+    return null;
+  }
+
+  /**
+   * get connection obj unique by thread.
+   * @return conected connection obj
+   */
+  public static Connection getConnection() { // use a threadlocal here or in the Dao?
+    try {
+      logger.debug("Getting connection");
+      Connection c = connectionThreadLocal.get();
+      if (c == null || c.isClosed()) {
+        connectionThreadLocal.set(c = DS.getConnection());
+      }
+      return c;
     } catch (SQLException e) {
       logger.error("Error getting connection" + e.getMessage() + e.getSQLState() + e.getStackTrace());
     }
