@@ -1,8 +1,8 @@
 package controller;
 
-import model.Computer;
-import model.DTO.ComputerDto;
-import model.Page;
+import persistance.model.Computer;
+import persistance.model.DTO.ComputerDto;
+import persistance.model.Page;
 import services.ComputerService;
 import services.Mapper;
 

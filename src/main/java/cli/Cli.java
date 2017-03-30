@@ -1,12 +1,12 @@
 package cli;
 
-import dao.DaoCompany;
-import dao.DaoCompanyI;
-import dao.DaoComputer;
-import dao.DaoComputerI;
-import model.Company;
-import model.Computer;
-import model.Page;
+import persistance.dao.DaoCompany;
+import persistance.dao.DaoCompanyI;
+import persistance.dao.DaoComputer;
+import persistance.dao.DaoComputerI;
+import persistance.model.Company;
+import persistance.model.Computer;
+import persistance.model.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import services.CompanyService;

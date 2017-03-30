@@ -1,4 +1,4 @@
-package model;
+package persistance.model;
 
 
 public class Company {

@@ -1,9 +1,9 @@
 package services;
 
-import model.Computer;
-import model.DTO.ComputerDto;
-import model.GenericBuilder;
-import model.Page;
+import persistance.model.Computer;
+import persistance.model.DTO.ComputerDto;
+import persistance.model.GenericBuilder;
+import persistance.model.Page;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;

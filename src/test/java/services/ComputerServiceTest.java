@@ -1,9 +1,9 @@
 package services;
 
-import model.Company;
-import model.Computer;
-import model.GenericBuilder;
-import model.Page;
+import persistance.model.Company;
+import persistance.model.Computer;
+import persistance.model.GenericBuilder;
+import persistance.model.Page;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

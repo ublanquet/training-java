@@ -1,7 +1,7 @@
-package dao;
+package persistance.dao;
 
 
-import model.Company;
+import persistance.model.Company;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public interface DaoCompanyI {
 
-    Logger LOGGER = LoggerFactory.getLogger(" dao.DaoCompany");
+    Logger LOGGER = LoggerFactory.getLogger(" persistance.dao.DaoCompany");
 
     /**
      * reutrn unique instance.

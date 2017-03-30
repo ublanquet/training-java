@@ -1,4 +1,4 @@
-package model.DTO;
+package persistance.model.DTO;
 
 public class ComputerDto {
 

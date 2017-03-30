@@ -1,7 +1,7 @@
 package controller;
 
-import model.Company;
-import model.Computer;
+import persistance.model.Company;
+import persistance.model.Computer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import services.CompanyService;

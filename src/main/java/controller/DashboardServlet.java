@@ -1,8 +1,8 @@
 package controller;
 
-import model.Computer;
-import model.DTO.ComputerDto;
-import model.Page;
+import persistance.model.Computer;
+import persistance.model.DTO.ComputerDto;
+import persistance.model.Page;
 import services.ComputerService;
 import services.Mapper;
 import services.Validate;
@@ -65,12 +65,7 @@ public class DashboardServlet extends HttpServlet {
     request.setAttribute("list", page.getListPage());
     request.setAttribute("totalCount", computerService.getCount());
     Long pageCount = computerService.getCount() / 10;
-    ArrayList<String> pageNums = new ArrayList();
-    for (long i = 0; i < pageCount + 1; i++) {
-      pageNums.add("" + i);
-    }
     request.setAttribute("totalPages", pageCount);
-    request.setAttribute("totalNums", pageNums);
 
     Utils.cleanMessage(session);
 

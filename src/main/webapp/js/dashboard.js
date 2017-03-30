@@ -64,19 +64,19 @@ $(function () {
         }
     });
 
-    $("button.nbEntries").click(function (event) {
+    $("button.nbEntries").click(function () {
         $("button.nbEntries").removeClass("active");
         $(this).addClass("active");
         perPage = $(this).text();
         setPages();
     });
 
-    $("#searchsubmit").click(function (event) {
+    $("#searchsubmit").click(function () {
         ajaxTableReload();
     });
 
     //$("#searchForm").submit().
-    $("#searchForm").submit(function (event) {
+    $("#searchForm").submit(function (e) {
         event.preventDefault();
         ajaxTableReload();
     });
@@ -93,7 +93,6 @@ $(function () {
             filteredCount = $("#filteredCount").val();
             var count = filteredCount || totalCount;
             $("#homeTitle").text( count + " Computers found");
-            toggleEditMode();
             setPages();
         });
     }

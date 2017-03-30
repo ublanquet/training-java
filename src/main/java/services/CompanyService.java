@@ -1,9 +1,9 @@
 package services;
 
 
-import dao.DaoCompany;
-import dao.DaoCompanyI;
-import model.Company;
+import persistance.dao.DaoCompany;
+import persistance.dao.DaoCompanyI;
+import persistance.model.Company;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

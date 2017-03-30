@@ -1,14 +1,14 @@
-package dao;
+package persistance.dao;
 
-import model.Computer;
-import model.Page;
+import persistance.model.Computer;
+import persistance.model.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
 public interface DaoComputerI {
-    Logger LOGGER = LoggerFactory.getLogger("dao.DaoComputer");
+    Logger LOGGER = LoggerFactory.getLogger("persistance.dao.DaoComputer");
 
     /**
      * get unique instance.

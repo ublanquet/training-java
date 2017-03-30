@@ -1,4 +1,4 @@
-package model;
+package persistance.model;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -31,6 +31,7 @@ public class Computer {
     public Computer(Long id, Company company, String name, LocalDateTime introduced, LocalDateTime discontinued) {
         this.id = id;
         this.company = company;
+        this.companyId = company.getId();
         this.name = name;
         this.introduced = introduced;
         this.discontinued = discontinued;

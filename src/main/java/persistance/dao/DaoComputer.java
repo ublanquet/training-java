@@ -1,9 +1,9 @@
-package dao;
+package persistance.dao;
 
-import model.Company;
-import model.Computer;
-import model.GenericBuilder;
-import model.Page;
+import persistance.model.Company;
+import persistance.model.Computer;
+import persistance.model.GenericBuilder;
+import persistance.model.Page;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

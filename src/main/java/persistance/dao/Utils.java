@@ -1,4 +1,4 @@
-package dao;
+package persistance.dao;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -14,7 +14,7 @@ public class Utils {
   private static final String CONFIGFILE = "/db.properties";
   private static final HikariConfig CFG = new HikariConfig(CONFIGFILE);
   private static final HikariDataSource DS = new HikariDataSource(CFG);
-  private static Logger logger = LoggerFactory.getLogger("dao.utils");
+  private static Logger logger = LoggerFactory.getLogger("persistance.dao.utils");
 
 
   /**

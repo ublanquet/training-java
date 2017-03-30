@@ -1,9 +1,9 @@
 package services;
 
-import dao.DaoComputer;
-import dao.DaoComputerI;
-import model.Computer;
-import model.Page;
+import persistance.dao.DaoComputer;
+import persistance.dao.DaoComputerI;
+import persistance.model.Computer;
+import persistance.model.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

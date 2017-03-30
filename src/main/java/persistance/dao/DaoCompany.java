@@ -1,6 +1,6 @@
-package dao;
+package persistance.dao;
 
-import model.Company;
+import persistance.model.Company;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

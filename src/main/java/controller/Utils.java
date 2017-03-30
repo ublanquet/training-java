@@ -1,8 +1,8 @@
 package controller;
 
 
-import model.Computer;
-import model.GenericBuilder;
+import persistance.model.Computer;
+import persistance.model.GenericBuilder;
 import services.Validate;
 
 import javax.servlet.http.HttpServletRequest;
