@@ -58,9 +58,13 @@ public class Page<T> {
         return allPagesItemCount;
     }
 
-    public void setAllPagesItemCount(long allPagesItemCount) {
+  /**
+   * set total numbers of items across all pages, and calc the total number of pages required.
+   * @param allPagesItemCount nb of items across all pages
+   */
+  public void setAllPagesItemCount(long allPagesItemCount) {
         this.allPagesItemCount = allPagesItemCount;
-        if( nbEntries > 0 ) {
+        if (nbEntries > 0) {
             maxPage = (int) allPagesItemCount / nbEntries + (allPagesItemCount % nbEntries == 0 ? 0 : 1);
         }
     }

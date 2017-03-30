@@ -110,6 +110,12 @@
             <artifactId>checkstyle</artifactId>
             <version>5.0</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.collections</groupId>
+                    <artifactId>google-collections</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- https://mvnrepository.com/artifact/javax/javaee-api -->
         <dependency>
