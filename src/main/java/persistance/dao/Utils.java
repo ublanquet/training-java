@@ -35,7 +35,7 @@ public class Utils {
    * get connection obj unique by thread.
    * @return conected connection obj
    */
-  public static Connection getConnection() { // use a threadlocal here or in the Dao?
+  public static Connection getConnection() { // use a threadlocal here or in the Dao? doesn't hikari deal with that ? how to manage cleanup ?
     try {
       logger.debug("Getting connection");
       Connection c = connectionThreadLocal.get();

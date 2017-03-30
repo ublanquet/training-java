@@ -91,16 +91,6 @@ public class SeleniumTest {
     System.out.println("Page computer nb is: " + computerNb.getText());
     assertEquals("8 Computers found", computerNb.getText());
     assertEquals("CM-2a", result.getText());
-
-
-/*
-    (new WebDriverWait(driver, 10)).until(new Function<WebDriver, Boolean>() {
-      public Boolean apply(WebDriver d) {
-        return (computerNb.getText().length() > 12);
-        return driver.findElements(By.tagName("tr")).size() > 11;
-      }
-    });
-*/
   }
 
   @Test

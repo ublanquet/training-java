@@ -1,5 +1,6 @@
 package services;
 
+import org.mockito.Mockito;
 import persistance.model.Company;
 import persistance.model.Computer;
 import persistance.model.GenericBuilder;
@@ -8,6 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
@@ -49,7 +51,6 @@ public class ComputerServiceTest {
             .with(Computer::setName, "Apple IIc Plus")
             .with(Computer::setCompany, companyNull)
             .build();
-
         page = new Page<>(10);
     }
 
@@ -88,7 +89,15 @@ public class ComputerServiceTest {
         if (createdId == 0) {
             fail("failed computer creation");
         }
-        Computer created = service.getById(createdId);
+
+        /*
+      final Computer mockComputer = Mockito.mock(Computer.class);
+      final ComputerService cServiceMock = Mockito.mock(ComputerService.class);
+      Mockito.doThrow(new SQLException()).when(cServiceMock).create(mockComputer);
+      assertEquals((long)cServiceMock.create(mockComputer), (long)0);
+      */
+
+      Computer created = service.getById(createdId);
         assertEquals(computerToCreate.toString(), created.toString());
 
         long nbDelete = service.delete(computerToCreate.getId());

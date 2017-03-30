@@ -88,7 +88,7 @@ public enum ComputerService {
   public Long create(Computer c) {
     if (!Validate.isValidComputer(c)) {
       logger.error("Error persisting computer : invalid object");
-      return null;
+      return (long) 0;
     }
     long generatedKey = 0;
     try {
