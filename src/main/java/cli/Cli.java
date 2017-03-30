@@ -1,12 +1,12 @@
-package view;
+package cli;
 
-import dao.DaoCompany;
-import dao.DaoCompanyI;
-import dao.DaoComputer;
-import dao.DaoComputerI;
-import model.Company;
-import model.Computer;
-import model.Page;
+import persistance.dao.DaoCompany;
+import persistance.dao.DaoCompanyI;
+import persistance.dao.DaoComputer;
+import persistance.dao.DaoComputerI;
+import persistance.model.Company;
+import persistance.model.Computer;
+import persistance.model.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import services.CompanyService;
@@ -25,7 +25,7 @@ public class Cli {
     private static DaoCompany daoComp = DaoCompanyI.getInstance();
     private static Logger logger = LoggerFactory.getLogger(" dao.Cli");
     private static Boolean running = true;
-    private static ComputerService compService = new ComputerService();
+    private static ComputerService compService = ComputerService.getInstance();
     private static CompanyService companyService = new CompanyService();
 
     private static Scanner scanner = new Scanner(System.in);
@@ -56,7 +56,7 @@ public class Cli {
      * @return user input command
      */
     public static String waitCommand() {
-        System.out.println("Available commands (not case sensitive) : getComputerbyId, getAllComputer, getAllCompany, createComputer, getallcomputerp, quit");
+        System.out.println("Available commands (not case sensitive) : getComputerbyId, getAllComputer, getAllCompany, createComputer, getallcomputerp, deleteCompany, quit");
         System.out.println("Enter your command : ");
         String command = scanner.nextLine();
         return command;
@@ -73,12 +73,12 @@ public class Cli {
     }
 
     /**
-     * convert input to long.
+     * convert input to Long.
      *
      * @param input input
-     * @return long input
+     * @return Long input
      */
-    public static long getLongInput(String input) {
+    public static Long getLongInput(String input) {
         long longInput = -1;
         try {
             longInput = Long.parseLong(input);
@@ -126,7 +126,7 @@ public class Cli {
                     result = displayComputerbyId(getLongInput(splited[1]));
                 } else {
                     System.out.println("Enter the computer ID to retrieve");
-                    long id = getLongInput(getInput());
+                    Long id = getLongInput(getInput());
                     result = displayComputerbyId(id);
                 }
                 break;
@@ -147,6 +147,15 @@ public class Cli {
                     result = displayAllComputerPaged("0", "20");
                 }
                 break;
+            case "deletecompany":
+              if (splited.length > 0) {
+                result = deleteCompany(getLongInput(splited[1]));
+              } else {
+                System.out.println("Enter the company ID to delete");
+                Long id = getLongInput(getInput());
+                result = deleteCompany(id);
+              }
+              break;
             case "quit":
                 running = false;
                 break;
@@ -169,7 +178,7 @@ public class Cli {
         System.out.println("Displaying all companies stored in DB : ");
 
         try {
-            ArrayList<Company> cList = companyService.getAllCompany(Long.parseLong(start), Long.parseLong(end));
+            ArrayList<Company> cList = companyService.getAll(Long.parseLong(start), Long.parseLong(end));
             for (Company c : cList) {
                 System.out.println(c.toString());
             }
@@ -191,7 +200,7 @@ public class Cli {
         try {
             pageComputer.setNbEntries(Integer.parseInt(nb));
             pageComputer.setCurrentPage(Integer.parseInt(pageN));
-            compService.getPaginatedComputers(pageComputer);
+            compService.getPaginated(pageComputer);
 
             System.out.println(pageComputer.toString());
         } catch (Exception ex) {
@@ -211,7 +220,7 @@ public class Cli {
         System.out.println("Displaying all computers stored in DB : ");
 
         try {
-            ArrayList<Computer> cList = compService.getAllComputers(Long.parseLong(start), Long.parseLong(end));
+            ArrayList<Computer> cList = compService.getAll(Long.parseLong(start), Long.parseLong(end));
 
             for (Computer c : cList) {
                 System.out.println(c.toString());
@@ -228,10 +237,10 @@ public class Cli {
      * @param id id
      * @return command success status string
      */
-    public static String displayComputerbyId(long id) {
+    public static String displayComputerbyId(Long id) {
         System.out.println("Retrieving computer of ID " + id + ": ");
         try {
-            Computer computer = compService.getComputerbyId(id);
+            Computer computer = compService.getById(id);
             System.out.println(computer.toString());
         } catch (Exception ex) {
             return "Command error " + ex.getMessage();
@@ -276,7 +285,7 @@ public class Cli {
         }
 
         try {
-            long companyId = Long.parseLong(input[startIndex]);
+            Long companyId = Long.parseLong(input[startIndex]);
             String name = input[startIndex + 1];
 
             LocalDateTime intro = null;
@@ -313,11 +322,26 @@ public class Cli {
         }
         long generatedKey = 0;
         try {
-            generatedKey = compService.createComputer(c);
+            generatedKey = compService.create(c);
             System.out.println(c.toString());
         } catch (Exception ex) {
             return "Command error " + ex.getMessage();
         }
         return "Command success, generated ID : " + generatedKey;
+    }
+
+  /**
+   * delete a company and all computers of that company.
+   * @param id company id to delete
+   * @return command return status string
+   */
+    public static String deleteCompany(long id) {
+      int deletedRows = 0;
+      try {
+        deletedRows = companyService.delete(id);
+      } catch (Exception ex) {
+        return "Command error " + ex.getMessage();
+      }
+      return "Command success, deleted rows : " + deletedRows;
     }
 }

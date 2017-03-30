@@ -1,11 +1,11 @@
-package model;
+package persistance.model;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 public class Computer {
-    private long id;
-    private long companyId;
+    private Long id;
+    private Long companyId;
 
     private Company company;
     private String name;
@@ -21,15 +21,17 @@ public class Computer {
 
     /**
      * constructor.
-     * @param id id
-     * @param company company
-     * @param name name
-     * @param introduced date intro
+     *
+     * @param id           id
+     * @param company      company
+     * @param name         name
+     * @param introduced   date intro
      * @param discontinued date disco
      */
-    public Computer(long id, Company company, String name, LocalDateTime introduced, LocalDateTime discontinued) {
+    public Computer(Long id, Company company, String name, LocalDateTime introduced, LocalDateTime discontinued) {
         this.id = id;
         this.company = company;
+        this.companyId = company.getId();
         this.name = name;
         this.introduced = introduced;
         this.discontinued = discontinued;
@@ -37,13 +39,14 @@ public class Computer {
 
     /**
      * Constructor.
-     * @param id id
-     * @param companyId company id
-     * @param name name
-     * @param introduced date intro
+     *
+     * @param id           id
+     * @param companyId    company id
+     * @param name         name
+     * @param introduced   date intro
      * @param discontinued date disco
      */
-    public Computer(long id, long companyId, String name, LocalDateTime introduced, LocalDateTime discontinued) {
+    public Computer(Long id, Long companyId, String name, LocalDateTime introduced, LocalDateTime discontinued) {
         this.id = id;
         this.companyId = companyId;
         this.name = name;
@@ -53,12 +56,13 @@ public class Computer {
 
     /**
      * constructor.
-     * @param companyId company id
-     * @param name name
-     * @param introduced date intro
+     *
+     * @param companyId    company id
+     * @param name         name
+     * @param introduced   date intro
      * @param discontinued date disco
      */
-    public Computer(long companyId, String name, LocalDateTime introduced, LocalDateTime discontinued) {
+    public Computer(Long companyId, String name, LocalDateTime introduced, LocalDateTime discontinued) {
         this.companyId = companyId;
         this.name = name;
         this.introduced = introduced;
@@ -67,34 +71,47 @@ public class Computer {
 
     /**
      * constructor.
-     * @param id id
+     *
+     * @param id        id
      * @param companyId company id
-     * @param name name
+     * @param name      name
      */
-    public Computer(long id, long companyId, String name) {
+    public Computer(Long id, Long companyId, String name) {
         this.id = id;
         this.companyId = companyId;
         this.name = name;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getCompanyId() {
+    public Long getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(long companyId) {
+    public void setCompanyId(Long companyId) {
         this.companyId = companyId;
     }
 
+    /**
+     * set company adn companyId.
+     *
+     * @param company company
+     */
     public void setCompany(Company company) {
         this.company = company;
+        if (company != null) {
+            this.companyId = company.getId();
+        }
+    }
+
+    public Company getCompany() {
+        return company;
     }
 
     public String getName() {
@@ -155,8 +172,8 @@ public class Computer {
     public String toString() {
         return "Computer{" +
                 "id=" + id +
-                ", companyId=" + companyId +
-                ", companyName=" + company.getName() +
+                ", companyId=" + (company != null ? company.getId() : "null") +
+                ", companyName=" + (company != null ? company.getName() : "null") +
                 ", name='" + name + '\'' +
                 ", introduced=" + introduced +
                 ", discontinued=" + discontinued +

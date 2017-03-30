@@ -1,4 +1,4 @@
-package model;
+package persistance.model;
 
 import java.util.ArrayList;
 
@@ -7,6 +7,9 @@ public class Page<T> {
     public int currentPage;
     private int nbEntries;
     private int maxPage;
+
+
+    private long allPagesItemCount;
 
     /**
      * basic constructor.
@@ -43,6 +46,30 @@ public class Page<T> {
         this.currentPage = page;
     }
 
+    public int getMaxPage() {
+        return maxPage;
+    }
+
+    public void setMaxPage(int maxPage) {
+        this.maxPage = maxPage;
+    }
+
+    public long getAllPagesItemCount() {
+        return allPagesItemCount;
+    }
+
+  /**
+   * set total numbers of items across all pages, and calc the total number of pages required.
+   * @param allPagesItemCount nb of items across all pages
+   */
+  public void setAllPagesItemCount(long allPagesItemCount) {
+        this.allPagesItemCount = allPagesItemCount;
+        if (nbEntries > 0) {
+            maxPage = (int) allPagesItemCount / nbEntries + (allPagesItemCount % nbEntries == 0 ? 0 : 1);
+        }
+    }
+
+
     public void setCurrentPage(int currentPage) {
         this.currentPage = currentPage;
     }
@@ -63,12 +90,12 @@ public class Page<T> {
         this.nbEntries = nbEntries;
     }
 
-    public long getFirstEntryIndex() {
-        return currentPage * nbEntries;
+    public Long getFirstEntryIndex() {
+        return (long) currentPage * nbEntries;
     }
 
-    public long getLastEntryIndex() {
-        return currentPage * nbEntries + nbEntries;
+    public Long getLastEntryIndex() {
+        return (long) currentPage * nbEntries + nbEntries;
     }
 
     public int getNextPageIndex() {

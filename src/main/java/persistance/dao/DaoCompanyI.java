@@ -1,7 +1,7 @@
-package dao;
+package persistance.dao;
 
 
-import model.Company;
+import persistance.model.Company;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public interface DaoCompanyI {
 
-    Logger LOGGER = LoggerFactory.getLogger(" dao.DaoCompany");
+    Logger LOGGER = LoggerFactory.getLogger(" persistance.dao.DaoCompany");
 
     /**
      * reutrn unique instance.
@@ -24,7 +24,7 @@ public interface DaoCompanyI {
      * @param c company
      * @return generated id
      */
-    long create(Company c);
+    Long create(Company c);
 
     /**
      * update.
@@ -38,20 +38,21 @@ public interface DaoCompanyI {
      * @param max number to get
      * @return list company
      */
-    ArrayList<Company> selectAll(long min, long max);
+    ArrayList<Company> selectAll(Long min, Long max);
 
     /**
      * get by id.
      * @param id id.
      * @return company
      */
-    Company getById(long id);
+    Company getById(Long id);
 
     /**
-     * delete.
+     * delete a company and all associated computers.
      * @param id id
+     * @return nb of deleted rows.
      */
-    void delete(long id);
+    int delete(Long id);
 
 
 }
