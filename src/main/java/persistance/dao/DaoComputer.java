@@ -16,8 +16,6 @@ import java.util.ArrayList;
 public enum DaoComputer implements DaoComputerI {
     INSTANCE;
 
-    private Connection connect;
-
     /**
      * create in db.
      *
@@ -25,7 +23,7 @@ public enum DaoComputer implements DaoComputerI {
      * @return generated id
      */
     public Long create(Computer c) {
-        connect = Utils.getConnection();
+        Connection connect = Utils.getConnection();
         long generatedKey = 0;
         try {
 
@@ -50,10 +48,19 @@ public enum DaoComputer implements DaoComputerI {
             p.close();
             LOGGER.info(" Computer created, generated ID : " + generatedKey);
         } catch (SQLException e) {
+          try {
+            if (!connect.getAutoCommit()) {
+              connect.rollback();
+            }
+          } catch (SQLException ex) {
+            LOGGER.error("Error during transaction rollback");
+          }
             LOGGER.error("Error creating computer " + e.getMessage() + e.getSQLState() + e.getStackTrace());
         } finally {
           try {
-            connect.close();
+            if (connect.getAutoCommit()) {
+              connect.close();
+            }
           } catch (SQLException ex) {
             LOGGER.error("Error closing connection");
           }
@@ -69,8 +76,8 @@ public enum DaoComputer implements DaoComputerI {
      */
     public int update(Computer c) {
       int affectedRows = 0;
-        try {
-            connect = Utils.getConnection();
+      Connection connect = Utils.getConnection();
+      try {
             PreparedStatement p = connect.prepareStatement("UPDATE computer SET " +
                     "name = ?, introduced = ?, discontinued = ?, company_id = ?" +
                     " WHERE computer.id = ?");
@@ -87,10 +94,19 @@ public enum DaoComputer implements DaoComputerI {
             p.close();
           LOGGER.info(affectedRows + " rows updated");
         } catch (SQLException e) {
+        try {
+          if (!connect.getAutoCommit()) {
+            connect.rollback();
+          }
+        } catch (SQLException ex) {
+          LOGGER.error("Error during transaction rollback");
+        }
             LOGGER.error("Error updating computer of ID " + c.getId() + e.getMessage() + e.getSQLState() + e.getStackTrace());
         } finally {
           try {
-            connect.close();
+            if (connect.getAutoCommit()) {
+              connect.close();
+            }
           } catch (SQLException ex) {
             LOGGER.error("Error closing connection");
           }
@@ -108,8 +124,8 @@ public enum DaoComputer implements DaoComputerI {
     public ArrayList<Computer> selectAll(Long min, Long max) {
         ArrayList<Computer> resultList = new ArrayList<>();
         ResultSet rs;
-        try {
-            connect = Utils.getConnection();
+      Connection connect = Utils.getConnection();
+      try {
             PreparedStatement p = connect.prepareStatement("SELECT * FROM computer LEFT JOIN company on computer.company_id = company.id " +
                     "LIMIT ?, ?");
             p.setLong(1, min);
@@ -128,12 +144,22 @@ public enum DaoComputer implements DaoComputerI {
                         .build();
                 resultList.add(c);
             }
+            rs.close();
             p.close();
         } catch (SQLException e) {
+        try {
+          if (!connect.getAutoCommit()) {
+            connect.rollback();
+          }
+        } catch (SQLException ex) {
+          LOGGER.error("Error during transaction rollback");
+        }
             LOGGER.error("Error getting computers" + e.getMessage() + e.getSQLState() + e.getStackTrace());
         } finally {
           try {
-            connect.close();
+            if (connect.getAutoCommit()) {
+              connect.close();
+            }
           } catch (SQLException ex) {
             LOGGER.error("Error closing connection");
           }
@@ -149,8 +175,8 @@ public enum DaoComputer implements DaoComputerI {
     public Long getCount() {
         Long count = null;
         ResultSet rs;
-        try {
-            connect = Utils.getConnection();
+      Connection connect = Utils.getConnection();
+      try {
             PreparedStatement p = connect.prepareStatement(" SELECT COUNT(*) FROM computer;");
             rs = p.executeQuery();
             while (rs.next()) {
@@ -158,10 +184,19 @@ public enum DaoComputer implements DaoComputerI {
             }
             p.close();
         } catch (SQLException e) {
+        try {
+          if (!connect.getAutoCommit()) {
+            connect.rollback();
+          }
+        } catch (SQLException ex) {
+          LOGGER.error("Error during transaction rollback");
+        }
             LOGGER.error("Error getting computers count " + e.getMessage() + e.getSQLState() + e.getStackTrace());
         } finally {
           try {
-            connect.close();
+            if (connect.getAutoCommit()) {
+              connect.close();
+            }
           } catch (SQLException ex) {
             LOGGER.error("Error closing connection");
           }
@@ -177,8 +212,8 @@ public enum DaoComputer implements DaoComputerI {
     public Long getCount(String name) {
         Long count = null;
         ResultSet rs;
-        try {
-            connect = Utils.getConnection();
+      Connection connect = Utils.getConnection();
+      try {
             PreparedStatement p = connect.prepareStatement(" SELECT COUNT(*) FROM computer WHERE name LIKE ?;");
             p.setString(1, "%" + name + "%");
             rs = p.executeQuery();
@@ -188,10 +223,19 @@ public enum DaoComputer implements DaoComputerI {
             }
             p.close();
         } catch (SQLException e) {
-            LOGGER.error("Error getting computers count by name " + e.getMessage() + e.getSQLState() + e.getStackTrace());
+        try {
+          if (!connect.getAutoCommit()) {
+            connect.rollback();
+          }
+        } catch (SQLException ex) {
+            LOGGER.error("Error during transaction rollback");
+          }
+        LOGGER.error("Error getting computers count by name " + e.getMessage() + e.getSQLState() + e.getStackTrace());
         } finally {
           try {
-            connect.close();
+            if (connect.getAutoCommit()) {
+              connect.close();
+            }
           } catch (SQLException ex) {
             LOGGER.error("Error closing connection");
           }
@@ -208,8 +252,8 @@ public enum DaoComputer implements DaoComputerI {
     public Page<Computer> selectPaginated(Page page) {
         ArrayList<Computer> resultList = new ArrayList<>();
         ResultSet rs;
-        try {
-            connect = Utils.getConnection();
+      Connection connect = Utils.getConnection();
+      try {
             PreparedStatement p = connect.prepareStatement("SELECT * FROM computer LEFT JOIN company on computer.company_id = company.id " +
                     "LIMIT ? OFFSET ?");
             p.setLong(1, page.getNbEntries());
@@ -230,10 +274,19 @@ public enum DaoComputer implements DaoComputerI {
             }
             p.close();
         } catch (SQLException e) {
+        try {
+          if (!connect.getAutoCommit()) {
+            connect.rollback();
+          }
+        } catch (SQLException ex) {
+          LOGGER.error("Error during transaction rollback");
+        }
             LOGGER.error("Error getting computers" + e.getMessage() + e.getSQLState() + e.getStackTrace());
         } finally {
           try {
-            connect.close();
+            if (connect.getAutoCommit()) {
+              connect.close();
+            }
           } catch (SQLException ex) {
             LOGGER.error("Error closing connection");
           }
@@ -253,8 +306,8 @@ public enum DaoComputer implements DaoComputerI {
   public Page<Computer> selectFiltered(Page page, String name) {
     ArrayList<Computer> resultList = new ArrayList<>();
     ResultSet rs;
+    Connection connect = Utils.getConnection();
     try {
-      connect = Utils.getConnection();
       PreparedStatement p = connect.prepareStatement("SELECT * FROM computer LEFT JOIN company on computer.company_id = company.id " +
           "WHERE ( computer.name LIKE ? " +
           " OR company.name LIKE ? ) " +
@@ -280,10 +333,19 @@ public enum DaoComputer implements DaoComputerI {
       }
       p.close();
     } catch (SQLException e) {
+      try {
+        if (!connect.getAutoCommit()) {
+          connect.rollback();
+        }
+      } catch (SQLException ex) {
+        LOGGER.error("Error during transaction rollback");
+      }
       LOGGER.error("Error getting computers" + e.getMessage() + e.getSQLState() + e.getStackTrace());
     } finally {
       try {
-        connect.close();
+        if (connect.getAutoCommit()) {
+          connect.close();
+        }
       } catch (SQLException ex) {
         LOGGER.error("Error closing connection");
       }
@@ -302,8 +364,8 @@ public enum DaoComputer implements DaoComputerI {
     public Computer getById(Long id) {
         ResultSet rs;
         Computer c = new Computer();
-        try {
-            connect = Utils.getConnection();
+      Connection connect = Utils.getConnection();
+      try {
             PreparedStatement p = connect.prepareStatement("SELECT * FROM computer LEFT JOIN company on computer.company_id = company.id " +
                     "WHERE computer.id = ?");
             p.setLong(1, id);
@@ -322,10 +384,19 @@ public enum DaoComputer implements DaoComputerI {
             }
             p.close();
         } catch (SQLException e) {
+          try {
+            if (!connect.getAutoCommit()) {
+              connect.rollback();
+            }
+          } catch (SQLException ex) {
+            LOGGER.error("Error during transaction rollback");
+          }
             LOGGER.error("Error retrieving computer of ID " + id + e.getMessage() + e.getSQLState() + e.getStackTrace());
         } finally {
           try {
-            connect.close();
+            if (connect.getAutoCommit()) {
+              connect.close();
+            }
           } catch (SQLException ex) {
             LOGGER.error("Error closing connection");
           }
@@ -342,9 +413,8 @@ public enum DaoComputer implements DaoComputerI {
      */
     public int delete(Long id) {
       int affectedRows = 0;
-
+      Connection connect = Utils.getConnection();
       try {
-            connect = Utils.getConnection();
             PreparedStatement p = connect.prepareStatement("DELETE FROM computer WHERE computer.id = ?");
             p.setLong(1, id);
 
@@ -353,10 +423,19 @@ public enum DaoComputer implements DaoComputerI {
             p.close();
         LOGGER.info(affectedRows + " rows updated");
         } catch (SQLException e) {
+          try {
+            if (!connect.getAutoCommit()) {
+              connect.rollback();
+            }
+          } catch (SQLException ex) {
+            LOGGER.error("Error during transaction rollback");
+          }
             LOGGER.error("Error deleting computer of ID " + id + e.getMessage() + e.getSQLState() + e.getStackTrace());
         } finally {
         try {
-          connect.close();
+          if (connect.getAutoCommit()) {
+            connect.close();
+          }
         } catch (SQLException ex) {
           LOGGER.error("Error closing connection");
         }
@@ -364,5 +443,56 @@ public enum DaoComputer implements DaoComputerI {
       return affectedRows;
     }
 
+  /**
+   * delete.
+   *
+   * @param id id
+   * @return nb affected rows, 0 fail, 1 success
+   */
+  public int deleteByCompanyId(Long id) {
+    int affectedRows = 0;
+    Connection connect = Utils.getConnection();
+    try {
+      PreparedStatement p = connect.prepareStatement("DELETE FROM computer WHERE computer.company_id = ?");
+      p.setLong(1, id);
 
+      affectedRows = p.executeUpdate();
+
+      p.close();
+      LOGGER.info(affectedRows + " rows updated");
+    } catch (SQLException e) {
+      try {
+        if (!connect.getAutoCommit()) {
+          connect.rollback();
+        }
+      } catch (SQLException ex) {
+        LOGGER.error("Error during transaction rollback");
+      }
+      LOGGER.error("Error deleting computer of ID " + id + e.getMessage() + e.getSQLState() + e.getStackTrace());
+    } finally {
+      try {
+        if (connect.getAutoCommit()) {
+          connect.close();
+        }
+      } catch (SQLException ex) {
+        LOGGER.error("Error closing connection");
+      }
+    }
+    return affectedRows;
+  }
+
+
+  /**
+   * start transaction.
+   */
+  public void startTransaction() {
+      Utils.startTransaction();
+    }
+
+  /**
+   * commit transaction.
+   */
+  public void commitTransaction() {
+      Utils.commitTransaction();
+    }
 }
