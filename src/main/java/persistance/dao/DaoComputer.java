@@ -454,6 +454,55 @@ public enum DaoComputer implements DaoComputerI {
    * @param id id
    * @return nb affected rows, 0 fail, 1 success
    */
+  public int delete(long[] ids) {
+    int affectedRows = 0;
+    Connection connect = Utils.getConnection();
+    try {
+      String sql = "DELETE FROM computer WHERE computer.id = [";
+      int i;
+      for (i=1;i<ids.length;i++) {
+        sql += "?,";
+      }
+      sql += "?]";
+
+
+      PreparedStatement p = connect.prepareStatement(sql);
+
+      for (i=1;i<=ids.length;i++) {
+        p.setLong(i, ids[i]);
+      }
+
+      affectedRows = p.executeUpdate();
+
+      p.close();
+      LOGGER.info(affectedRows + " rows updated");
+    } catch (SQLException e) {
+      try {
+        if (!connect.getAutoCommit()) {
+          connect.rollback();
+        }
+      } catch (SQLException ex) {
+        LOGGER.error("Error during transaction rollback");
+      }
+      LOGGER.error("Error deleting computers, ids :" + ids.toString() + e.getMessage() + e.getSQLState() + e.getStackTrace());
+    } finally {
+      try {
+        if (connect.getAutoCommit()) {
+          connect.close();
+        }
+      } catch (SQLException ex) {
+        LOGGER.error("Error closing connection");
+      }
+    }
+    return affectedRows;
+  }
+
+  /**
+   * delete.
+   *
+   * @param id id
+   * @return nb affected rows, 0 fail, 1 success
+   */
   public int deleteByCompanyId(Long id) {
     int affectedRows = 0;
     Connection connect = Utils.getConnection();
