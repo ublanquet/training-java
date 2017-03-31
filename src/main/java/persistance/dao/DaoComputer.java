@@ -182,6 +182,7 @@ public enum DaoComputer implements DaoComputerI {
             while (rs.next()) {
                 count = rs.getLong(1);
             }
+            rs.close();
             p.close();
         } catch (SQLException e) {
         try {
@@ -221,6 +222,7 @@ public enum DaoComputer implements DaoComputerI {
 
                 count = rs.getLong(1);
             }
+            rs.close();
             p.close();
         } catch (SQLException e) {
         try {
@@ -272,7 +274,8 @@ public enum DaoComputer implements DaoComputerI {
                         .build();
                 resultList.add(c);
             }
-            p.close();
+        rs.close();
+        p.close();
         } catch (SQLException e) {
         try {
           if (!connect.getAutoCommit()) {
@@ -331,6 +334,7 @@ public enum DaoComputer implements DaoComputerI {
             .build();
         resultList.add(c);
       }
+      rs.close();
       p.close();
     } catch (SQLException e) {
       try {
@@ -382,6 +386,7 @@ public enum DaoComputer implements DaoComputerI {
                         .with(Computer::setCompany, rs.getLong("company.id") != 0 ? new Company(rs.getLong("company.id"), rs.getString("company.name")) : null)
                         .build();
             }
+            rs.close();
             p.close();
         } catch (SQLException e) {
           try {

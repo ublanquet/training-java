@@ -115,6 +115,7 @@ public enum DaoCompany implements DaoCompanyI {
                         rs.getString("name"));
                 resultList.add(c);
             }
+            rs.close();
             p.close();
         } catch (SQLException e) {
           try {
@@ -156,6 +157,7 @@ public enum DaoCompany implements DaoCompanyI {
                     rs.getString("name"));
                 resultList.add(c);
             }
+            rs.close();
             p.close();
         } catch (SQLException e) {
           try {
@@ -201,6 +203,7 @@ public enum DaoCompany implements DaoCompanyI {
                 c = new Company(rs.getLong("id"),
                         rs.getString("name"));
             }
+            rs.close();
             p.close();
         } catch (SQLException e) {
           try {
