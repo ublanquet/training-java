@@ -458,12 +458,12 @@ public enum DaoComputer implements DaoComputerI {
     int affectedRows = 0;
     Connection connect = Utils.getConnection();
     try {
-      String sql = "DELETE FROM computer WHERE computer.id = [";
+      String sql = "DELETE FROM computer WHERE computer.id IN (";
       int i;
       for (i=1;i<ids.length;i++) {
         sql += "?,";
       }
-      sql += "?]";
+      sql += "?)";
 
 
       PreparedStatement p = connect.prepareStatement(sql);
