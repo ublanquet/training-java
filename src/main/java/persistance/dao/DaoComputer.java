@@ -59,7 +59,7 @@ public enum DaoComputer implements DaoComputerI {
         } finally {
           try {
             if (connect.getAutoCommit()) {
-              connect.close();
+              Utils.closeConnection();
             }
           } catch (SQLException ex) {
             LOGGER.error("Error closing connection");
@@ -105,7 +105,7 @@ public enum DaoComputer implements DaoComputerI {
         } finally {
           try {
             if (connect.getAutoCommit()) {
-              connect.close();
+              Utils.closeConnection();
             }
           } catch (SQLException ex) {
             LOGGER.error("Error closing connection");
@@ -158,7 +158,7 @@ public enum DaoComputer implements DaoComputerI {
         } finally {
           try {
             if (connect.getAutoCommit()) {
-              connect.close();
+              Utils.closeConnection();
             }
           } catch (SQLException ex) {
             LOGGER.error("Error closing connection");
@@ -195,7 +195,7 @@ public enum DaoComputer implements DaoComputerI {
         } finally {
           try {
             if (connect.getAutoCommit()) {
-              connect.close();
+              Utils.closeConnection();
             }
           } catch (SQLException ex) {
             LOGGER.error("Error closing connection");
@@ -234,7 +234,7 @@ public enum DaoComputer implements DaoComputerI {
         } finally {
           try {
             if (connect.getAutoCommit()) {
-              connect.close();
+              Utils.closeConnection();
             }
           } catch (SQLException ex) {
             LOGGER.error("Error closing connection");
@@ -285,7 +285,7 @@ public enum DaoComputer implements DaoComputerI {
         } finally {
           try {
             if (connect.getAutoCommit()) {
-              connect.close();
+              Utils.closeConnection();
             }
           } catch (SQLException ex) {
             LOGGER.error("Error closing connection");
@@ -344,7 +344,7 @@ public enum DaoComputer implements DaoComputerI {
     } finally {
       try {
         if (connect.getAutoCommit()) {
-          connect.close();
+          Utils.closeConnection();
         }
       } catch (SQLException ex) {
         LOGGER.error("Error closing connection");
@@ -395,7 +395,7 @@ public enum DaoComputer implements DaoComputerI {
         } finally {
           try {
             if (connect.getAutoCommit()) {
-              connect.close();
+              Utils.closeConnection();
             }
           } catch (SQLException ex) {
             LOGGER.error("Error closing connection");
@@ -472,7 +472,7 @@ public enum DaoComputer implements DaoComputerI {
     } finally {
       try {
         if (connect.getAutoCommit()) {
-          connect.close();
+          Utils.closeConnection();
         }
       } catch (SQLException ex) {
         LOGGER.error("Error closing connection");
@@ -495,4 +495,5 @@ public enum DaoComputer implements DaoComputerI {
   public void commitTransaction() {
       Utils.commitTransaction();
     }
+
 }

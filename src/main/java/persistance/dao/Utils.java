@@ -89,9 +89,12 @@ public class Utils {
   }
 
   /**
-   * close.
+   * close connection.
+   * @throws SQLException if couldn't close connection.
    */
-  public static void close() {
-
+  public static void closeConnection() throws SQLException {
+    Connection c = connectionThreadLocal.get();
+    connectionThreadLocal.remove();
+    c.close();
   }
 }

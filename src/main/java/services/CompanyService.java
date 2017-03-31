@@ -62,7 +62,7 @@ public class CompanyService {
     try {
       daoC.startTransaction();
       int deletedComputer = daoComputer.deleteByCompanyId(id);
-      daoC.deleteCompany(id);
+      daoC.delete(id);
       daoC.commitTransaction();
       return deletedComputer;
     } catch (Exception ex) {

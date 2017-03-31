@@ -47,7 +47,7 @@ public enum DaoCompany implements DaoCompanyI {
         } finally {
           try {
             if (connect.getAutoCommit()) {
-              connect.close();
+              Utils.closeConnection();
             }
           } catch (SQLException ex) {
             LOGGER.error("Error closing connection");
@@ -84,7 +84,7 @@ public enum DaoCompany implements DaoCompanyI {
         } finally {
           try {
             if (connect.getAutoCommit()) {
-              connect.close();
+              Utils.closeConnection();
             }
           } catch (SQLException ex) {
             LOGGER.error("Error closing connection");
@@ -128,7 +128,7 @@ public enum DaoCompany implements DaoCompanyI {
         } finally {
           try {
             if (connect.getAutoCommit()) {
-              connect.close();
+              Utils.closeConnection();
             }
           } catch (SQLException ex) {
             LOGGER.error("Error closing connection");
@@ -169,7 +169,7 @@ public enum DaoCompany implements DaoCompanyI {
         } finally {
           try {
             if (connect.getAutoCommit()) {
-              connect.close();
+              Utils.closeConnection();
             }
           } catch (SQLException ex) {
             LOGGER.error("Error closing connection");
@@ -214,7 +214,7 @@ public enum DaoCompany implements DaoCompanyI {
         } finally {
           try {
             if (connect.getAutoCommit()) {
-              connect.close();
+              Utils.closeConnection();
             }
           } catch (SQLException ex) {
             LOGGER.error("Error closing connection");
@@ -230,48 +230,6 @@ public enum DaoCompany implements DaoCompanyI {
      * @return deleted rows numbers
      */
     public int delete(Long id) {
-      Connection connect = Utils.getConnection();
-      try {
-            connect.setAutoCommit(false);
-            PreparedStatement p = connect.prepareStatement("DELETE FROM computer " +
-                "WHERE company_id = ?");
-            p.setLong(1, id);
-
-            int affectedComputersRows = p.executeUpdate();
-
-            p = connect.prepareStatement("DELETE FROM company WHERE company.id = ?");
-            p.setLong(1, id);
-
-            int affectedRows = p.executeUpdate();
-            connect.commit();
-            p.close();
-            LOGGER.info(affectedComputersRows + " computers rows deleted");
-            LOGGER.info(affectedRows + " company deleted, id : " + id);
-            return affectedComputersRows + affectedRows;
-        } catch (SQLException e) {
-            try {
-                connect.rollback();
-            } catch (SQLException ex) {
-              LOGGER.error("Error during transaction rollback");
-            }
-            LOGGER.error("Error deleting company of ID " + id + "%n" + e.getMessage() + e.getSQLState() + e.getStackTrace());
-        } finally {
-            try {
-              connect.setAutoCommit(true);
-              connect.close();
-            } catch (SQLException ex) {
-              LOGGER.error("Error closing connection");
-            }
-        }
-        return 0;
-    }
-
-    /**
-     * delete from db.
-     * @param id id
-     * @return deleted rows numbers
-     */
-    public int deleteCompany(Long id) {
       Connection connect = Utils.getConnection();
       try {
             PreparedStatement p = connect.prepareStatement("DELETE FROM company WHERE company.id = ?");
@@ -292,7 +250,7 @@ public enum DaoCompany implements DaoCompanyI {
         } finally {
             try {
               if (connect.getAutoCommit()) {
-                connect.close();
+                Utils.closeConnection();
               }
             } catch (SQLException ex) {
                 LOGGER.error("Error closing connection");
