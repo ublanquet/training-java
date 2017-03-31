@@ -1,6 +1,9 @@
 package services;
 
+import org.junit.Ignore;
 import org.mockito.Mockito;
+import persistance.dao.DaoComputer;
+import persistance.dao.DaoComputerI;
 import persistance.model.Company;
 import persistance.model.Computer;
 import persistance.model.GenericBuilder;
@@ -10,6 +13,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
@@ -17,7 +23,7 @@ import static org.junit.Assert.fail;
 
 public class ComputerServiceTest {
     protected ComputerService service;
-    protected Computer computer, computer2, computer10, computerToCreate;
+    protected Computer computer, computer2, computer10, computerToCreate,invalidComputer, invalidComputer2;
     protected Company company, company2, companyNull;
     protected Page<Computer> page;
 
@@ -51,6 +57,19 @@ public class ComputerServiceTest {
             .with(Computer::setName, "Apple IIc Plus")
             .with(Computer::setCompany, companyNull)
             .build();
+
+      invalidComputer = GenericBuilder.of(Computer::new)
+          .with(Computer::setName, null)
+          .with(Computer::setCompany, companyNull)
+          .build();
+
+      invalidComputer2 = GenericBuilder.of(Computer::new)
+          .with(Computer::setName, "Invalid")
+          .with(Computer::setCompany, companyNull)
+          .with(Computer::setIntroduced, LocalDateTime.of(2014, Month.FEBRUARY, 27, 0, 0) )
+          .with(Computer::setDiscontinued, LocalDateTime.of(2011, Month.FEBRUARY, 25, 0, 0) )
+          .build();
+
         page = new Page<>(10);
     }
 
@@ -85,24 +104,58 @@ public class ComputerServiceTest {
 
     @Test
     public void testCreateDeleteComputer() throws Exception {
-        long createdId = service.create(computerToCreate);
-        if (createdId == 0) {
-            fail("failed computer creation");
-        }
+      long createdId = service.create(computerToCreate);
+      if (createdId == 0) {
+          fail("failed computer creation");
+      }
 
-        /*
+      Computer created = service.getById(createdId);
+      assertEquals(computerToCreate.toString(), created.toString());
+
+      long nbDelete = service.delete(computerToCreate.getId());
+      if (nbDelete == 0) {
+          fail("failed computer delete");
+      }
+
+           /*
       final Computer mockComputer = Mockito.mock(Computer.class);
       final ComputerService cServiceMock = Mockito.mock(ComputerService.class);
       Mockito.doThrow(new SQLException()).when(cServiceMock).create(mockComputer);
       assertEquals((long)cServiceMock.create(mockComputer), (long)0);
       */
+/*
+      ComputerService cService = ComputerService.getInstance();
+      cService = Mockito.spy(cService);
+      service = Mockito.spy(service);
+      final Computer c = Mockito.mock(Computer.class);
+      Mockito.doReturn(0).when(cService).create(c);
 
-      Computer created = service.getById(createdId);
-        assertEquals(computerToCreate.toString(), created.toString());
-
-        long nbDelete = service.delete(computerToCreate.getId());
-        if (nbDelete == 0) {
-            fail("failed computer delete");
-        }
+      // Test
+      cService.create(c);
+      Mockito.verify(cService, Mockito.atLeastOnce()).create(c);
+*/
+      createdId = service.create(invalidComputer);
+      //Mockito.verify(service, Mockito.atLeastOnce()).create(invalidComputer);
+      if (createdId != 0) {
+        fail("Invalid computer got created");
+      }
+      createdId = service.create(invalidComputer2);
+      if (createdId != 0) {
+        fail("Invalid computer got created");
+      }
     }
+
+  @Test
+  @Ignore
+  public void testDao() throws Exception {
+    /*DaoComputer daoComputer = DaoComputerI.getInstance();
+    daoComputer = Mockito.spy(daoComputer);
+    final Computer c = Mockito.mock(Computer.class);
+    Mockito.doReturn(0).when(daoComputer).create(c);
+    // Test
+    daoComputer.create(c);
+    Mockito.verify(daoComputer, Mockito.atLeastOnce()).create(c);
+    */
+  }
+
 }

@@ -15,6 +15,18 @@ public class ComputerDto {
   }
 
   @Override
+  public String toString() {
+    return "Computer{" +
+        "id='" + id + '\'' +
+        ", companyId='" + companyId + '\'' +
+        ", companyName='" + companyName + '\'' +
+        ", name='" + name + '\'' +
+        ", introduced='" + introduced + '\'' +
+        ", discontinued='" + discontinued + '\'' +
+        '}';
+  }
+
+  @Override
   public boolean equals(Object o) {
     if (this == o) {
       return true;
