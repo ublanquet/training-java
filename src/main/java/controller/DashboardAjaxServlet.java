@@ -35,8 +35,11 @@ public class DashboardAjaxServlet extends HttpServlet {
       int perPage = Integer.parseInt(request.getParameter("perPage"));
       page.setNbEntries(perPage);
     }
-    if (request.getParameter("search") != null && request.getParameter("search") != "") {
+    if (request.getParameter("search") != null && request.getParameter("search") != "" && request.getParameter("order[]") == null) {
       page = computerService.getFiltered(page, request.getParameter("search"));
+      request.setAttribute("filteredCount", computerService.getCount(request.getParameter("search")));
+    } else if (request.getParameter("order[]") != null) { //TODO restruct ifs to be cleaner, only one one method really needed
+      page = computerService.getFiltered(page, request.getParameter("search"), request.getParameter("order[]").split(","));
       request.setAttribute("filteredCount", computerService.getCount(request.getParameter("search")));
     } else {
       page = computerService.getPaginated(page);

@@ -364,6 +364,71 @@ public enum DaoComputer implements DaoComputerI {
   }
 
   /**
+   * get computer list paged and filtered by name.
+   *
+   * @param name name filter
+   * @param page the page
+   * @param order order
+   * @return the filled page
+   */
+  public Page<Computer> selectFiltered(Page page, String name, String order) {
+    ArrayList<Computer> resultList = new ArrayList<>();
+    ResultSet rs;
+    Connection connect = Utils.getConnection();
+    try {
+
+      String sql = "SELECT * FROM computer LEFT JOIN company on computer.company_id = company.id " +
+          "WHERE ( computer.name LIKE ? " +
+          " OR company.name LIKE ? ) " +
+          "ORDER BY ";
+      sql += order;
+      sql += " LIMIT ? OFFSET ?";
+      PreparedStatement p = connect.prepareStatement(sql);
+      p.setString(1, "%" + name + "%");
+      p.setString(2, "%" + name + "%");
+      p.setLong(3, page.getNbEntries());
+      p.setLong(4, page.getFirstEntryIndex());
+
+      System.out.println(p);
+      rs = p.executeQuery();
+      while (rs.next()) {
+        Computer c = GenericBuilder.of(Computer::new)
+            .with(Computer::setId, rs.getLong("computer.id"))
+            .with(Computer::setName, rs.getString("computer.name"))
+            .with(Computer::setIntroducedTimestamp, rs.getTimestamp("introduced"))
+            .with(Computer::setDiscontinuedTimestamp, rs.getTimestamp("discontinued"))
+            .with(Computer::setCompanyId, rs.getLong("company_id"))
+            .with(Computer::setCompany, rs.getLong("company.id") != 0 ? new Company(rs.getLong("company.id"), rs.getString("company.name")) : null)
+            .build();
+        resultList.add(c);
+      }
+      rs.close();
+      p.close();
+    } catch (SQLException e) {
+      try {
+        if (!connect.getAutoCommit()) {
+          connect.rollback();
+        }
+      } catch (SQLException ex) {
+        LOGGER.error("Error during transaction rollback");
+      }
+      LOGGER.error("Error getting computers" + e.getMessage() + e.getSQLState() + e.getStackTrace());
+    } finally {
+      try {
+        if (connect.getAutoCommit()) {
+          Utils.closeConnection();
+        }
+      } catch (SQLException ex) {
+        LOGGER.error("Error closing connection");
+      }
+    }
+
+    page.setList(resultList);
+
+    return page;
+  }
+
+  /**
    * get by id.
    *
    * @param id id
