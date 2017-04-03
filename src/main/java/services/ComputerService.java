@@ -208,7 +208,7 @@ public enum ComputerService {
    * @param id id to delete
    * @return nb affected rows, 0 fail, 1 success
    */
-  public int delete(long[] id) {
+  public int delete(ArrayList<Long> id) {
     logger.debug("deleting computer of id : " + id);
     int affectedRow = daoC.delete(id);
     if (affectedRow == 0) {
