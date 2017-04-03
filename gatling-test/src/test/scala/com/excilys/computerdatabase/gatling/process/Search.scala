@@ -17,7 +17,7 @@ object Search {
     .pause(3,10)
     .feed(feeder)
     .exec(http("Search: Search a computer ${searchCriterion}")
-      .get(config.getString("application.urls.dashboardPage"))
+      .post(config.getString("application.urls.dashboardPage"))
         .queryParam(config.getString("application.urls.param.search").toString(),"${searchCriterion}")
         .check(status.is(200))
     )
