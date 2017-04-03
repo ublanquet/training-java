@@ -12,11 +12,11 @@ object Delete {
   val config = ConfigFactory.load()
 
   val delete = exec(http("Delete: Search for delete")
-    .get(config.getString("application.urls.dashboardPage"))
-    .queryParam(config.getString("application.urls.param.search").toString(), "${addComputerName}_edited")
+    .post(config.getString("application.urls.dashboardPage"))
+    .formParam(config.getString("application.urls.param.search").toString(), "${addComputerName}_edited")
     .check(
       status.is(200),
-      css("#results input", "value").saveAs("computerId")
+      css("input", "value").saveAs("computerId")
     ))
     .pause(3, 10)
     .exec(http("Delete: Delete post")

@@ -12,11 +12,11 @@ object Edit {
   val config = ConfigFactory.load()
 
   val edit = exec(http("Edit: Search for edit")
-    .get(config.getString("application.urls.dashboardPage"))
-    .queryParam(config.getString("application.urls.param.search").toString(), "${addComputerName}")
+    .post(config.getString("application.urls.dashboardPage"))
+    .formParam(config.getString("application.urls.param.search").toString(), "${addComputerName}")
     .check(
       status.is(200),
-      css("#results a", "href").saveAs("computerURL")
+      css("a", "href").saveAs("computerURL")
     )
   )
     .pause(3, 10)
