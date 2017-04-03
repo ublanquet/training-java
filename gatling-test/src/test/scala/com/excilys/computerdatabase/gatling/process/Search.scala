@@ -13,7 +13,7 @@ object Search {
   val feeder = csv("data/search.csv").random
 
   val search = exec(http("Search: Home of the application")
-    .get(config.getString("application.urls.dashboardPage")))
+    .post(config.getString("application.urls.dashboardPage")))
     .pause(3,10)
     .feed(feeder)
     .exec(http("Search: Search a computer ${searchCriterion}")

@@ -1,5 +1,6 @@
 package controller;
 
+import org.slf4j.LoggerFactory;
 import persistance.model.Company;
 import persistance.model.Computer;
 import services.CompanyService;
@@ -13,11 +14,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 @WebServlet(name = "AddComputerServlet", urlPatterns = "/addcomputer")
 public class AddComputerServlet extends HttpServlet {
   CompanyService companyService = new CompanyService();
   ComputerService computerService = ComputerService.getInstance();
+  org.slf4j.Logger LOGGER = LoggerFactory.getLogger("controller.AddComputerServlet");
 
   /**
    * r.
@@ -29,12 +32,14 @@ public class AddComputerServlet extends HttpServlet {
   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     Long newId = null;
     HttpSession session = request.getSession();
+    LOGGER.debug("creating computer");
 
     if (request.getParameter("computerName") != null) {
       Computer c = Utils.buildComputerFromParams(request);
       newId = computerService.create(c);
       if (newId == null || newId == 0) {
         Utils.setMessage("warning", "Error creating computer", session);
+        LOGGER.warn("Error creating computer");
       } else {
         Utils.setMessage("info", "Computer created, id : " + newId, session);
       }

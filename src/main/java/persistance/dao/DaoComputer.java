@@ -317,7 +317,7 @@ public enum DaoComputer implements DaoComputerI {
       PreparedStatement p = connect.prepareStatement("SELECT * FROM computer LEFT JOIN company on computer.company_id = company.id " +
           "WHERE ( computer.name LIKE ? " +
           " OR company.name LIKE ? ) " +
-          "LIMIT ? OFFSET ?");
+          " LIMIT ? OFFSET ? ");
       LOGGER.debug("search filter : " + name);
       p.setString(1, "%" + name + "%");
       p.setString(2, "%" + name + "%");
@@ -347,7 +347,7 @@ public enum DaoComputer implements DaoComputerI {
       } catch (SQLException ex) {
         LOGGER.error("Error during transaction rollback");
       }
-      LOGGER.error("Error getting computers" + e.getMessage() + e.getSQLState() + e.getStackTrace());
+      LOGGER.error("Error getting computers filtered" + e.getMessage() + e.getSQLState() + e.getStackTrace());
     } finally {
       try {
         if (connect.getAutoCommit()) {
@@ -379,10 +379,12 @@ public enum DaoComputer implements DaoComputerI {
 
       String sql = "SELECT * FROM computer LEFT JOIN company on computer.company_id = company.id " +
           "WHERE ( computer.name LIKE ? " +
-          " OR company.name LIKE ? ) " +
-          "ORDER BY ";
-      sql += order;
-      sql += " LIMIT ? OFFSET ?";
+          " OR company.name LIKE ? ) ";
+      if (order.length() > 0) {
+        sql += "ORDER BY ";
+        sql += order;
+      }
+      sql += " LIMIT ? OFFSET ? ";
       PreparedStatement p = connect.prepareStatement(sql);
       p.setString(1, "%" + name + "%");
       p.setString(2, "%" + name + "%");
@@ -412,7 +414,7 @@ public enum DaoComputer implements DaoComputerI {
       } catch (SQLException ex) {
         LOGGER.error("Error during transaction rollback");
       }
-      LOGGER.error("Error getting computers" + e.getMessage() + e.getSQLState() + e.getStackTrace());
+      LOGGER.error("Error getting computers ordered" + e.getMessage() + e.getSQLState() + e.getStackTrace());
     } finally {
       try {
         if (connect.getAutoCommit()) {
