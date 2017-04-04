@@ -156,7 +156,7 @@ public class Validate {
         return false;
       }
       if (c.getName() == null || c.getName().length() < 2) {
-        logger.error("Computer obj validation error : name");
+        logger.error("Computer obj validation error : name" + c.getName());
         return false;
       }
       if ((c.getCompany() != null && c.getCompanyId() != null) && c.getCompany().getId() == c.getCompanyId()) {

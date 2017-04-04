@@ -16,7 +16,7 @@ object Delete {
     .formParam(config.getString("application.urls.param.search").toString(), "${addComputerName}_edited")
     .check(
       status.is(200),
-      css("input", "value").saveAs("computerId")
+      css("input.cb", "value").saveAs("computerId")
     ))
     .pause(3, 10)
     .exec(http("Delete: Delete post")
