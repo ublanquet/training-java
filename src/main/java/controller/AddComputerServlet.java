@@ -34,6 +34,7 @@ public class AddComputerServlet extends HttpServlet {
     LOGGER.debug("creating computer");
 
     if (request.getParameter("computerName") != null) {
+      DashboardAjaxServlet.invalidateCache();
       Computer c = Utils.buildComputerFromParams(request);
       newId = computerService.create(c);
       if (newId == null || newId == 0) {

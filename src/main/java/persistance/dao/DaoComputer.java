@@ -16,6 +16,8 @@ import java.util.ArrayList;
 public enum DaoComputer implements DaoComputerI {
   INSTANCE;
 
+  private long nbComputers = 0;
+
   /**
    * create in db.
    *
@@ -44,6 +46,7 @@ public enum DaoComputer implements DaoComputerI {
       if (affectedRows > 0) {
         generatedKey = Utils.getGeneratedKey(p);
         c.setId(generatedKey);
+        nbComputers++;
       }
       p.close();
       LOGGER.info(" Computer created, generated ID : " + generatedKey);
@@ -174,6 +177,9 @@ public enum DaoComputer implements DaoComputerI {
    * @return count
    */
   public Long getCount() {
+    if (nbComputers > 0) {
+      return nbComputers;
+    }
     Long count = null;
     ResultSet rs;
     Connection connect = Utils.getConnection();
@@ -185,6 +191,7 @@ public enum DaoComputer implements DaoComputerI {
       }
       rs.close();
       p.close();
+      nbComputers = count;
     } catch (SQLException e) {
       try {
         if (!connect.getAutoCommit()) {
@@ -213,6 +220,9 @@ public enum DaoComputer implements DaoComputerI {
    * @return count
    */
   public Long getCount(String name) {
+    if (name == "" && nbComputers > 0) {
+      return nbComputers;
+    }
     Long count = null;
     ResultSet rs;
     Connection connect = Utils.getConnection();
@@ -313,6 +323,7 @@ public enum DaoComputer implements DaoComputerI {
     ArrayList<Computer> resultList = new ArrayList<>();
     ResultSet rs;
     Connection connect = Utils.getConnection();
+
     try {
       PreparedStatement p = connect.prepareStatement("SELECT * FROM computer LEFT JOIN company on computer.company_id = company.id " +
           "WHERE ( computer.name LIKE ? " +
@@ -375,6 +386,9 @@ public enum DaoComputer implements DaoComputerI {
     ArrayList<Computer> resultList = new ArrayList<>();
     ResultSet rs;
     Connection connect = Utils.getConnection();
+    if (connect == null) {
+      return page;
+    }
     try {
 
       String sql = "SELECT * FROM computer LEFT JOIN company on computer.company_id = company.id " +
@@ -498,6 +512,9 @@ public enum DaoComputer implements DaoComputerI {
 
       p.close();
       LOGGER.info(affectedRows + " rows updated");
+      if (affectedRows > 0) {
+        nbComputers--;
+      }
     } catch (SQLException e) {
       try {
         if (!connect.getAutoCommit()) {
@@ -544,6 +561,9 @@ public enum DaoComputer implements DaoComputerI {
       }
 
       affectedRows = p.executeUpdate();
+      if (affectedRows > 0) {
+        nbComputers -= affectedRows;
+      }
 
       p.close();
       LOGGER.info(affectedRows + " rows updated");
@@ -584,6 +604,9 @@ public enum DaoComputer implements DaoComputerI {
       affectedRows = p.executeUpdate();
 
       p.close();
+      if (affectedRows > 0) {
+        nbComputers -= affectedRows;
+      }
       LOGGER.info(affectedRows + " rows updated");
     } catch (SQLException e) {
       try {

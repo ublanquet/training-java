@@ -19,7 +19,7 @@ import java.util.ArrayList;
 @WebServlet(name = "DashboardServlet", urlPatterns = "/dashboard")
 public class DashboardServlet extends HttpServlet {
   private ComputerService computerService = ComputerService.getInstance();
-
+  static  Page<ComputerDto> pageCache;
   /**
    * r.
    *
@@ -31,6 +31,7 @@ public class DashboardServlet extends HttpServlet {
   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     HttpSession session = request.getSession();
     if (request.getParameter("selection") != null) {
+      DashboardAjaxServlet.invalidateCache();
       String message = "Computers deleted, id : ";
       String[] idToDelete =  request.getParameter("selection").split(",");
       ArrayList<Long> ids = new ArrayList<>();
@@ -62,7 +63,12 @@ public class DashboardServlet extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     HttpSession session = request.getSession();
     Page<ComputerDto> page;
-    page = Mapper.convertPageDto(computerService.getPaginated(new Page<Computer>(10)));
+    if (pageCache == null) {
+      page = Mapper.convertPageDto(computerService.getPaginated(new Page<Computer>(10)));
+      pageCache = page;
+    } else {
+      page = pageCache;
+    }
     request.setAttribute("page", page);
     request.setAttribute("list", page.getListPage());
     request.setAttribute("totalCount", computerService.getCount());

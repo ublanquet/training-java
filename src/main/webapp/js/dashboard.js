@@ -104,6 +104,7 @@ $(function () {
             var maxPages = count / perPage;
             var lastPage = count % perPage == 0 ? 0 : 1;
             pageMax = maxPages+lastPage-1;
+            pageMax = pageMax > 60 ? 60 : pageMax;
             $("ul.pagination li").each(function (i){
                 if(i > maxPages+lastPage){
                     $(this).hide();

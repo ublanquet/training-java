@@ -66,13 +66,13 @@ public enum ComputerService {
    * @return count
    */
   public Long getCount(String name) {
-    logger.info("Retrieving computer count");
+    logger.info("Retrieving filtered computer count");
     if (name == null) {
       name = "";
     }
     long count = 0;
     try {
-      count = daoC.getCount(name);
+      count = daoC.getCount("");
     } catch (Exception ex) {
       logger.error("Error retrieving computer" + ex.getMessage() + ex.getStackTrace());
     }

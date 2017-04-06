@@ -44,6 +44,7 @@ public class EditComputerServlet extends HttpServlet {
     if (affectedRow == 0) {
       Utils.setMessage("warning", "Error updating computer", session);
     } else {
+      DashboardAjaxServlet.invalidateCache();
       Utils.setMessage("info", "Computer updated, id : " + c.getId(), session);
     }
 
