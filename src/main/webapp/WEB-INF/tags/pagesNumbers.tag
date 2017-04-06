@@ -8,9 +8,16 @@
             <span aria-hidden="true">&laquo;</span>
         </a>
     </li>
-    <c:forEach begin="0" end="${nbPages}" var="i">
-        <li id="p${i}"><a href="#">${i}</a></li>
-    </c:forEach>
+    <c:if test="${nbPages} < 60">
+        <c:forEach begin="0" end="${nbPages}" var="i">
+            <li id="p${i}"><a href="#">${i}</a></li>
+        </c:forEach>
+    </c:if>
+    <c:if test="${nbPages} > 60">
+        <c:forEach begin="0" end="${nbPages}" var="i">
+            <li id="p${i}"><a href="#">${i}</a></li>
+        </c:forEach>
+    </c:if>
     <li>
         <a href="#" aria-label="Next">
             <span aria-hidden="true">&raquo;</span>
