@@ -29,6 +29,7 @@ $(function () {
     var totalCount = $("#totalCount").val();
     var filteredCount = $("#filteredCount").val();
     var pageMax = 1;
+    var orderBys = [];
 
     $("ul.pagination li").eq(1).addClass("active");
     setPages();
@@ -86,7 +87,8 @@ $(function () {
         $.post("/dashboard/ajax", {
             pageN: pageN,
             perPage: perPage,
-            search: filter
+            search: filter,
+            order: orderBys
         }, function(response) {
             table.html(response);
             $(".editMode").hide();
@@ -110,6 +112,44 @@ $(function () {
                 }
             });
         $("ul.pagination li").last().show();
+     }
+
+     $(".ordering").click( function() {
+         var $this = $(this);
+         var elem = $(this);
+         var id = $this.attr("id");
+         var column = $(elem).attr("id");
+         //var column = $(elem).getAttribute("id");
+         if ($(elem).hasClass("glyphicon-sort")) {
+             $(elem).removeClass("glyphicon-sort");
+             $(elem).addClass("glyphicon-sort-by-attributes");
+             orderBys.push(column);
+         }
+         else {
+             $(elem).addClass("glyphicon-sort");
+             $(elem).removeClass("glyphicon-sort-by-attributes");
+             orderBys.splice(orderBys.indexOf(column) != -1 ? orderBys.indexOf(column) : undefined, 1);
+         }
+
+         ajaxTableReload();
+     });
+
+     function addOrderBy() {
+         var elem   = $(this);
+         var column = $(elem).attr("id");
+         //var column = $(elem).getAttribute("id");
+         if ($(elem).hasClass("glyphicon-sort")) {
+             $(elem).removeClass("glyphicon-sort");
+             $(elem).addClass("glyphicon-sort-by-attributes");
+             orderBys.push(column);
+         }
+         else {
+             $(elem).addClass("glyphicon-sort");
+             $(elem).removeClass("glyphicon-sort-by-attributes");
+             orderBys.splice(orderBys.indexOf(column) != -1 ? orderBys.indexOf(column) : undefined, 1);
+         }
+
+         ajaxTableReload();
      }
 
     $('#searchForm').keypress(function(e) {
@@ -193,4 +233,3 @@ $(document).keydown(function (e) {
             break;
     }
 });
-

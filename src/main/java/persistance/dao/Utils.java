@@ -15,20 +15,59 @@ public class Utils {
   private static final HikariConfig CFG = new HikariConfig(CONFIGFILE);
   private static final HikariDataSource DS = new HikariDataSource(CFG);
   private static Logger logger = LoggerFactory.getLogger("persistance.dao.utils");
-
+  private static ThreadLocal<Connection> connectionThreadLocal = new ThreadLocal<Connection>();
 
   /**
-   * get connection obj.
+   * get connection obj unique by thread.
+   *
    * @return conected connection obj
    */
   public static Connection getConnection() {
     try {
       logger.debug("Getting connection");
-      return DS.getConnection();
+      Connection c = connectionThreadLocal.get();
+      if (c == null || c.isClosed()) {
+        connectionThreadLocal.set(c = DS.getConnection());
+      }
+      return c;
     } catch (SQLException e) {
       logger.error("Error getting connection" + e.getMessage() + e.getSQLState() + e.getStackTrace());
     }
     return null;
+  }
+
+  /**
+   * Start a transaction on the current request connection.
+   */
+  public static void startTransaction() {
+    Connection c = getConnection();
+    try {
+      c.setAutoCommit(false);
+    } catch (Exception e) {
+      logger.error("Error starting transaction" + e.getMessage() + e.getStackTrace());
+    }
+    connectionThreadLocal.set(c);
+  }
+
+  /**
+   * Commit the transaction of current request.
+   */
+  public static void commitTransaction() {
+    Connection c = getConnection();
+    try {
+      c.commit();
+      c.setAutoCommit(true);
+      c.close();
+    } catch (Exception e) {
+      logger.error("Error commiting transaction" + e.getMessage() + e.getStackTrace());
+      try {
+        c.rollback();
+        c.setAutoCommit(true);
+        c.close();
+      } catch (Exception ex) {
+        logger.error("Error closing transaction" + e.getMessage() + e.getStackTrace());
+      }
+    }
   }
 
   /**
@@ -47,5 +86,15 @@ public class Utils {
       logger.error("Error retrieving generated key " + e.getMessage() + e.getSQLState() + e.getStackTrace());
     }
     return generatedKey;
+  }
+
+  /**
+   * close connection.
+   * @throws SQLException if couldn't close connection.
+   */
+  public static void closeConnection() throws SQLException {
+    Connection c = connectionThreadLocal.get();
+    connectionThreadLocal.remove();
+    c.close();
   }
 }

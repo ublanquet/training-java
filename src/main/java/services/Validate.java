@@ -50,6 +50,27 @@ public class Validate {
   }
 
   /**
+   * parse a Long from string.
+   *
+   * @param input input
+   * @return converted number or null
+   */
+  public static Boolean validOrder(String input) {
+    switch (input) {
+      case "order_company.name":
+        return true;
+      case "order_computer.name":
+        return true;
+      case "order_discontinued":
+        return true;
+      case "order_introduced":
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  /**
    * parse a date, format dd/MM/yyyy.
    *
    * @param input input string

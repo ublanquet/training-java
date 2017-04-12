@@ -7,14 +7,13 @@ public class Page<T> {
     public int currentPage;
     private int nbEntries;
     private int maxPage;
-
-
     private long allPagesItemCount;
 
     /**
      * basic constructor.
      */
     public Page() {
+      this.currentPage = 0;
     }
 
     /**
@@ -43,8 +42,20 @@ public class Page<T> {
      */
     public Page(ArrayList<T> list, int page) {
         this.list = list;
+        this.nbEntries = list.size();
         this.currentPage = page;
     }
+
+  /**
+   * constructor.
+   * @param list list of objs
+   */
+  public Page(ArrayList<T> list) {
+    this.list = list;
+    this.nbEntries = list.size();
+    this.currentPage = 0;
+
+  }
 
     public int getMaxPage() {
         return maxPage;
@@ -78,8 +89,13 @@ public class Page<T> {
         return list;
     }
 
-    public void setList(ArrayList<T> list) {
+  /**
+   * set the list and set page size to it's size.
+   * @param list liste
+   */
+  public void setList(ArrayList<T> list) {
         this.list = list;
+        this.nbEntries = list.size();
     }
 
     public int getNbEntries() {

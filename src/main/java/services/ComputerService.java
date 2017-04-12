@@ -1,11 +1,11 @@
 package services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import persistance.dao.DaoComputer;
 import persistance.dao.DaoComputerI;
 import persistance.model.Computer;
 import persistance.model.Page;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -88,7 +88,7 @@ public enum ComputerService {
   public Long create(Computer c) {
     if (!Validate.isValidComputer(c)) {
       logger.error("Error persisting computer : invalid object");
-      return null;
+      return (long) 0;
     }
     long generatedKey = 0;
     try {
@@ -151,6 +151,34 @@ public enum ComputerService {
   }
 
   /**
+   * get filtered page compuetr.
+   *
+   * @param name  name filter
+   * @param page  page
+   * @param order order
+   * @return filled page
+   */
+  public Page<Computer> getFiltered(Page<Computer> page, String name, String[] order) {
+    logger.debug("Retrieving pagniated computers stored in DB : ");
+    //ArrayList<String> orderList = new ArrayList<String>(order);
+
+    String orderString = ""; // + order[0].replace("order_", "");
+    for (int i = 0; i < order.length; i++) {
+      if (Validate.validOrder(order[i])) {
+        if (i == 0) {
+          orderString += order[0].replace("order_", "");
+        } else {
+          orderString += ", " + order[i].replace("order_", "");
+        }
+      }
+    }
+
+    page = daoC.selectFiltered(page, name != null ? name : "", orderString);
+
+    return page;
+  }
+
+  /**
    * create computer obj from string array.
    *
    * @param input input
@@ -191,6 +219,7 @@ public enum ComputerService {
 
   /**
    * delete by id.
+   *
    * @param id id to delete
    * @return nb affected rows, 0 fail, 1 success
    */
@@ -205,6 +234,23 @@ public enum ComputerService {
 
   /**
    * delete by id.
+   *
+   * @param id id to delete
+   * @return nb affected rows, 0 fail, 1 success
+   */
+  public int delete(ArrayList<Long> id) {
+    logger.debug("deleting computer of id : " + id);
+    int affectedRow = daoC.delete(id);
+    if (affectedRow == 0) {
+      logger.error("No Computer deleted, incorrect id");
+    }
+    return affectedRow;
+  }
+
+
+  /**
+   * delete by id.
+   *
    * @param c obj to delete
    * @return nb affected rows, 0 fail, 1 success
    */

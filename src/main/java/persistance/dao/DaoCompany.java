@@ -13,15 +13,13 @@ import java.util.ArrayList;
 public enum DaoCompany implements DaoCompanyI {
     INSTANCE;
 
-    private Connection connect = null;
-
     /**
      * create company in db.
      * @param c company obj
      * @return generated id
      */
     public Long create(Company c) {
-        connect = Utils.getConnection();
+        Connection connect = Utils.getConnection();
         long generatedKey = 0;
         try {
 
@@ -36,13 +34,21 @@ public enum DaoCompany implements DaoCompanyI {
                 c.setId(generatedKey);
             }
             p.close();
-            connect.close();
             LOGGER.info(" Company created, generated ID : " + generatedKey);
         } catch (SQLException e) {
+          try {
+            if (!connect.getAutoCommit()) {
+              connect.rollback();
+            }
+          } catch (SQLException ex) {
+            LOGGER.error("Error during transaction rollback");
+          }
             LOGGER.error("Error creating company" + e.getMessage() + e.getSQLState() + e.getStackTrace());
         } finally {
           try {
-            connect.close();
+            if (connect.getAutoCommit()) {
+              Utils.closeConnection();
+            }
           } catch (SQLException ex) {
             LOGGER.error("Error closing connection");
           }
@@ -55,8 +61,8 @@ public enum DaoCompany implements DaoCompanyI {
      * @param c company obj
      */
     public void update(Company c) {
+      Connection connect = Utils.getConnection();
         try {
-            connect = Utils.getConnection();
             PreparedStatement p = connect.prepareStatement("UPDATE company SET " +
                     "name = ? " +
                     " WHERE company.id = ?");
@@ -65,14 +71,21 @@ public enum DaoCompany implements DaoCompanyI {
             long affectedRows = p.executeUpdate();
 
             p.close();
-            connect.close();
             LOGGER.info(affectedRows + " rows updated");
-
         } catch (SQLException e) {
+          try {
+            if (!connect.getAutoCommit()) {
+              connect.rollback();
+            }
+          } catch (SQLException ex) {
+            LOGGER.error("Error during transaction rollback");
+          }
             LOGGER.error("Error updating entry" + e.getMessage() + e.getSQLState() + e.getStackTrace());
         } finally {
           try {
-            connect.close();
+            if (connect.getAutoCommit()) {
+              Utils.closeConnection();
+            }
           } catch (SQLException ex) {
             LOGGER.error("Error closing connection");
           }
@@ -88,8 +101,8 @@ public enum DaoCompany implements DaoCompanyI {
     public ArrayList<Company> selectAll(Long min, Long max) {
         ArrayList<Company> resultList = new ArrayList<>();
         ResultSet rs;
-        try {
-            connect = Utils.getConnection();
+      Connection connect = Utils.getConnection();
+      try {
             PreparedStatement p = connect.prepareStatement("SELECT * FROM company " +
                     "LIMIT ?, ?");
             p.setLong(1, min);
@@ -102,13 +115,22 @@ public enum DaoCompany implements DaoCompanyI {
                         rs.getString("name"));
                 resultList.add(c);
             }
+            rs.close();
             p.close();
-            connect.close();
         } catch (SQLException e) {
+          try {
+            if (!connect.getAutoCommit()) {
+              connect.rollback();
+            }
+          } catch (SQLException ex) {
+            LOGGER.error("Error during transaction rollback");
+          }
             LOGGER.error("Error retrieving companies" + e.getMessage() + e.getSQLState() + e.getStackTrace());
         } finally {
           try {
-            connect.close();
+            if (connect.getAutoCommit()) {
+              Utils.closeConnection();
+            }
           } catch (SQLException ex) {
             LOGGER.error("Error closing connection");
           }
@@ -124,8 +146,8 @@ public enum DaoCompany implements DaoCompanyI {
     public ArrayList<Company> selectAll() {
         ArrayList<Company> resultList = new ArrayList<>();
         ResultSet rs;
-        try {
-            connect = Utils.getConnection();
+      Connection connect = Utils.getConnection();
+      try {
             PreparedStatement p = connect.prepareStatement("SELECT * FROM company;");
 
             rs = p.executeQuery();
@@ -135,13 +157,22 @@ public enum DaoCompany implements DaoCompanyI {
                     rs.getString("name"));
                 resultList.add(c);
             }
+            rs.close();
             p.close();
-            connect.close();
         } catch (SQLException e) {
+          try {
+            if (!connect.getAutoCommit()) {
+              connect.rollback();
+            }
+          } catch (SQLException ex) {
+            LOGGER.error("Error during transaction rollback");
+          }
             LOGGER.error("Error retrieving companies" + e.getMessage() + e.getSQLState() + e.getStackTrace());
         } finally {
           try {
-            connect.close();
+            if (connect.getAutoCommit()) {
+              Utils.closeConnection();
+            }
           } catch (SQLException ex) {
             LOGGER.error("Error closing connection");
           }
@@ -158,8 +189,8 @@ public enum DaoCompany implements DaoCompanyI {
     public Company getById(Long id) {
         ResultSet rs;
         Company c = new Company();
-        try {
-            connect = Utils.getConnection();
+      Connection connect = Utils.getConnection();
+      try {
             PreparedStatement p = connect.prepareStatement("SELECT * FROM company WHERE company.id = ?");
             p.setLong(1, id);
 
@@ -172,14 +203,22 @@ public enum DaoCompany implements DaoCompanyI {
                 c = new Company(rs.getLong("id"),
                         rs.getString("name"));
             }
-
+            rs.close();
             p.close();
-            connect.close();
         } catch (SQLException e) {
+          try {
+            if (!connect.getAutoCommit()) {
+              connect.rollback();
+            }
+          } catch (SQLException ex) {
+            LOGGER.error("Error during transaction rollback");
+          }
             LOGGER.error("Error retrieving company of ID " + id + "%n" + e.getMessage() + e.getSQLState() + e.getStackTrace());
         } finally {
           try {
-            connect.close();
+            if (connect.getAutoCommit()) {
+              Utils.closeConnection();
+            }
           } catch (SQLException ex) {
             LOGGER.error("Error closing connection");
           }
@@ -194,39 +233,46 @@ public enum DaoCompany implements DaoCompanyI {
      * @return deleted rows numbers
      */
     public int delete(Long id) {
-        try {
-            connect = Utils.getConnection();
-            connect.setAutoCommit(false);
-            PreparedStatement p = connect.prepareStatement("DELETE FROM computer " +
-                "WHERE company_id = ?");
+      Connection connect = Utils.getConnection();
+      try {
+            PreparedStatement p = connect.prepareStatement("DELETE FROM company WHERE company.id = ?");
             p.setLong(1, id);
-
-            int affectedComputersRows = p.executeUpdate();
-
-            p = connect.prepareStatement("DELETE FROM company WHERE company.id = ?");
-            p.setLong(1, id);
-
             int affectedRows = p.executeUpdate();
-            connect.commit();
             p.close();
-            LOGGER.info(affectedComputersRows + " computers rows deleted");
             LOGGER.info(affectedRows + " company deleted, id : " + id);
-            return affectedComputersRows + affectedRows;
+            return affectedRows;
         } catch (SQLException e) {
             try {
+              if (!connect.getAutoCommit()) {
                 connect.rollback();
+              }
             } catch (SQLException ex) {
-              LOGGER.error("Error during transaction rollback");
+                LOGGER.error("Error during transaction rollback");
             }
             LOGGER.error("Error deleting company of ID " + id + "%n" + e.getMessage() + e.getSQLState() + e.getStackTrace());
         } finally {
             try {
-              connect.setAutoCommit(true);
-              connect.close();
+              if (connect.getAutoCommit()) {
+                Utils.closeConnection();
+              }
             } catch (SQLException ex) {
-              LOGGER.error("Error closing connection");
+                LOGGER.error("Error closing connection");
             }
         }
         return 0;
     }
+
+  /**
+   * start transaction.
+   */
+  public void startTransaction() {
+    Utils.startTransaction();
+  }
+
+  /**
+   * commit transaction.
+   */
+  public void commitTransaction() {
+    Utils.commitTransaction();
+  }
 }

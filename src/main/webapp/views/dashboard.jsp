@@ -71,18 +71,18 @@
                             </span>
                 </th>
                 <th>
-                    Computer name
+                    Computer name <span id="order_computer.name" class="ordering glyphicon glyphicon-sort"></span>
                 </th>
                 <th>
-                    Introduced date
+                    Introduced date <span id="order_introduced" class="ordering glyphicon glyphicon-sort"></span>
                 </th>
                 <!-- Table header for Discontinued Date -->
                 <th>
-                    Discontinued date
+                    Discontinued date <span id="order_discontinued" class="ordering glyphicon glyphicon-sort"></span>
                 </th>
                 <!-- Table header for Company -->
                 <th>
-                    Company
+                    Company <span id="order_company.name" class="ordering glyphicon glyphicon-sort"></span>
                 </th>
 
             </tr>

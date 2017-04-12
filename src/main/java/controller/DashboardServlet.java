@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 
 @WebServlet(name = "DashboardServlet", urlPatterns = "/dashboard")
 public class DashboardServlet extends HttpServlet {
@@ -32,8 +33,10 @@ public class DashboardServlet extends HttpServlet {
     if (request.getParameter("selection") != null) {
       String message = "Computers deleted, id : ";
       String[] idToDelete =  request.getParameter("selection").split(",");
+      ArrayList<Long> ids = new ArrayList<>();
       for (String selection : idToDelete) {
         try {
+          ids.add(Validate.parseLong(selection));
           if (computerService.delete(Validate.parseLong(selection)) > 0) {
             message = message + selection + ", ";
           } else {
