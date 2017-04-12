@@ -47,6 +47,7 @@ public class ComputerServiceTest {
                 .with(Computer::setCompany, company2)
                 .build();
 
+        //testmodif
       /*computer = GenericBuilder.of(Computer::new)
           .with(Computer::setId, (long)6)
           .with(Computer::setName, "MacBook Pro")
