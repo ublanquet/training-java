@@ -264,7 +264,7 @@ public enum DaoComputer implements DaoComputerI {
       p.setLong(2, page.getFirstEntryIndex());
 
       rs = p.executeQuery();
-
+      //System.out.println(p);
       while (rs.next()) {
         Computer c = GenericBuilder.of(Computer::new)
             .with(Computer::setId, rs.getLong("computer.id"))

@@ -8,13 +8,13 @@
             <span aria-hidden="true">&laquo;</span>
         </a>
     </li>
-    <c:if test="${nbPages} < 60">
+    <c:if test="${nbPages < 60}"> <!-- TODO Defiling when too much pages -->
         <c:forEach begin="0" end="${nbPages}" var="i">
             <li id="p${i}"><a href="#">${i}</a></li>
         </c:forEach>
     </c:if>
-    <c:if test="${nbPages} > 60">
-        <c:forEach begin="0" end="${nbPages}" var="i">
+    <c:if test="${nbPages >= 60}">
+        <c:forEach begin="0" end="60" var="i">
             <li id="p${i}"><a href="#">${i}</a></li>
         </c:forEach>
     </c:if>

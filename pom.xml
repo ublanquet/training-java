@@ -8,9 +8,47 @@
     <artifactId>training-java</artifactId>
     <version>0.1.0</version>
 
+    <properties>
+        <dataSourceClassName>com.mysql.cj.jdbc.MysqlDataSource</dataSourceClassName>
+        <dataSource.url>jdbc:mysql://localhost:3306/computer-database-db?useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC</dataSource.url>
+        <dataSource.user>root</dataSource.user>
+        <dataSource.password>pass</dataSource.password>
+
+        <mysql-version>6.0.6</mysql-version>
+        <!-- <JAVA_1_8_HOME>/home/ebiz/Téléchargements/jdk1.8.0_121</JAVA_1_8_HOME>-->
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>test</id>
+            <properties>
+                <dataSourceClassName>com.mysql.cj.jdbc.MysqlDataSource</dataSourceClassName>
+                <dataSource.url>jdbc:mysql://172.17.0.2:3306/computer-database-db?useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC</dataSource.url>
+                <dataSource.user>root</dataSource.user>
+                <dataSource.password>pass</dataSource.password>
+            </properties>
+        </profile>
+        <profile>
+            <id>production</id>
+            <properties>
+                <dataSourceClassName>com.mysql.cj.jdbc.MysqlDataSource</dataSourceClassName>
+                <dataSource.url>jdbc:mysql://172.17.0.3:3306/computer-database-db?useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC</dataSource.url>
+                <dataSource.user>root</dataSource.user>
+                <dataSource.password>pass</dataSource.password>
+            </properties>
+        </profile>
+    </profiles>
+
     <build>
 
         <defaultGoal>clean install package</defaultGoal>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
 
         <plugins>
             <plugin>
@@ -21,10 +59,13 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                    <!-- fork>true</fork>-->
+                    <!--<executable>${JAVA_1_8_HOME}/bin/javac</executable>-->
                 </configuration>
             </plugin>
 
             <plugin>
+
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <executions>
@@ -41,7 +82,6 @@
                     </execution>
                 </executions>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
@@ -91,7 +131,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>6.0.6</version>
+            <version>${mysql-version}</version>
             <scope>runtime</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/junit/junit -->
