@@ -29,6 +29,15 @@
             </properties>
         </profile>
         <profile>
+            <id>testJenkins</id>
+            <properties>
+                <dataSourceClassName>com.mysql.cj.jdbc.MysqlDataSource</dataSourceClassName>
+                <dataSource.url>jdbc:mysql://localhost:3307/computer-database-db?useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC</dataSource.url>
+                <dataSource.user>root</dataSource.user>
+                <dataSource.password>pass</dataSource.password>
+            </properties>
+        </profile>
+        <profile>
             <id>production</id>
             <properties>
                 <dataSourceClassName>com.mysql.cj.jdbc.MysqlDataSource</dataSourceClassName>
