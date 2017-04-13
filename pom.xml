@@ -23,7 +23,7 @@
             <id>test</id>
             <properties>
                 <dataSourceClassName>com.mysql.cj.jdbc.MysqlDataSource</dataSourceClassName>
-                <dataSource.url>jdbc:mysql://172.17.0.2:3306/computer-database-db?useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC</dataSource.url>
+                <dataSource.url>jdbc:mysql://mysql_test:3306/computer-database-db?useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC</dataSource.url>
                 <dataSource.user>root</dataSource.user>
                 <dataSource.password>pass</dataSource.password>
             </properties>
@@ -32,7 +32,7 @@
             <id>production</id>
             <properties>
                 <dataSourceClassName>com.mysql.cj.jdbc.MysqlDataSource</dataSourceClassName>
-                <dataSource.url>jdbc:mysql://172.17.0.3:3306/computer-database-db?useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC</dataSource.url>
+                <dataSource.url>jdbc:mysql://mysql_prod:3306/computer-database-db?useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC</dataSource.url>
                 <dataSource.user>root</dataSource.user>
                 <dataSource.password>pass</dataSource.password>
             </properties>

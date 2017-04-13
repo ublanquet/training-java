@@ -84,7 +84,7 @@ $(function () {
 
     function ajaxTableReload() {
         var filter = $("#searchbox").val();
-        $.post("/dashboard/ajax", {
+        $.post(contextPath + "/dashboard/ajax", {
             pageN: pageN,
             perPage: perPage,
             search: filter,
