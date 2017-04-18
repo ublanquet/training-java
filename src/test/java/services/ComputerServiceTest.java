@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-@Ignore
+
 public class ComputerServiceTest {
     protected ComputerService service;
     protected Computer computer, computer2, computer10, computerToCreate,invalidComputer, invalidComputer2;
@@ -85,7 +85,6 @@ public class ComputerServiceTest {
     }
 
     @Test
-    @Ignore
     public void testGetAllComputer() throws Exception {
         ArrayList<Computer> computers = service.getAll( (long) 0, (long) 10);
 
