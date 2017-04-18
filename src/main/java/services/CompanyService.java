@@ -2,9 +2,7 @@ package services;
 
 
 import persistance.dao.DaoCompany;
-import persistance.dao.DaoCompanyI;
 import persistance.dao.DaoComputer;
-import persistance.dao.DaoComputerI;
 import persistance.model.Company;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +13,16 @@ public class CompanyService {
 
   private Logger logger = LoggerFactory.getLogger(" services.CompanyService");
 
-  private DaoCompany daoC = DaoCompanyI.getInstance();
-  private DaoComputer daoComputer = DaoComputerI.getInstance();
+  public void setDaoC(DaoCompany daoC) {
+    this.daoC = daoC;
+  }
+
+  public void setDaoComputer(DaoComputer daoComputer) {
+    this.daoComputer = daoComputer;
+  }
+
+  private DaoCompany daoC;
+  private DaoComputer daoComputer;
 
 
   /**

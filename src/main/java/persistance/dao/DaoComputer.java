@@ -13,8 +13,7 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 
-public enum DaoComputer implements DaoComputerI {
-  INSTANCE;
+public class DaoComputer implements DaoComputerI {
 
   /**
    * create in db.

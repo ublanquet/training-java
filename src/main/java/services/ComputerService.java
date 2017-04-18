@@ -3,7 +3,6 @@ package services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import persistance.dao.DaoComputer;
-import persistance.dao.DaoComputerI;
 import persistance.model.Computer;
 import persistance.model.Page;
 
@@ -14,17 +13,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public enum ComputerService {
-  INSTANCE;
+public class ComputerService {
   private Logger logger = LoggerFactory.getLogger(" services.ComputerService");
 
-  private DaoComputer daoC = DaoComputerI.getInstance();
 
 
-  public static ComputerService getInstance() {
-    return ComputerService.INSTANCE;
+  private DaoComputer daoC;
+  public void setDaoC(DaoComputer daoC) {
+    this.daoC = daoC;
   }
-
   /**
    * get by id.
    *

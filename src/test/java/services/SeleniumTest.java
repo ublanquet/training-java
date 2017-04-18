@@ -26,7 +26,7 @@ public class SeleniumTest {
   public void setUp() {
     System.setProperty("webdriver.gecko.driver", "/home/ebiz/Téléchargements/geckodriver-v0.15");
     driver = new FirefoxDriver();
-    service = ComputerService.getInstance();
+    //service = service;//.getInstance();
     driver.manage().timeouts().implicitlyWait(4, TimeUnit.SECONDS);
   }
 

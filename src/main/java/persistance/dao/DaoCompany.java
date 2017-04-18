@@ -10,9 +10,7 @@ import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public enum DaoCompany implements DaoCompanyI {
-    INSTANCE;
-
+public class DaoCompany implements DaoCompanyI {
     /**
      * create company in db.
      * @param c company obj

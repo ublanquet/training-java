@@ -29,7 +29,7 @@ public class ComputerServiceTest {
 
     @Before
     public void setUp() {
-        service = ComputerService.getInstance();
+        //service = ComputerService.getInstance();
 
         company = new Company( (long)1, "Apple Inc.");
         companyNull = null;
