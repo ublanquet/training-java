@@ -30,8 +30,10 @@ $(function () {
     var filteredCount = $("#filteredCount").val();
     var pageMax = 1;
     var orderBys = [];
+    var pagesStartIndex = 0;
 
-    $("ul.pagination li").eq(1).addClass("active");
+    //$("ul.pagination li").eq(1).addClass("active");
+    $("#p0").addClass("active");
     setPages();
 
     //Pagination
@@ -46,24 +48,39 @@ $(function () {
         ajaxTableReload();
     });
 
-    $("ul.pagination a").first().unbind( "click" ).click(function () {
+    $("#prev").unbind( "click" ).click(function () {
         if (pageN > 0) {
             pageN--;
             var filter = $("#searchbox").val();
             $("ul.pagination li").removeClass("active");
-            $("#p"+pageN).addClass("active")
+            $("#p"+ (pageN - pagesStartIndex)).addClass("active")
             ajaxTableReload();
         }
     });
-    $("ul.pagination a").last().unbind( "click" ).click(function () {
+    $("#next").unbind( "click" ).click(function () {
         if (pageN < pageMax-1) {
             pageN++;
             var filter = $("#searchbox").val();
             $("ul.pagination li").removeClass("active");
-            $("#p" + pageN).addClass("active")
+            $("#p" + (pageN - pagesStartIndex)).addClass("active")
             ajaxTableReload();
         }
     });
+
+    $("#prevPages").unbind( "click" ).click(function () {
+        if (pagesStartIndex > 0) {
+            pagesStartIndex -= 60;
+            setPages();
+        }
+    });
+    $("#nextPages").unbind( "click" ).click(function () {
+        if (pagesStartIndex < pageMax-60) {
+            pagesStartIndex += 60;
+            setPages();
+        }
+    });
+
+
 
     $("button.nbEntries").click(function () {
         $("button.nbEntries").removeClass("active");
@@ -103,16 +120,46 @@ $(function () {
             var count = filteredCount || totalCount;
             var maxPages = count / perPage;
             var lastPage = count % perPage == 0 ? 0 : 1;
-            pageMax = maxPages+lastPage-1;
-            $("ul.pagination li").each(function (i){
-                if(i > maxPages+lastPage){
-                    $(this).hide();
-                }else{
-                    $(this).show();
+            pageMax = maxPages+lastPage;
+            if(pageMax < 60) {
+                $(".pageNum").each(function (i) {
+                    if (i > maxPages + lastPage) {
+                        $(this).hide();
+                    } else {
+                        $(this).show();
+                    }
+                });
+            }
+            else {
+                if(pagesStartIndex == 0) {
+                    $(".pageNum").each(function (i) {
+                        if (i > maxPages + lastPage) {
+                            $(this).hide();
+                        } else {
+                            $(this).show();
+                        }
+                    });
                 }
-            });
-        $("ul.pagination li").last().show();
-     }
+                else {
+                    $(".pageNum a").each(function (i) {
+                        var pN = $(this).text();
+                        //$(this).attr("id", "p" + (parseInt(pN)+pagesStartIndex))
+                        $(this).text( parseInt(pN)+pagesStartIndex );
+
+                        if (i + pagesStartIndex > maxPages + lastPage) {
+                            $(this).hide();
+                        } else {
+                            $(this).show();
+                        }
+
+                    });
+                }
+
+            }
+        //$("ul.pagination li").last().show();
+        $("#next").show();
+        $("#nextPages").show();
+    }
 
      $(".ordering").click( function() {
          var $this = $(this);

@@ -1,4 +1,5 @@
 package services;
+import org.junit.Ignore;
 import persistance.model.Company;
 import org.junit.After;
 import org.junit.Before;
@@ -7,7 +8,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
-
+@Ignore
 public class CompanyServiceTest {
     protected CompanyService service;
     protected Company company, company10;
@@ -23,6 +24,7 @@ public class CompanyServiceTest {
     public void tearDown() {
     }
 
+    @Ignore
     @Test
     public void testGetAllCompany() throws Exception {
         ArrayList<Company> companies = service.getAll( (long) 0, (long) 10);
