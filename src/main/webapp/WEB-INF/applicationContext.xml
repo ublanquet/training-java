@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+
+    <!-- ANNOTATIONS POUR L'INJECTION DE DEPENDANCES -->
+    <context:annotation-config />
+
+    <!-- ANNOTATIONS POUR LA CREATION DE BEANS VIA ANNOTATIONS -->
+    <context:component-scan base-package="controller" />
+
+    <!-- ANNOTATIONS POUR AOP -->
+    <!--aop:aspectj-autoproxy /-->
+
+    <bean name="unBean" class="controller.DashboardServlet" scope="prototype" >
+        <property name="unePropriete" value="Hello world"/>
+    </bean>
+
+    <bean name="companyService" class="services.CompanyService" scope="singleton">
+        <property name="unePropriete" value="Hello world"/>
+        <property name="daoCompany" ref="companyDao"/>
+        <property name="daoComputer" ref="computerDao"/>
+    </bean>
+    <bean name="computerService" class="services.ComputerService" scope="singleton" >
+        <property name="unePropriete" value="Hello world"/>
+        <property name="daoComputer" ref="computerDao"/>
+        <property name="daoCompany" ref="companyDao"/>
+    </bean>
+
+    <bean name="companyDao" class="persistance.dao.DaoCompany" scope="singleton" >
+        <property name="unePropriete" value="Hello world"/>
+    </bean>
+    <bean name="computerDao" class="persistance.dao.DaoComputer" scope="singleton" >
+        <property name="unePropriete" value="Hello world"/>
+    </bean>
+
+    <!-- get hikari properties -->
+    <!--
+    <bean name="propertyPlaceholder" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <value>classpath:resources/db.properties</value>
+        </property>
+    </bean>
+
+    <bean id="datasource" class="persistance.dao.Utils">
+        <property name="urlConnection" value="${datasource.url}"/>
+        <property name="drivers" value="${datasource.drivers}"/>
+        <property name="username" value="${datasource.username}"/>
+        <property name="password" value="${datasource.password}"/>
+    </bean>
+    -->
+</beans>
