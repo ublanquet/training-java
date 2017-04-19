@@ -1,21 +1,31 @@
 package persistance.dao;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Utils {
-  private static final String CONFIGFILE = "/db.properties";
+  /*private static final String CONFIGFILE = "/db.properties";
   private static final HikariConfig CFG = new HikariConfig(CONFIGFILE);
-  private static final HikariDataSource DS = new HikariDataSource(CFG);
+  private static final HikariDataSource DS = new HikariDataSource(CFG);*/
   private static Logger logger = LoggerFactory.getLogger("persistance.dao.utils");
   private static ThreadLocal<Connection> connectionThreadLocal = new ThreadLocal<Connection>();
+
+  private static DataSource ds;
+
+  public static void setDS(DataSource ds) {
+    Utils.ds = ds;
+  }
+
+
+
+
 
   /**
    * get connection obj unique by thread.
@@ -27,7 +37,7 @@ public class Utils {
       logger.debug("Getting connection");
       Connection c = connectionThreadLocal.get();
       if (c == null || c.isClosed()) {
-        connectionThreadLocal.set(c = DS.getConnection());
+        connectionThreadLocal.set(c = ds.getConnection());
       }
       return c;
     } catch (SQLException e) {
