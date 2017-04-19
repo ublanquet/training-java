@@ -33,8 +33,12 @@
         <property name="computerService" ref="computerService"/>
     </bean>
 
-    <!-- DATASOURCE -->
+    <bean name="dashboardAjax" class="controller.DashboardAjaxServlet" scope="prototype" >
+        <property name="computerService" ref="computerService"/>
+    </bean>
 
+    <!-- DATASOURCE -->
+    <!-- Get HikariCP properties -->
     <bean name="propertyPlaceholder" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
             <value>classpath:db.properties</value>
@@ -67,21 +71,4 @@
         </property>
     </bean>
 
-
-
-    <!-- get hikari properties -->
-    <!--
-    <bean name="propertyPlaceholder" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="locations">
-            <value>classpath:resources/db.properties</value>
-        </property>
-    </bean>
-
-    <bean id="datasource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="urlConnection" value="${datasource.url}"/>
-        <property name="drivers" value="${datasource.drivers}"/>
-        <property name="username" value="${datasource.username}"/>
-        <property name="password" value="${datasource.password}"/>
-    </bean>
-    -->
 </beans>
