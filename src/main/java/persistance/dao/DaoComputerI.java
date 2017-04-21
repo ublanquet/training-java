@@ -11,14 +11,6 @@ public interface DaoComputerI {
     Logger LOGGER = LoggerFactory.getLogger("persistance.dao.DaoComputer");
 
     /**
-     * get unique instance.
-     * @return instance
-     */
-    static DaoComputer getInstance() {
-        return DaoComputer.INSTANCE;
-    }
-
-    /**
      * create computer.
      * @param c computer
      * @return generated id

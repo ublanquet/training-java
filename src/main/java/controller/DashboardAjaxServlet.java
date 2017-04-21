@@ -1,11 +1,14 @@
 package controller;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.WebApplicationContext;
 import persistance.model.Computer;
 import persistance.model.DTO.ComputerDto;
 import persistance.model.Page;
 import services.ComputerService;
 import services.Mapper;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,7 +18,16 @@ import java.io.IOException;
 
 @WebServlet(name = "DashboardAjaxServlet", urlPatterns = "/dashboard/ajax")
 public class DashboardAjaxServlet extends HttpServlet {
-  ComputerService computerService = ComputerService.getInstance();
+  ComputerService computerService;
+
+  @Override
+  public void init(ServletConfig config) throws ServletException {
+    super.init(config);
+
+    ApplicationContext ac = (ApplicationContext) config.getServletContext().getAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
+
+    this.computerService = (ComputerService) ac.getBean("computerService");
+  }
 
   /**
    * post.

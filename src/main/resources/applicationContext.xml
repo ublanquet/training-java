@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+
+    <!-- ANNOTATIONS POUR L'INJECTION DE DEPENDANCES -->
+    <context:annotation-config />
+
+    <!-- ANNOTATIONS POUR LA CREATION DE BEANS VIA ANNOTATIONS -->
+    <context:component-scan base-package="controller" />
+
+    <!-- ANNOTATIONS POUR AOP -->
+    <!--aop:aspectj-autoproxy /-->
+    <bean name="companyDao" class="persistance.dao.DaoCompany" scope="singleton" >
+    </bean>
+    <bean name="computerDao" class="persistance.dao.DaoComputer" scope="singleton" >
+    </bean>
+
+
+    <bean name="companyService" class="services.CompanyService" scope="singleton">
+        <property name="daoC" ref="companyDao"/>
+        <property name="daoComputer" ref="computerDao"/>
+    </bean>
+    <bean name="computerService" class="services.ComputerService" scope="singleton" >
+        <property name="daoC" ref="computerDao"/>
+    </bean>
+
+    <bean name="dashboard" class="controller.DashboardServlet" scope="prototype" >
+        <property name="computerService" ref="computerService"/>
+    </bean>
+
+    <bean name="dashboardAjax" class="controller.DashboardAjaxServlet" scope="prototype" >
+        <property name="computerService" ref="computerService"/>
+    </bean>
+
+    <!-- DATASOURCE -->
+    <!-- Get HikariCP properties -->
+
+    <bean name="propertyPlaceholder" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <value>classpath:db.properties</value>
+        </property>
+    </bean>
+
+    <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+        <property name="dataSourceProperties" >
+            <props>
+                <prop key="url">${dataSource.url2}</prop>
+                <prop key="user">${dataSource.user}</prop>
+                <prop key="password">${dataSource.password}</prop>
+            </props>
+        </property>
+        <property name="dataSourceClassName" value="${dataSourceClassName}" />
+        <property name="maximumPoolSize" value="${maximumPoolSize}" />
+                  <!--value="oracle.jdbc.driver.OracleDriver"-->
+    </bean>
+
+    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource">
+        <constructor-arg ref="hikariConfig" />
+    </bean>
+
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="persistance.dao.Utils.setDS"/>
+        <property name="arguments">
+            <list>
+                <ref bean="dataSource"/>
+            </list>
+        </property>
+    </bean>
+
+</beans>

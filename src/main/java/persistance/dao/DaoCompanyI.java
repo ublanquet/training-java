@@ -12,14 +12,6 @@ public interface DaoCompanyI {
     Logger LOGGER = LoggerFactory.getLogger(" persistance.dao.DaoCompany");
 
     /**
-     * reutrn unique instance.
-     * @return instance
-     */
-    static DaoCompany getInstance() {
-        return DaoCompany.INSTANCE;
-    }
-
-    /**
      * create a company in db.
      * @param c company
      * @return generated id

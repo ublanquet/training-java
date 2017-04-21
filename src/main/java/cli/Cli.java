@@ -1,9 +1,7 @@
 package cli;
 
 import persistance.dao.DaoCompany;
-import persistance.dao.DaoCompanyI;
 import persistance.dao.DaoComputer;
-import persistance.dao.DaoComputerI;
 import persistance.model.Company;
 import persistance.model.Computer;
 import persistance.model.Page;
@@ -21,11 +19,11 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class Cli {
-    private static DaoComputer daoC = DaoComputerI.getInstance();
-    private static DaoCompany daoComp = DaoCompanyI.getInstance();
+    private static DaoComputer daoC;
+    private static DaoCompany daoComp;
     private static Logger logger = LoggerFactory.getLogger(" dao.Cli");
     private static Boolean running = true;
-    private static ComputerService compService = ComputerService.getInstance();
+    private static ComputerService compService;
     private static CompanyService companyService = new CompanyService();
 
     private static Scanner scanner = new Scanner(System.in);

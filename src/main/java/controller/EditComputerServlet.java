@@ -20,8 +20,8 @@ import java.util.ArrayList;
 
 @WebServlet(name = "EditComputerServlet", urlPatterns = "/editcomputer")
 public class EditComputerServlet extends HttpServlet {
-  CompanyService companyService = new CompanyService();
-  ComputerService computerService = ComputerService.getInstance();
+  CompanyService companyService;
+  ComputerService computerService;
   Logger logger = LoggerFactory.getLogger("controller.EditComputerServlet");
 
 

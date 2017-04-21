@@ -2,18 +2,26 @@ package services;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import persistance.model.Company;
 import persistance.model.Computer;
 import persistance.model.DTO.ComputerDto;
 import persistance.model.GenericBuilder;
 import persistance.model.Page;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations={"/applicationContext.xml"})
 public class DtoTest {
+  @Resource
   protected ComputerService service;
   protected Computer computer, computer2, computer10;
   protected Company company, company2, companyNull;
@@ -22,7 +30,7 @@ public class DtoTest {
 
   @Before
   public void setUp() {
-    service = ComputerService.getInstance();
+    //service = ComputerService.getInstance();
 
     company = new Company( (long)1, "Apple Inc.");
     companyNull = null;
