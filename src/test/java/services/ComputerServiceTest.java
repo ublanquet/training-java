@@ -1,9 +1,9 @@
 package services;
 
 import org.junit.Ignore;
-import org.mockito.Mockito;
-import persistance.dao.DaoComputer;
-import persistance.dao.DaoComputerI;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import persistance.model.Company;
 import persistance.model.Computer;
 import persistance.model.GenericBuilder;
@@ -12,8 +12,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.sql.SQLException;
-import java.time.LocalDate;
+import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
@@ -21,7 +20,10 @@ import java.util.ArrayList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations={"/applicationContext.xml"})
 public class ComputerServiceTest {
+  @Resource
     protected ComputerService service;
     protected Computer computer, computer2, computer10, computerToCreate,invalidComputer, invalidComputer2;
     protected Company company, company2, companyNull;

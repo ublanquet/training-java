@@ -39,6 +39,7 @@
 
     <!-- DATASOURCE -->
     <!-- Get HikariCP properties -->
+
     <bean name="propertyPlaceholder" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
             <value>classpath:db.properties</value>
@@ -48,7 +49,7 @@
     <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
         <property name="dataSourceProperties" >
             <props>
-                <prop key="url">${dataSource.url}</prop>
+                <prop key="url">${dataSource.url2}</prop>
                 <prop key="user">${dataSource.user}</prop>
                 <prop key="password">${dataSource.password}</prop>
             </props>
