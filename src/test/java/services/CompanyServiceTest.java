@@ -22,7 +22,7 @@ public class CompanyServiceTest {
 
     @Before
     public void setUp() {
-        service = new CompanyService();
+        //service = new CompanyService();
         company = new Company( (long) 1, "Apple Inc.");
         company10 = new Company( (long) 10, "Digital Equipment Corporation");
     }

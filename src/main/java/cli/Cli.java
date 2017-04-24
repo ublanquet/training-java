@@ -1,5 +1,7 @@
 package cli;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import persistance.dao.DaoCompany;
 import persistance.dao.DaoComputer;
 import persistance.model.Company;
@@ -38,6 +40,10 @@ public class Cli {
      * @param args arguments
      */
     public static void main(String[] args) {
+        ApplicationContext context = new ClassPathXmlApplicationContext("/applicationContext.xml");
+        compService = (ComputerService) context.getBean("computerService");
+        companyService =  (CompanyService) context.getBean("companyService");
+
         System.out.println("Welcome to ComputerDataBase CLI");
         logger.debug("CLI start");
 
