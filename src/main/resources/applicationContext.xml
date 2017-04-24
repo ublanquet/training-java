@@ -3,15 +3,17 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
-	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+">
 
 
     <!-- ANNOTATIONS POUR L'INJECTION DE DEPENDANCES -->
     <context:annotation-config />
 
     <!-- ANNOTATIONS POUR LA CREATION DE BEANS VIA ANNOTATIONS -->
-    <context:component-scan base-package="controller" />
+    <context:component-scan base-package="java" />
 
     <!-- ANNOTATIONS POUR AOP -->
     <!--aop:aspectj-autoproxy /-->
@@ -29,13 +31,7 @@
         <property name="daoC" ref="computerDao"/>
     </bean>
 
-    <bean name="dashboard" class="controller.DashboardServlet" scope="prototype" >
-        <property name="computerService" ref="computerService"/>
-    </bean>
 
-    <bean name="dashboardAjax" class="controller.DashboardAjaxServlet" scope="prototype" >
-        <property name="computerService" ref="computerService"/>
-    </bean>
 
     <!-- DATASOURCE -->
     <!-- Get HikariCP properties -->
@@ -71,5 +67,13 @@
             </list>
         </property>
     </bean>
+    <!-- TRANSACTION -->
+    <tx:annotation-driven />
+
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
 
 </beans>

@@ -1,12 +1,14 @@
 package services;
 
 
+import org.springframework.transaction.annotation.Transactional;
 import persistance.dao.DaoCompany;
 import persistance.dao.DaoComputer;
 import persistance.model.Company;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class CompanyService {
@@ -63,14 +65,16 @@ public class CompanyService {
    * @param id id
    * @return deleted rows
    */
+  @Transactional(rollbackFor = Throwable.class)
   public int delete(long id) {
     logger.debug("Deleting company of ID : " + id);
     try {
-      daoC.startTransaction();
+      //daoC.startTransaction();
       int deletedComputer = daoComputer.deleteByCompanyId(id);
-      daoC.delete(id);
-      daoC.commitTransaction();
-      return deletedComputer;
+      //daoC.delete(id);
+      //daoC.commitTransaction();
+      //return deletedComputer;
+      throw new SQLException();
     } catch (Exception ex) {
       logger.error("Error deleting company of ID : " + id);
     }
