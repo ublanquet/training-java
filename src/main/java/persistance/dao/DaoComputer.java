@@ -1,5 +1,6 @@
 package persistance.dao;
 
+import org.springframework.jdbc.core.JdbcTemplate;
 import persistance.model.Company;
 import persistance.model.Computer;
 import persistance.model.GenericBuilder;
@@ -14,6 +15,10 @@ import java.sql.Types;
 import java.util.ArrayList;
 
 public class DaoComputer implements DaoComputerI {
+  private JdbcTemplate jdbcTemplate;
+  public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+    this.jdbcTemplate = jdbcTemplate;
+  }
 
   /**
    * create in db.

@@ -1,5 +1,6 @@
 package persistance.dao;
 
+import org.springframework.jdbc.core.JdbcTemplate;
 import persistance.model.Company;
 
 import java.sql.Connection;
@@ -11,7 +12,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class DaoCompany implements DaoCompanyI {
-    /**
+  private JdbcTemplate jdbcTemplate;
+  public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+    this.jdbcTemplate = jdbcTemplate;
+  }
+
+  /**
      * create company in db.
      * @param c company obj
      * @return generated id
