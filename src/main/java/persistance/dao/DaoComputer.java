@@ -1,6 +1,9 @@
 package persistance.dao;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import persistance.model.Company;
 import persistance.model.Computer;
 import persistance.model.GenericBuilder;
@@ -10,7 +13,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 
@@ -27,11 +29,11 @@ public class DaoComputer implements DaoComputerI {
    * @return generated id
    */
   public Long create(Computer c) {
-    Connection connect = Utils.getConnection();
+    //Connection connect = Utils.getConnection();
     long generatedKey = 0;
     try {
 
-      PreparedStatement p = connect.prepareStatement("INSERT INTO computer " +
+      /*PreparedStatement p = connect.prepareStatement("INSERT INTO computer " +
           "(name, introduced, discontinued, company_id) " +
           "VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
       p.setString(1, c.getName());
@@ -42,26 +44,63 @@ public class DaoComputer implements DaoComputerI {
       } else {
         p.setNull(4, Types.BIGINT);
       }
+      String sql = "INSERT INTO computer " +
+          "(name, introduced, discontinued, company_id) " +
+          "VALUES (?,?,?,?)";*/
 
-      long affectedRows = p.executeUpdate();
+      //Object[] params = {c.getName(), c.getIntroducedTimestamp(), c.getDiscontinuedTimestamp(), c.getCompanyId()};
 
-      if (affectedRows > 0) {
-        generatedKey = Utils.getGeneratedKey(p);
-        c.setId(generatedKey);
-      }
-      p.close();
+      SimpleJdbcInsert inserter =
+          new SimpleJdbcInsert(jdbcTemplate)
+              .withTableName("computer")
+              .usingGeneratedKeyColumns("id");
+      SqlParameterSource parameters = new MapSqlParameterSource()
+          .addValue("name", c.getName())
+          .addValue("introduced", c.getIntroducedTimestamp())
+          .addValue("discontinued", c.getDiscontinuedTimestamp())
+          .addValue("company_id", c.getCompanyId());
+      Number newId = inserter.executeAndReturnKey(parameters);
+      generatedKey = newId.longValue();
+      c.setId(generatedKey);
+
+      //long affectedRows = jdbcTemplate.update(sql, params);
+      //long affectedRows = p.executeUpdate();
+      /*long affectedRows = jdbcTemplate.update(new PreparedStatementCreator() {
+        @Override
+        public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+          PreparedStatement p = con.prepareStatement("INSERT INTO computer " +
+              "(name, introduced, discontinued, company_id) " +
+              "VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+          p.setString(1, c.getName());
+          p.setTimestamp(2, c.getIntroducedTimestamp());
+          p.setTimestamp(3, c.getDiscontinuedTimestamp());
+          if (c.getCompanyId() != null && c.getCompanyId() != 0) {
+            p.setLong(4, c.getCompanyId());
+          } else {
+            p.setNull(4, Types.BIGINT);
+          }
+          return p;
+        }
+      }, holder);*/
+      //p.close();
       LOGGER.info(" Computer created, generated ID : " + generatedKey);
-    } catch (SQLException e) {
-      LOGGER.error("Error creating computer " + e.getMessage() + e.getSQLState() + e.getStackTrace());
-    } finally {
-      try {
-        connect.close();
-      } catch (SQLException ex) {
-        LOGGER.error("Error closing connection");
-      }
+    } catch (Exception e) {
+      LOGGER.error("Error creating computer " + e.getMessage() + e.getStackTrace());
     }
     return generatedKey;
   }
+
+  /**
+   * JdbcTemplate doesn't provide this method, but I think it should.
+   * I copied ArgPreparedStatementSetter and SimplePreparedStatementCreator
+   *   from Spring sources (I just added a constructor to the latter).
+   */
+  /*public int update(String sql, Object[] args, KeyHolder keyHolder) {
+    PreparedStatementSetter pss = new ArgPreparedStatementSetter(args);
+    PreparedStatementCreator psc = new SimplePreparedStatementCreator(INSERT_EVENT, pss);
+
+    return jdbcTemplate.update(psc, keyHolder); // This method is available in JdbcTemplate
+  }*/
 
   /**
    * update.
@@ -85,8 +124,19 @@ public class DaoComputer implements DaoComputerI {
         p.setNull(4, Types.BIGINT);
       }
       p.setLong(5, c.getId());
-      affectedRows = p.executeUpdate();
-      p.close();
+
+      Long companyId = null;
+      if (c.getCompanyId() != null && c.getCompanyId() != 0) {
+        companyId = c.getCompanyId();
+      }
+      Object[] params = {c.getName(), c.getIntroducedTimestamp(), c.getDiscontinuedTimestamp(), companyId , c.getId()};
+      String sql = "UPDATE computer SET " +
+          "name = ?, introduced = ?, discontinued = ?, company_id = ?" +
+          " WHERE computer.id = ?";
+
+      affectedRows = jdbcTemplate.update(sql, params);
+      //affectedRows = p.executeUpdate();
+      //p.close();
       LOGGER.info(affectedRows + " rows updated");
     } catch (SQLException e) {
       LOGGER.error("Error updating computer of ID " + c.getId() + e.getMessage() + e.getSQLState() + e.getStackTrace());
@@ -116,6 +166,10 @@ public class DaoComputer implements DaoComputerI {
           "LIMIT ?, ?");
       p.setLong(1, min);
       p.setLong(2, max);
+
+      //String sql = "SELECT * FROM computer LEFT JOIN company on computer.company_id = company.id " +
+      //    "LIMIT ?, ?"
+      //jdbcTemplate.query(sql, mapper);
 
       rs = p.executeQuery();
 

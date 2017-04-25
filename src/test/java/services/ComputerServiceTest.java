@@ -120,6 +120,12 @@ public class ComputerServiceTest {
 
       Computer created = service.getById(createdId);
       assertEquals(computerToCreate.toString(), created.toString());
+      created.setName("editedName");
+      service.update(created);
+      Computer edited = service.getById(created.getId());
+      assertEquals(created.toString(), edited.toString());
+      assertEquals("editedName", edited.getName());
+
 
       long nbDelete = service.delete(computerToCreate.getId());
       if (nbDelete == 0) {
