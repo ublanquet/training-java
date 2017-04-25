@@ -495,20 +495,4 @@ public class DaoComputer implements DaoComputerI {
     }
     return affectedRows;
   }
-
-
-  /**
-   * start transaction.
-   */
-  public void startTransaction() {
-    Utils.startTransaction();
-  }
-
-  /**
-   * commit transaction.
-   */
-  public void commitTransaction() {
-    Utils.commitTransaction();
-  }
-
 }
