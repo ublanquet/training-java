@@ -47,19 +47,10 @@ public class DaoComputer implements DaoComputerI {
       p.close();
       LOGGER.info(" Computer created, generated ID : " + generatedKey);
     } catch (SQLException e) {
-      try {
-        if (!connect.getAutoCommit()) {
-          connect.rollback();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error during transaction rollback");
-      }
       LOGGER.error("Error creating computer " + e.getMessage() + e.getSQLState() + e.getStackTrace());
     } finally {
       try {
-        if (connect.getAutoCommit()) {
-          Utils.closeConnection();
-        }
+        connect.close();
       } catch (SQLException ex) {
         LOGGER.error("Error closing connection");
       }
@@ -93,20 +84,10 @@ public class DaoComputer implements DaoComputerI {
       p.close();
       LOGGER.info(affectedRows + " rows updated");
     } catch (SQLException e) {
-      try {
-        if (!connect.getAutoCommit()) {
-          connect.rollback();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error during transaction rollback");
-      }
       LOGGER.error("Error updating computer of ID " + c.getId() + e.getMessage() + e.getSQLState() + e.getStackTrace());
     } finally {
       try {
         connect.close();
-        if (connect.getAutoCommit()) {
-          Utils.closeConnection();
-        }
       } catch (SQLException ex) {
         LOGGER.error("Error closing connection");
       }
@@ -147,19 +128,10 @@ public class DaoComputer implements DaoComputerI {
       rs.close();
       p.close();
     } catch (SQLException e) {
-      try {
-        if (!connect.getAutoCommit()) {
-          connect.rollback();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error during transaction rollback");
-      }
       LOGGER.error("Error getting computers" + e.getMessage() + e.getSQLState() + e.getStackTrace());
     } finally {
       try {
-        if (connect.getAutoCommit()) {
-          Utils.closeConnection();
-        }
+        connect.close();
       } catch (SQLException ex) {
         LOGGER.error("Error closing connection");
       }
@@ -186,19 +158,10 @@ public class DaoComputer implements DaoComputerI {
       rs.close();
       p.close();
     } catch (SQLException e) {
-      try {
-        if (!connect.getAutoCommit()) {
-          connect.rollback();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error during transaction rollback");
-      }
       LOGGER.error("Error getting computers count " + e.getMessage() + e.getSQLState() + e.getStackTrace());
     } finally {
       try {
-        if (connect.getAutoCommit()) {
-          Utils.closeConnection();
-        }
+        connect.close();
       } catch (SQLException ex) {
         LOGGER.error("Error closing connection");
       }
@@ -227,19 +190,10 @@ public class DaoComputer implements DaoComputerI {
       rs.close();
       p.close();
     } catch (SQLException e) {
-      try {
-        if (!connect.getAutoCommit()) {
-          connect.rollback();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error during transaction rollback");
-      }
       LOGGER.error("Error getting computers count by name " + e.getMessage() + e.getSQLState() + e.getStackTrace());
     } finally {
       try {
-        if (connect.getAutoCommit()) {
-          Utils.closeConnection();
-        }
+        connect.close();
       } catch (SQLException ex) {
         LOGGER.error("Error closing connection");
       }
@@ -279,19 +233,10 @@ public class DaoComputer implements DaoComputerI {
       rs.close();
       p.close();
     } catch (SQLException e) {
-      try {
-        if (!connect.getAutoCommit()) {
-          connect.rollback();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error during transaction rollback");
-      }
       LOGGER.error("Error getting computers" + e.getMessage() + e.getSQLState() + e.getStackTrace());
     } finally {
       try {
-        if (connect.getAutoCommit()) {
-          Utils.closeConnection();
-        }
+        connect.close();
       } catch (SQLException ex) {
         LOGGER.error("Error closing connection");
       }
@@ -340,19 +285,10 @@ public class DaoComputer implements DaoComputerI {
       rs.close();
       p.close();
     } catch (SQLException e) {
-      try {
-        if (!connect.getAutoCommit()) {
-          connect.rollback();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error during transaction rollback");
-      }
       LOGGER.error("Error getting computers" + e.getMessage() + e.getSQLState() + e.getStackTrace());
     } finally {
       try {
-        if (connect.getAutoCommit()) {
-          Utils.closeConnection();
-        }
+        connect.close();
       } catch (SQLException ex) {
         LOGGER.error("Error closing connection");
       }
@@ -405,19 +341,10 @@ public class DaoComputer implements DaoComputerI {
       rs.close();
       p.close();
     } catch (SQLException e) {
-      try {
-        if (!connect.getAutoCommit()) {
-          connect.rollback();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error during transaction rollback");
-      }
       LOGGER.error("Error getting computers" + e.getMessage() + e.getSQLState() + e.getStackTrace());
     } finally {
       try {
-        if (connect.getAutoCommit()) {
-          Utils.closeConnection();
-        }
+        connect.close();
       } catch (SQLException ex) {
         LOGGER.error("Error closing connection");
       }
@@ -458,19 +385,10 @@ public class DaoComputer implements DaoComputerI {
       rs.close();
       p.close();
     } catch (SQLException e) {
-      try {
-        if (!connect.getAutoCommit()) {
-          connect.rollback();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error during transaction rollback");
-      }
       LOGGER.error("Error retrieving computer of ID " + id + e.getMessage() + e.getSQLState() + e.getStackTrace());
     } finally {
       try {
-        if (connect.getAutoCommit()) {
-          Utils.closeConnection();
-        }
+        connect.close();
       } catch (SQLException ex) {
         LOGGER.error("Error closing connection");
       }
@@ -497,19 +415,10 @@ public class DaoComputer implements DaoComputerI {
       p.close();
       LOGGER.info(affectedRows + " rows updated");
     } catch (SQLException e) {
-      try {
-        if (!connect.getAutoCommit()) {
-          connect.rollback();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error during transaction rollback");
-      }
       LOGGER.error("Error deleting computer of ID " + id + e.getMessage() + e.getSQLState() + e.getStackTrace());
     } finally {
       try {
-        if (connect.getAutoCommit()) {
-          connect.close();
-        }
+        connect.close();
       } catch (SQLException ex) {
         LOGGER.error("Error closing connection");
       }
@@ -546,19 +455,10 @@ public class DaoComputer implements DaoComputerI {
       p.close();
       LOGGER.info(affectedRows + " rows updated");
     } catch (SQLException e) {
-      try {
-        if (!connect.getAutoCommit()) {
-          connect.rollback();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error during transaction rollback");
-      }
       LOGGER.error("Error deleting computers, ids :" + ids.toString() + e.getMessage() + e.getSQLState() + e.getStackTrace());
     } finally {
       try {
-        if (connect.getAutoCommit()) {
-          connect.close();
-        }
+        connect.close();
       } catch (SQLException ex) {
         LOGGER.error("Error closing connection");
       }
@@ -584,13 +484,6 @@ public class DaoComputer implements DaoComputerI {
       p.close();
       LOGGER.info(affectedRows + " rows updated");
     } catch (SQLException e) {
-      try {
-        if (!connect.getAutoCommit()) {
-          connect.rollback();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error during transaction rollback");
-      }
       LOGGER.error("Error deleting computer of ID " + id + e.getMessage() + e.getSQLState() + e.getStackTrace());
     } finally {
       try {
