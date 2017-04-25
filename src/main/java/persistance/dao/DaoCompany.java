@@ -206,5 +206,4 @@ public class DaoCompany implements DaoCompanyI {
         }
         return 0;
     }
-  
 }
