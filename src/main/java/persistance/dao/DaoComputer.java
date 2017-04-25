@@ -103,6 +103,7 @@ public class DaoComputer implements DaoComputerI {
       LOGGER.error("Error updating computer of ID " + c.getId() + e.getMessage() + e.getSQLState() + e.getStackTrace());
     } finally {
       try {
+        connect.close();
         if (connect.getAutoCommit()) {
           Utils.closeConnection();
         }
@@ -593,9 +594,8 @@ public class DaoComputer implements DaoComputerI {
       LOGGER.error("Error deleting computer of ID " + id + e.getMessage() + e.getSQLState() + e.getStackTrace());
     } finally {
       try {
-        if (connect.getAutoCommit()) {
-          Utils.closeConnection();
-        }
+        connect.close();
+
       } catch (SQLException ex) {
         LOGGER.error("Error closing connection");
       }

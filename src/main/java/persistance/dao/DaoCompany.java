@@ -34,19 +34,10 @@ public class DaoCompany implements DaoCompanyI {
             p.close();
             LOGGER.info(" Company created, generated ID : " + generatedKey);
         } catch (SQLException e) {
-          try {
-            if (!connect.getAutoCommit()) {
-              connect.rollback();
-            }
-          } catch (SQLException ex) {
-            LOGGER.error("Error during transaction rollback");
-          }
             LOGGER.error("Error creating company" + e.getMessage() + e.getSQLState() + e.getStackTrace());
         } finally {
           try {
-            if (connect.getAutoCommit()) {
-              Utils.closeConnection();
-            }
+            connect.close();
           } catch (SQLException ex) {
             LOGGER.error("Error closing connection");
           }
@@ -71,19 +62,10 @@ public class DaoCompany implements DaoCompanyI {
             p.close();
             LOGGER.info(affectedRows + " rows updated");
         } catch (SQLException e) {
-          try {
-            if (!connect.getAutoCommit()) {
-              connect.rollback();
-            }
-          } catch (SQLException ex) {
-            LOGGER.error("Error during transaction rollback");
-          }
             LOGGER.error("Error updating entry" + e.getMessage() + e.getSQLState() + e.getStackTrace());
         } finally {
           try {
-            if (connect.getAutoCommit()) {
-              Utils.closeConnection();
-            }
+            connect.close();
           } catch (SQLException ex) {
             LOGGER.error("Error closing connection");
           }
@@ -116,19 +98,10 @@ public class DaoCompany implements DaoCompanyI {
             rs.close();
             p.close();
         } catch (SQLException e) {
-          try {
-            if (!connect.getAutoCommit()) {
-              connect.rollback();
-            }
-          } catch (SQLException ex) {
-            LOGGER.error("Error during transaction rollback");
-          }
             LOGGER.error("Error retrieving companies" + e.getMessage() + e.getSQLState() + e.getStackTrace());
         } finally {
           try {
-            if (connect.getAutoCommit()) {
-              Utils.closeConnection();
-            }
+            connect.close();
           } catch (SQLException ex) {
             LOGGER.error("Error closing connection");
           }
@@ -158,19 +131,11 @@ public class DaoCompany implements DaoCompanyI {
             rs.close();
             p.close();
         } catch (SQLException e) {
-          try {
-            if (!connect.getAutoCommit()) {
-              connect.rollback();
-            }
-          } catch (SQLException ex) {
-            LOGGER.error("Error during transaction rollback");
-          }
             LOGGER.error("Error retrieving companies" + e.getMessage() + e.getSQLState() + e.getStackTrace());
         } finally {
           try {
-            if (connect.getAutoCommit()) {
-              Utils.closeConnection();
-            }
+            connect.close();
+
           } catch (SQLException ex) {
             LOGGER.error("Error closing connection");
           }
@@ -204,19 +169,10 @@ public class DaoCompany implements DaoCompanyI {
             rs.close();
             p.close();
         } catch (SQLException e) {
-          try {
-            if (!connect.getAutoCommit()) {
-              connect.rollback();
-            }
-          } catch (SQLException ex) {
-            LOGGER.error("Error during transaction rollback");
-          }
             LOGGER.error("Error retrieving company of ID " + id + "%n" + e.getMessage() + e.getSQLState() + e.getStackTrace());
         } finally {
           try {
-            if (connect.getAutoCommit()) {
-              Utils.closeConnection();
-            }
+            connect.close();
           } catch (SQLException ex) {
             LOGGER.error("Error closing connection");
           }
@@ -240,19 +196,10 @@ public class DaoCompany implements DaoCompanyI {
             LOGGER.info(affectedRows + " company deleted, id : " + id);
             return affectedRows;
         } catch (SQLException e) {
-            try {
-              if (!connect.getAutoCommit()) {
-                connect.rollback();
-              }
-            } catch (SQLException ex) {
-                LOGGER.error("Error during transaction rollback");
-            }
             LOGGER.error("Error deleting company of ID " + id + "%n" + e.getMessage() + e.getSQLState() + e.getStackTrace());
         } finally {
             try {
-              if (connect.getAutoCommit()) {
-                Utils.closeConnection();
-              }
+              connect.close();
             } catch (SQLException ex) {
                 LOGGER.error("Error closing connection");
             }

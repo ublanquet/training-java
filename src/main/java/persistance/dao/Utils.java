@@ -3,6 +3,7 @@ package persistance.dao;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -22,8 +23,9 @@ public class Utils {
   public static void setDS(DataSource ds) {
     Utils.ds = ds;
   }
-
-
+  public static DataSource getDS() {
+    return ds;
+  }
 
 
 
@@ -35,6 +37,22 @@ public class Utils {
   public static Connection getConnection() {
     try {
       logger.debug("Getting connection");
+      //return ds.getConnection();
+      return DataSourceUtils.getConnection(ds); //use utils for transactionManager
+    } catch (Exception e) {
+      logger.error("Error getting connection" + e.getMessage() +  e.getStackTrace());
+    }
+    return null;
+  }
+
+  /**
+   * get connection obj unique by thread.
+   *
+   * @return conected connection obj
+   */
+  /*public static Connection getConnection() {
+    try {
+      logger.debug("Getting connection");
       Connection c = connectionThreadLocal.get();
       if (c == null || c.isClosed()) {
         connectionThreadLocal.set(c = ds.getConnection());
@@ -44,7 +62,7 @@ public class Utils {
       logger.error("Error getting connection" + e.getMessage() + e.getSQLState() + e.getStackTrace());
     }
     return null;
-  }
+  }*/
 
   /**
    * Start a transaction on the current request connection.

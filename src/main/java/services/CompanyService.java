@@ -8,7 +8,7 @@ import persistance.model.Company;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.SQLException;
+
 import java.util.ArrayList;
 
 public class CompanyService {
@@ -71,14 +71,14 @@ public class CompanyService {
     try {
       //daoC.startTransaction();
       int deletedComputer = daoComputer.deleteByCompanyId(id);
-      //daoC.delete(id);
+      daoC.delete(id);
       //daoC.commitTransaction();
-      //return deletedComputer;
-      throw new SQLException();
+      return deletedComputer;
     } catch (Exception ex) {
       logger.error("Error deleting company of ID : " + id);
+      throw ex;
     }
-    return 0;
+    //return 0;
   }
 
     /*public Page<Company> getPaginatedCompanies (Page<Company> page) {
