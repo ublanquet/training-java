@@ -1,5 +1,7 @@
 package controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,7 @@ import persistance.model.Page;
 import services.CompanyService;
 import services.ComputerService;
 import services.Mapper;
+import services.Validate;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -25,6 +28,8 @@ public class ComputerController {
   CompanyService companyService;
   @Autowired
   ComputerService computerService;
+  Logger logger = LoggerFactory.getLogger("controller.EditComputerServlet");
+
 
   /**
    * .
@@ -59,5 +64,43 @@ public class ComputerController {
     return "redirect:/dashboard";
   }
 
-  
+  /**
+   * .
+   * @param model .
+   * @param session .
+   * @return .
+   */
+  @PostMapping("/editcomputer")
+  public String editComputer(Model model, HttpSession session,
+                            @RequestParam Map<String,String> allRequestParams ) {
+
+    int affectedRow = 0;
+    Computer c = Utils.buildComputerFromParams(allRequestParams);
+    try {
+      affectedRow = computerService.update(c);
+    } catch (Exception ex) {
+      logger.error("Error updating computer : " + ex.getMessage() + ex.getStackTrace() + ex.getClass());
+    }
+    if (affectedRow == 0) {
+      Utils.setMessage("warning", "Error updating computer", session);
+    } else {
+      Utils.setMessage("info", "Computer updated, id : " + c.getId(), session);
+    }
+
+    return "redirect:/dashboard";
+  }
+
+  /**
+   * .
+   * @param model .
+   * @return .
+   */
+  @GetMapping("/editcomputer")
+  public String editComputerForm(Model model, @RequestParam(value = "id") Long id) {
+    ArrayList<Company> companies = companyService.getAll();
+    model.addAttribute("companies", companies);
+    model.addAttribute("computer", computerService.getById(id));
+    return "editComputer";
+  }
+
 }
