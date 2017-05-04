@@ -41,6 +41,42 @@ public class DashboardController {
     return "dashboard";
   }
 
+
+  /**
+   * .
+   * @param model  .
+   * @param session .
+   * @param pageN .
+   * @param perPage .
+   * @param search .
+   * @param order .
+   * @return .
+   */
+  @PostMapping("/dashboard/ajax")
+  public String dashboardAjax(Model model, HttpSession session,
+                              @RequestParam(value = "pageN", defaultValue = "0") Integer pageN,
+                              @RequestParam(value = "perPage", defaultValue = "10") Integer perPage,
+                              @RequestParam(value = "search", required = false) String search,
+                              @RequestParam(value = "order[]", required = false) String[] order) {
+    Page<Computer> page = new Page(10);
+    page.setCurrentPage(pageN);
+    page.setNbEntries(perPage);
+
+    if (search != null && search != "" && order == null) {
+      page = computerService.getFiltered(page, search);
+      model.addAttribute("filteredCount", computerService.getCount(search));
+    } else if (order != null) {
+      page = computerService.getFiltered(page, search, order);
+      model.addAttribute("filteredCount", computerService.getCount(search));
+    } else {
+      page = computerService.getPaginated(page);
+    }
+    Page<ComputerDto> pageDto = Mapper.convertPageDto(page);
+    model.addAttribute("list", pageDto.getListPage());
+
+    return "dashboardTable";
+  }
+
   /**
    * .
    * @param session .
@@ -67,4 +103,6 @@ public class DashboardController {
     Utils.setMessage("info", message, session);
     return "dashboard";
   }
+
+
 }

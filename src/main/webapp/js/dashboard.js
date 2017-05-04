@@ -120,6 +120,9 @@ $(function () {
             var count = filteredCount || totalCount;
             var maxPages = count / perPage;
             var lastPage = count % perPage == 0 ? 0 : 1;
+            if(count < perPage) {
+                lastPage = 0;
+            }
             pageMax = maxPages+lastPage;
             if(pageMax < 60) {
                 $(".pageNum").each(function (i) {
