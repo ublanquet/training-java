@@ -29,6 +29,9 @@ public class DaoComputer implements DaoComputerI {
    */
   public Long create(Computer c) {
     long generatedKey = 0;
+    if (c.getCompanyId() == null || c.getCompanyId() == 0) {
+      c.setCompanyId(null);
+    }
     try {
       SimpleJdbcInsert inserter =
           new SimpleJdbcInsert(jdbcTemplate)
