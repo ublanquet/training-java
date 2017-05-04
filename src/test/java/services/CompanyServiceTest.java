@@ -3,6 +3,7 @@ import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import persistance.model.Company;
 import org.junit.After;
 import org.junit.Before;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
+@WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"/applicationContext.xml"})
 public class CompanyServiceTest {
