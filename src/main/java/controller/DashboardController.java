@@ -1,5 +1,7 @@
 package controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +23,7 @@ import java.util.Locale;
 public class DashboardController {
   @Autowired
   private ComputerService computerService;
+  Logger logger = LoggerFactory.getLogger("controller.EditComputerServlet");
 
   /**
    * .
@@ -38,7 +41,7 @@ public class DashboardController {
     model.addAttribute("totalCount", computerService.getCount());
     Long pageCount = computerService.getCount() / 10;
     model.addAttribute("totalPages", pageCount);
-
+    logger.debug("Current locale :" + locale.getDisplayName());
     Utils.cleanMessage(session);
     return "dashboard";
   }
