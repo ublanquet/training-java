@@ -3,6 +3,7 @@
 <%@ taglib prefix="fmt"
            uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!DOCTYPE html>
@@ -32,7 +33,7 @@
     </c:if>
     <div class="container">
         <h1 id="homeTitle">
-            ${totalCount} Computers found
+            ${totalCount} <spring:message code="dashboard.find" />
         </h1>
         <input type="hidden" id="totalCount" value="${totalCount}">
         <div id="actions" class="form-horizontal">

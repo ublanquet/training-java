@@ -15,6 +15,7 @@ import services.Validate;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Locale;
 
 @Controller
 public class DashboardController {
@@ -25,10 +26,11 @@ public class DashboardController {
    * .
    * @param model .
    * @param session .
+   * @param locale .
    * @return .
    */
   @GetMapping("/dashboard")
-  public String dashboard(Model model, HttpSession session) {
+  public String dashboard(Model model, HttpSession session, Locale locale) {
     Page<ComputerDto> page;
     page = Mapper.convertPageDto(computerService.getPaginated(new Page<Computer>(10)));
     model.addAttribute("page", page);
@@ -50,10 +52,11 @@ public class DashboardController {
    * @param perPage .
    * @param search .
    * @param order .
+   * @param locale .
    * @return .
    */
   @PostMapping("/dashboard/ajax")
-  public String dashboardAjax(Model model, HttpSession session,
+  public String dashboardAjax(Model model, HttpSession session, Locale locale,
                               @RequestParam(value = "pageN", defaultValue = "0") Integer pageN,
                               @RequestParam(value = "perPage", defaultValue = "10") Integer perPage,
                               @RequestParam(value = "search", required = false) String search,
