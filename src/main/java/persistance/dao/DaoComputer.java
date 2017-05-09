@@ -87,8 +87,6 @@ public class DaoComputer implements DaoComputerI {
    */
   public ArrayList<Computer> selectAll(Long min, Long max) {
     ArrayList<Computer> resultList = new ArrayList<>();
-    ResultSet rs;
-    Connection connect = Utils.getConnection();
     try {
       String sql = "SELECT * FROM computer LEFT JOIN company on computer.company_id = company.id " +
           "LIMIT ?, ?";
