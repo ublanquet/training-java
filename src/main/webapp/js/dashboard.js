@@ -118,22 +118,13 @@ $(function () {
 
     function setPages () {
             var count = filteredCount || totalCount;
-            var maxPages = count / perPage;
+            var maxPages = Math.floor(count / perPage);
             var lastPage = count % perPage == 0 ? 0 : 1;
             if(count < perPage) {
                 lastPage = 0;
             }
             pageMax = maxPages+lastPage;
-            if(pageMax < 60) {
-                $(".pageNum").each(function (i) {
-                    if (i > maxPages + lastPage) {
-                        $(this).hide();
-                    } else {
-                        $(this).show();
-                    }
-                });
-            }
-            else {
+
                 if(pagesStartIndex == 0) {
                     $(".pageNum").each(function (i) {
                         if (i > maxPages + lastPage) {
@@ -158,7 +149,7 @@ $(function () {
                     });
                 }
 
-            }
+
         //$("ul.pagination li").last().show();
         $("#next").show();
         $("#nextPages").show();
