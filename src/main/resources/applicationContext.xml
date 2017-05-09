@@ -19,8 +19,7 @@
     <!-- ANNOTATIONS POUR LA CREATION DE BEANS VIA ANNOTATIONS -->
     <context:component-scan base-package="controller" />
 
-    <!-- ANNOTATIONS POUR AOP -->
-    <!--aop:aspectj-autoproxy /-->
+    <!-- CREATION MANAGED BEANS  -->
     <bean name="companyDao" class="persistance.dao.DaoCompany" scope="singleton" >
         <property name="jdbcTemplate" ref="jdbcTemplate" />
     </bean>
@@ -37,7 +36,7 @@
         <property name="daoC" ref="computerDao"/>
     </bean>
 
-
+    <bean id="computerValidator" class="persistance.model.ComputerValidator"/>
     <!-- DB -->
     <!-- DATASOURCE -->
     <!-- Get HikariCP properties -->

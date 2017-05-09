@@ -5,15 +5,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import persistance.model.ComputerValidator;
 import persistance.model.Company;
 import persistance.model.Computer;
+import persistance.model.DTO.ComputerDto;
 import services.CompanyService;
 import services.ComputerService;
+import services.Mapper;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -23,6 +29,8 @@ public class ComputerController {
   CompanyService companyService;
   @Autowired
   ComputerService computerService;
+  @Autowired
+  ComputerValidator computerValidator;
   Logger logger = LoggerFactory.getLogger("controller.EditComputerServlet");
 
 
@@ -35,6 +43,7 @@ public class ComputerController {
   @GetMapping("/addcomputer")
   public String addComputerForm(Model model, HttpSession session) {
     ArrayList<Company> companies = companyService.getAll();
+    model.addAttribute("form", new ComputerDto());
     model.addAttribute("companies", companies);
     return "addComputer";
   }
@@ -43,15 +52,27 @@ public class ComputerController {
    * .
    * @param model .
    * @param session .
-   * @param allRequestParams .
+   * @param computer .
+   * @param bindingResult .
    * @return .
    */
   @PostMapping("/addcomputer")
   public String addComputer(Model model, HttpSession session,
-                            @RequestParam Map<String, String> allRequestParams) {
+                            @Valid ComputerDto computer, BindingResult bindingResult) {
     Long newId = null;
-    Computer c = Utils.buildComputerFromParams(allRequestParams);
-    newId = computerService.create(c);
+    //ComputerValidator computerValidator = new ComputerValidator();
+    computerValidator.validate(Mapper.fromDto(computer), bindingResult);
+    //model.addAttribute("form", new Computer());
+    if (bindingResult.hasErrors()) {
+      String errorString = "";
+      for (ObjectError error : bindingResult.getAllErrors()) {
+        errorString += error.getObjectName() + " - " + error.getDefaultMessage() + "<br/>";
+      }
+      Utils.setMessage("warning", "Error creating computer, invalid param : " + errorString, session);
+      return "redirect:/dashboard";
+    }
+    //Computer c = Utils.buildComputerFromParams(allRequestParams);
+    newId = computerService.create(Mapper.fromDto(computer));
     if (newId == null || newId == 0) {
       Utils.setMessage("warning", "Error creating computer", session);
     } else {

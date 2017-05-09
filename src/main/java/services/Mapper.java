@@ -5,6 +5,8 @@ import persistance.model.DTO.ComputerDto;
 import persistance.model.GenericBuilder;
 import persistance.model.Page;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
@@ -36,6 +38,36 @@ public class Mapper {
         .build();
 
     return dto;
+  }
+
+  /**
+   * Create computer obj from compîter dto.
+   * @param dto .
+   * @return .
+   */
+  public static Computer fromDto(ComputerDto dto) {
+    LocalDateTime dateI = null, dateD = null;
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+    try {
+      if (dto.getIntroduced() != null) {
+        dateI = LocalDate.parse(dto.getIntroduced(), formatter).atStartOfDay();
+      }
+      if (dto.getDiscontinued() != null) {
+        dateD = LocalDate.parse(dto.getDiscontinued(), formatter).atStartOfDay();
+      }
+    } catch (Exception ex) {
+
+    }
+
+    Computer c = GenericBuilder.of(Computer::new)
+        .with(Computer::setName, dto.getName())
+        .with(Computer::setIntroduced, dateI)
+        .with(Computer::setDiscontinued, dateD)
+        .with(Computer::setCompanyId, Validate.parseLong(dto.getCompanyId()))
+        .with(Computer::setId, Validate.parseLong(dto.getId()))
+        .build();
+    return c;
   }
 
   /**

@@ -21,6 +21,7 @@ public class Utils {
     session.setAttribute("messageHide", false);
     session.setAttribute("messageLevel", level);
     session.setAttribute("message", msg);
+    session.setAttribute("messageDisplayNb", 0);
   }
 
   /**
@@ -36,7 +37,7 @@ public class Utils {
       } else {
         session.setAttribute("messageDisplayNb", (int) session.getAttribute("messageDisplayNb") + 1);
       }
-      if ((int) session.getAttribute("messageDisplayNb") > 0) {
+      if ((int) session.getAttribute("messageDisplayNb") > 1) {
         session.setAttribute("messageHide", true);
       }
     }

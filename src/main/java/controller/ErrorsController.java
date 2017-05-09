@@ -3,7 +3,6 @@ package controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +14,7 @@ public class ErrorsController {
    * @param httpRequest .
    * @return .
    */
-  @RequestMapping(value = "errors", method = RequestMethod.GET)
+  @RequestMapping(value = "errors")
   public String renderErrorPage(HttpServletRequest httpRequest, Model model) {
 
     Integer httpErrorCode = getErrorCode(httpRequest);

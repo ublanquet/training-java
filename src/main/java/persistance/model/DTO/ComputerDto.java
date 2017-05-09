@@ -1,13 +1,23 @@
 package persistance.model.DTO;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class ComputerDto {
 
   private String id;
   private String companyId;
 
   private String companyName;
+  @NotNull
+  @Size(min = 2, max = 30)
   private String name;
+
+  @DateTimeFormat(pattern = "dd/MM/yyyy")
   private String introduced;
+  @DateTimeFormat(pattern = "dd/MM/yyyy")
   private String discontinued;
 
   public String getId() {
@@ -42,7 +52,11 @@ public class ComputerDto {
 
   @Override
   public int hashCode() {
-    return getId().hashCode();
+    if (getId() != null) {
+      return getId().hashCode();
+    } else {
+      return 0;
+    }
   }
 
   public void setId(String id) {
