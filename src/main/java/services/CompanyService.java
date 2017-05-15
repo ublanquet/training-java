@@ -60,8 +60,9 @@ public class CompanyService {
   }
 
   /**
-   * get all companies.
-   * @return list companies
+   * get a companie by id.
+   * @param id id
+   * @return companie or null
    */
   public Company getById(Long id) {
     logger.debug("Get company by ID ");
