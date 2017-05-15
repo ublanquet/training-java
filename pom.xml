@@ -20,12 +20,17 @@
         <slf4j.version>1.7.24</slf4j.version>
         <logback.version>1.2.1</logback.version>
         <hibernateValidator.version>5.4.1.Final</hibernateValidator.version>
-
-        <!-- <JAVA_1_8_HOME>/home/ebiz/Téléchargements/jdk1.8.0_121</JAVA_1_8_HOME>-->
+        <javaElApi.version>2.2</javaElApi.version>
+        <mockito.version>2.7.17</mockito.version>
+        <checkstyle.version>5.0</checkstyle.version>
+        <junit.version>4.12</junit.version>
+        <selenium.version>3.3.1</selenium.version>
+        <hikari.version>2.5.1</hikari.version>
+        <jstl.version>1.2</jstl.version>
     </properties>
 
     <profiles>
-        <profile>
+        <profile> <!-- TODO move to properties files -->
             <id>test</id>
             <properties>
                 <dataSourceClassName>com.mysql.cj.jdbc.MysqlDataSource</dataSourceClassName>
@@ -74,8 +79,6 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                    <!-- fork>true</fork>-->
-                    <!--<executable>${JAVA_1_8_HOME}/bin/javac</executable>-->
                 </configuration>
             </plugin>
 
@@ -118,37 +121,6 @@
                 </executions>
             </plugin>
 
-            <!-- For integration tests -->
-            <!--<plugin>-->
-                <!--<groupId>org.codehaus.cargo</groupId>-->
-                <!--<artifactId>cargo-maven2-plugin</artifactId>-->
-                <!--<version>1.6.3</version>-->
-                <!--<configuration>-->
-                    <!--&lt;!&ndash; Container definition &ndash;&gt;-->
-                    <!--<container>-->
-                        <!--<containerId>tomcat</containerId>-->
-                        <!--<type>existing</type>-->
-                        <!--<home>/opt/tomcat</home>-->
-                    <!--</container>-->
-                <!--</configuration>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<id>start</id>-->
-                        <!--<phase>pre-integration-test</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>start</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                    <!--<execution>-->
-                        <!--<id>stop</id>-->
-                        <!--<phase>post-integration-test</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>stop</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-            <!--</plugin>-->
-
         </plugins>
 
 
@@ -162,13 +134,15 @@
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
             <scope>compile</scope>
-        </dependency>        <!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-core -->
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-core -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
             <version>${logback.version}</version>
             <scope>runtime</scope>
-        </dependency>        <!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
@@ -183,36 +157,39 @@
             <scope>runtime</scope>
         </dependency>
 
-
-        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
         <!-- DB connector -->
+        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql-version}</version>
             <scope>runtime</scope>
         </dependency>
+        <!-- DB pool -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>${hikari.version}</version>
+            <scope>compile</scope>
+        </dependency>
 
         <!-- TESTING -->
-        <!-- https://mvnrepository.com/artifact/junit/junit -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>2.7.17</version>
+            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/checkstyle/checkstyle -->
         <dependency>
             <groupId>checkstyle</groupId>
             <artifactId>checkstyle</artifactId>
-            <version>5.0</version>
+            <version>${checkstyle.version}</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
@@ -221,28 +198,10 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
-        <!-- JEE -->
-        <!-- https://mvnrepository.com/artifact/javax/javaee-api -->
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>7.0</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/javax.servlet.jsp.jstl/jstl -->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>jstl</artifactId>
-            <version>1.2</version>
-            <scope>provided</scope>
-        </dependency>
-
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>3.3.1</version>
+            <version>${selenium.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.google.guava</groupId>
@@ -251,19 +210,22 @@
             </exclusions>
             <scope>test</scope>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>21.0</version>
         </dependency>
 
+        <!-- JEE -->
+        <!-- https://mvnrepository.com/artifact/javax.servlet.jsp.jstl/jstl -->
         <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-            <version>2.5.1</version>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>${jstl.version}</version>
+            <scope>provided</scope>
         </dependency>
+
+
 
         <!-- SPRING -->
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-core -->
@@ -283,39 +245,31 @@
             <artifactId>spring-web</artifactId>
             <version>${spring.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <version>${spring.version}</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework/spring-beans -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
             <version>${spring.version}</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
             <version>${spring.version}</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.springframework/spring-test -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <version>${spring.version}</version>
         </dependency>
-
-        <!-- Spring aspects for i18n -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aspects</artifactId>
@@ -328,13 +282,14 @@
         <dependency>
             <groupId>javax.el</groupId>
             <artifactId>el-api</artifactId>
-            <version>2.2</version>
+            <version>${javaElApi.version}</version>
+            <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
             <version>${hibernateValidator.version}</version>
+            <scope>provided</scope>
         </dependency>
 
 
