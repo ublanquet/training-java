@@ -1,20 +1,34 @@
 package services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import persistance.model.Company;
 import persistance.model.Computer;
 import persistance.model.DTO.ComputerDto;
 import persistance.model.GenericBuilder;
 import persistance.model.Page;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+@Service
 public class Mapper {
+
+  static Logger logger = LoggerFactory.getLogger("services.Mapper");
+
+  @Autowired
+  CompanyService companyService;
   /**
    * create dto from obj.
    * @param c obj
    * @return dto
    */
   public static ComputerDto createComputerDto(Computer c) {
+    logger.debug("create DTO from computer");
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     String formattedDateIntro = c.getIntroduced() != null ? c.getIntroduced().format(formatter) : "";
@@ -36,6 +50,43 @@ public class Mapper {
         .build();
 
     return dto;
+  }
+
+  /**
+   * Create computer obj from compîter dto.
+   * @param dto .
+   * @return .
+   */
+  public Computer fromDto(ComputerDto dto) {
+    logger.debug("Create computer from dto");
+    LocalDateTime dateI = null, dateD = null;
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    try {
+      if (dto.getIntroduced() != null && !dto.getIntroduced().isEmpty()) {
+        dateI = LocalDate.parse(dto.getIntroduced(), formatter).atStartOfDay();
+      }
+      if (dto.getDiscontinued() != null && !dto.getDiscontinued().isEmpty()) {
+        dateD = LocalDate.parse(dto.getDiscontinued(), formatter).atStartOfDay();
+      }
+    } catch (Exception ex) {
+      logger.error("Error creating computer from DTO : incorrect date - " + ex.getMessage());
+    }
+
+    Company comp = null;
+    if (Validate.parseLong(dto.getCompanyId()) != null) {
+      comp = companyService.getById(Validate.parseLong(dto.getCompanyId()));
+    }
+
+    Computer c = GenericBuilder.of(Computer::new)
+        .with(Computer::setName, dto.getName())
+        .with(Computer::setIntroduced, dateI)
+        .with(Computer::setDiscontinued, dateD)
+        .with(Computer::setCompany, comp)
+        .with(Computer::setId, Validate.parseLong(dto.getId()))
+        .build();
+
+
+    return c;
   }
 
   /**

@@ -3,8 +3,14 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
-	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+">
 
 
     <!-- ANNOTATIONS POUR L'INJECTION DE DEPENDANCES -->
@@ -12,12 +18,15 @@
 
     <!-- ANNOTATIONS POUR LA CREATION DE BEANS VIA ANNOTATIONS -->
     <context:component-scan base-package="controller" />
+    <context:component-scan base-package="services" />
 
-    <!-- ANNOTATIONS POUR AOP -->
-    <!--aop:aspectj-autoproxy /-->
+
+    <!-- CREATION MANAGED BEANS  -->
     <bean name="companyDao" class="persistance.dao.DaoCompany" scope="singleton" >
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
     </bean>
     <bean name="computerDao" class="persistance.dao.DaoComputer" scope="singleton" >
+        <property name="jdbcTemplate" ref="jdbcTemplate" />
     </bean>
 
 
@@ -29,14 +38,8 @@
         <property name="daoC" ref="computerDao"/>
     </bean>
 
-    <bean name="dashboard" class="controller.DashboardServlet" scope="prototype" >
-        <property name="computerService" ref="computerService"/>
-    </bean>
-
-    <bean name="dashboardAjax" class="controller.DashboardAjaxServlet" scope="prototype" >
-        <property name="computerService" ref="computerService"/>
-    </bean>
-
+    <bean id="computerValidator" class="persistance.model.ComputerValidator"/>
+    <!-- DB -->
     <!-- DATASOURCE -->
     <!-- Get HikariCP properties -->
 
@@ -71,5 +74,58 @@
             </list>
         </property>
     </bean>
+    <!-- TRANSACTION -->
+    <tx:annotation-driven />
 
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <!-- JDBC TEMPLATE -->
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <!-- MVC -->
+    <mvc:annotation-driven/>
+    <mvc:resources mapping="/js/**" location="js/"/>
+    <mvc:resources mapping="/css/**" location="css/"/>
+    <mvc:resources mapping="/fonts/**" location="fonts/"/>
+    <mvc:resources mapping="/resources/**" location="/"/>
+
+
+
+    <!-- MVC   moved to dispatcher-servlet.xml
+    <mvc:annotation-driven/>
+
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix">
+            <value>/views/</value>
+        </property>
+        <property name="suffix">
+            <value>.jsp</value>
+        </property>
+    </bean>-->
+
+
+    <!-- I18N -->
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+        <property name="defaultLocale" value="en" />
+    </bean>
+
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="classpath:message" />
+        <property name="defaultEncoding" value="UTF-8" />
+    </bean>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**" />
+            <bean id="localeChangeInterceptor"
+                  class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+                <property name="paramName" value="lang" />
+            </bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
 </beans>

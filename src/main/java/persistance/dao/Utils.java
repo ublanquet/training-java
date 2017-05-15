@@ -3,6 +3,7 @@ package persistance.dao;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -11,19 +12,16 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Utils {
-  /*private static final String CONFIGFILE = "/db.properties";
-  private static final HikariConfig CFG = new HikariConfig(CONFIGFILE);
-  private static final HikariDataSource DS = new HikariDataSource(CFG);*/
   private static Logger logger = LoggerFactory.getLogger("persistance.dao.utils");
-  private static ThreadLocal<Connection> connectionThreadLocal = new ThreadLocal<Connection>();
 
   private static DataSource ds;
 
   public static void setDS(DataSource ds) {
     Utils.ds = ds;
   }
-
-
+  public static DataSource getDS() {
+    return ds;
+  }
 
 
 
@@ -35,49 +33,12 @@ public class Utils {
   public static Connection getConnection() {
     try {
       logger.debug("Getting connection");
-      Connection c = connectionThreadLocal.get();
-      if (c == null || c.isClosed()) {
-        connectionThreadLocal.set(c = ds.getConnection());
-      }
-      return c;
-    } catch (SQLException e) {
-      logger.error("Error getting connection" + e.getMessage() + e.getSQLState() + e.getStackTrace());
+      //return ds.getConnection();
+      return DataSourceUtils.getConnection(ds); //use utils for transactionManager
+    } catch (Exception e) {
+      logger.error("Error getting connection" + e.getMessage() +  e.getStackTrace());
     }
     return null;
-  }
-
-  /**
-   * Start a transaction on the current request connection.
-   */
-  public static void startTransaction() {
-    Connection c = getConnection();
-    try {
-      c.setAutoCommit(false);
-    } catch (Exception e) {
-      logger.error("Error starting transaction" + e.getMessage() + e.getStackTrace());
-    }
-    connectionThreadLocal.set(c);
-  }
-
-  /**
-   * Commit the transaction of current request.
-   */
-  public static void commitTransaction() {
-    Connection c = getConnection();
-    try {
-      c.commit();
-      c.setAutoCommit(true);
-      c.close();
-    } catch (Exception e) {
-      logger.error("Error commiting transaction" + e.getMessage() + e.getStackTrace());
-      try {
-        c.rollback();
-        c.setAutoCommit(true);
-        c.close();
-      } catch (Exception ex) {
-        logger.error("Error closing transaction" + e.getMessage() + e.getStackTrace());
-      }
-    }
   }
 
   /**
@@ -96,15 +57,5 @@ public class Utils {
       logger.error("Error retrieving generated key " + e.getMessage() + e.getSQLState() + e.getStackTrace());
     }
     return generatedKey;
-  }
-
-  /**
-   * close connection.
-   * @throws SQLException if couldn't close connection.
-   */
-  public static void closeConnection() throws SQLException {
-    Connection c = connectionThreadLocal.get();
-    connectionThreadLocal.remove();
-    c.close();
   }
 }

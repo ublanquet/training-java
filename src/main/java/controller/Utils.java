@@ -7,6 +7,7 @@ import services.Validate;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 public class Utils {
 
@@ -20,6 +21,7 @@ public class Utils {
     session.setAttribute("messageHide", false);
     session.setAttribute("messageLevel", level);
     session.setAttribute("message", msg);
+    session.setAttribute("messageDisplayNb", 0);
   }
 
   /**
@@ -35,7 +37,7 @@ public class Utils {
       } else {
         session.setAttribute("messageDisplayNb", (int) session.getAttribute("messageDisplayNb") + 1);
       }
-      if ((int) session.getAttribute("messageDisplayNb") > 0) {
+      if ((int) session.getAttribute("messageDisplayNb") > 1) {
         session.setAttribute("messageHide", true);
       }
     }
@@ -63,6 +65,33 @@ public class Utils {
     }
     if (request.getParameter("computerName") != null) {
       builder = builder.with(Computer::setName, request.getParameter("computerName"));
+    }
+
+    Computer c = builder.build();
+    return c;
+  }
+
+  /**
+   * Build a computer obj from string map parameters.
+   * @param map r
+   * @return computer obj
+   */
+  public static Computer buildComputerFromParams(Map<String, String> map) {
+    GenericBuilder<Computer> builder = GenericBuilder.of(Computer::new);
+    if (map.get("id") != null) {
+      builder = builder.with(Computer::setId, Validate.parseLong(map.get("id")));
+    }
+    if (map.get("companyId") != null) {
+      builder = builder.with(Computer::setCompanyId, Validate.parseLong(map.get("companyId")));
+    }
+    if (map.get("introduced") != null) {
+      builder = builder.with(Computer::setIntroduced, Validate.parseDate(map.get("introduced")));
+    }
+    if (map.get("discontinued") != null) {
+      builder = builder.with(Computer::setDiscontinued, Validate.parseDate(map.get("discontinued")));
+    }
+    if (map.get("computerName") != null) {
+      builder = builder.with(Computer::setName, map.get("computerName"));
     }
 
     Computer c = builder.build();

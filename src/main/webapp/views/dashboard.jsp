@@ -3,6 +3,7 @@
 <%@ taglib prefix="fmt"
            uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!DOCTYPE html>
@@ -32,21 +33,21 @@
     </c:if>
     <div class="container">
         <h1 id="homeTitle">
-            ${totalCount} Computers found
+            ${totalCount} <spring:message code="dashboard.find" />
         </h1>
         <input type="hidden" id="totalCount" value="${totalCount}">
         <div id="actions" class="form-horizontal">
             <div class="pull-left">
                 <form id="searchForm" action="" class="form-inline" >
 
-                    <input type="search" id="searchbox" name="search" class="form-control" placeholder="Search name" />
-                    <input type="button" id="searchsubmit" value="Filter by name"
+                    <input type="search" id="searchbox" name="search" class="form-control" placeholder="<spring:message code="dashboard.searchPh" />" />
+                    <input type="button" id="searchsubmit" value="<spring:message code="dashboard.search" />"
                            class="btn btn-primary"/>
                 </form>
             </div>
             <div class="pull-right">
-                <a class="btn btn-success" id="addComputer" href="addcomputer">Add Computer</a>
-                <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
+                <a class="btn btn-success" id="addComputer" href="addcomputer"><spring:message code="dashboard.add" /></a>
+                <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message code="dashboard.edit" /></a>
             </div>
         </div>
     </div>
@@ -71,18 +72,18 @@
                             </span>
                 </th>
                 <th>
-                    Computer name <span id="order_computer.name" class="ordering glyphicon glyphicon-sort"></span>
+                    <spring:message code="dashboard.th.computer" /> <span id="order_computer.name" class="ordering glyphicon glyphicon-sort"></span>
                 </th>
                 <th>
-                    Introduced date <span id="order_introduced" class="ordering glyphicon glyphicon-sort"></span>
+                    <spring:message code="dashboard.th.intro" /> <span id="order_introduced" class="ordering glyphicon glyphicon-sort"></span>
                 </th>
                 <!-- Table header for Discontinued Date -->
                 <th>
-                    Discontinued date <span id="order_discontinued" class="ordering glyphicon glyphicon-sort"></span>
+                    <spring:message code="dashboard.th.disco" /> <span id="order_discontinued" class="ordering glyphicon glyphicon-sort"></span>
                 </th>
                 <!-- Table header for Company -->
                 <th>
-                    Company <span id="order_company.name" class="ordering glyphicon glyphicon-sort"></span>
+                    <spring:message code="dashboard.th.company" /> <span id="order_company.name" class="ordering glyphicon glyphicon-sort"></span>
                 </th>
 
             </tr>

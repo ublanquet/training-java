@@ -1,11 +1,13 @@
 package services;
 
 
+import org.springframework.transaction.annotation.Transactional;
 import persistance.dao.DaoCompany;
 import persistance.dao.DaoComputer;
 import persistance.model.Company;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 import java.util.ArrayList;
 
@@ -57,24 +59,41 @@ public class CompanyService {
     return cList;
   }
 
+  /**
+   * get all companies.
+   * @return list companies
+   */
+  public Company getById(Long id) {
+    logger.debug("Get company by ID ");
+    Company c = null;
+    try {
+      c = daoC.getById(id);
+    } catch (Exception ex) {
+      logger.error("Company retrieval by ID " + id + " failure " + ex.getMessage());
+    }
+    return c;
+  }
+
 
   /**
    * delete a company and all associated computers.
    * @param id id
    * @return deleted rows
    */
+  @Transactional(rollbackFor = Throwable.class)
   public int delete(long id) {
     logger.debug("Deleting company of ID : " + id);
     try {
-      daoC.startTransaction();
+      //daoC.startTransaction();
       int deletedComputer = daoComputer.deleteByCompanyId(id);
       daoC.delete(id);
-      daoC.commitTransaction();
+      //daoC.commitTransaction();
       return deletedComputer;
     } catch (Exception ex) {
       logger.error("Error deleting company of ID : " + id);
+      throw ex;
     }
-    return 0;
+    //return 0;
   }
 
     /*public Page<Company> getPaginatedCompanies (Page<Company> page) {

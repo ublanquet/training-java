@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 public class Computer {
     private Long id;
     private Long companyId;
-
     private Company company;
     private String name;
     private LocalDateTime introduced;
@@ -182,6 +181,10 @@ public class Computer {
 
     @Override
     public int hashCode() {
-        return (int) (getId() ^ (getId() >>> 32));
+        if (getId() != null) {
+            return (int) (getId() ^ (getId() >>> 32));
+        } else {
+            return 0;
+        }
     }
 }

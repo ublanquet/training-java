@@ -1,19 +1,25 @@
 package persistance.dao;
 
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import persistance.model.Company;
 import persistance.model.Computer;
 import persistance.model.GenericBuilder;
 import persistance.model.Page;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Types;
 import java.util.ArrayList;
 
 public class DaoComputer implements DaoComputerI {
+  private JdbcTemplate jdbcTemplate;
+  public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+    this.jdbcTemplate = jdbcTemplate;
+  }
 
   /**
    * create in db.
@@ -22,47 +28,26 @@ public class DaoComputer implements DaoComputerI {
    * @return generated id
    */
   public Long create(Computer c) {
-    Connection connect = Utils.getConnection();
     long generatedKey = 0;
+    if (c.getCompanyId() == null || c.getCompanyId() == 0) {
+      c.setCompanyId(null);
+    }
     try {
-
-      PreparedStatement p = connect.prepareStatement("INSERT INTO computer " +
-          "(name, introduced, discontinued, company_id) " +
-          "VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-      p.setString(1, c.getName());
-      p.setTimestamp(2, c.getIntroducedTimestamp());
-      p.setTimestamp(3, c.getDiscontinuedTimestamp());
-      if (c.getCompanyId() != null && c.getCompanyId() != 0) {
-        p.setLong(4, c.getCompanyId());
-      } else {
-        p.setNull(4, Types.BIGINT);
-      }
-
-      long affectedRows = p.executeUpdate();
-
-      if (affectedRows > 0) {
-        generatedKey = Utils.getGeneratedKey(p);
-        c.setId(generatedKey);
-      }
-      p.close();
+      SimpleJdbcInsert inserter =
+          new SimpleJdbcInsert(jdbcTemplate)
+              .withTableName("computer")
+              .usingGeneratedKeyColumns("id");
+      SqlParameterSource parameters = new MapSqlParameterSource()
+          .addValue("name", c.getName())
+          .addValue("introduced", c.getIntroducedTimestamp())
+          .addValue("discontinued", c.getDiscontinuedTimestamp())
+          .addValue("company_id", c.getCompanyId());
+      Number newId = inserter.executeAndReturnKey(parameters);
+      generatedKey = newId.longValue();
+      c.setId(generatedKey);
       LOGGER.info(" Computer created, generated ID : " + generatedKey);
-    } catch (SQLException e) {
-      try {
-        if (!connect.getAutoCommit()) {
-          connect.rollback();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error during transaction rollback");
-      }
-      LOGGER.error("Error creating computer " + e.getMessage() + e.getSQLState() + e.getStackTrace());
-    } finally {
-      try {
-        if (connect.getAutoCommit()) {
-          Utils.closeConnection();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error closing connection");
-      }
+    } catch (Exception e) {
+      LOGGER.error("Error creating computer " + e.getMessage() + e.getStackTrace());
     }
     return generatedKey;
   }
@@ -75,40 +60,20 @@ public class DaoComputer implements DaoComputerI {
    */
   public int update(Computer c) {
     int affectedRows = 0;
-    Connection connect = Utils.getConnection();
     try {
-      PreparedStatement p = connect.prepareStatement("UPDATE computer SET " +
-          "name = ?, introduced = ?, discontinued = ?, company_id = ?" +
-          " WHERE computer.id = ?");
-      p.setString(1, c.getName());
-      p.setTimestamp(2, c.getIntroducedTimestamp());
-      p.setTimestamp(3, c.getDiscontinuedTimestamp());
+      Long companyId = null;
       if (c.getCompanyId() != null && c.getCompanyId() != 0) {
-        p.setLong(4, c.getCompanyId());
-      } else {
-        p.setNull(4, Types.BIGINT);
+        companyId = c.getCompanyId();
       }
-      p.setLong(5, c.getId());
-      affectedRows = p.executeUpdate();
-      p.close();
+      Object[] params = {c.getName(), c.getIntroducedTimestamp(), c.getDiscontinuedTimestamp(), companyId, c.getId()};
+      String sql = "UPDATE computer SET " +
+          "name = ?, introduced = ?, discontinued = ?, company_id = ?" +
+          " WHERE computer.id = ?";
+
+      affectedRows = jdbcTemplate.update(sql, params);
       LOGGER.info(affectedRows + " rows updated");
-    } catch (SQLException e) {
-      try {
-        if (!connect.getAutoCommit()) {
-          connect.rollback();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error during transaction rollback");
-      }
-      LOGGER.error("Error updating computer of ID " + c.getId() + e.getMessage() + e.getSQLState() + e.getStackTrace());
-    } finally {
-      try {
-        if (connect.getAutoCommit()) {
-          Utils.closeConnection();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error closing connection");
-      }
+    } catch (Exception e) {
+      LOGGER.error("Error updating computer of ID " + c.getId() + e.getMessage() + e.getStackTrace());
     }
     return affectedRows;
   }
@@ -122,46 +87,13 @@ public class DaoComputer implements DaoComputerI {
    */
   public ArrayList<Computer> selectAll(Long min, Long max) {
     ArrayList<Computer> resultList = new ArrayList<>();
-    ResultSet rs;
-    Connection connect = Utils.getConnection();
     try {
-      PreparedStatement p = connect.prepareStatement("SELECT * FROM computer LEFT JOIN company on computer.company_id = company.id " +
-          "LIMIT ?, ?");
-      p.setLong(1, min);
-      p.setLong(2, max);
-
-      rs = p.executeQuery();
-
-      while (rs.next()) {
-        Computer c = GenericBuilder.of(Computer::new)
-            .with(Computer::setId, rs.getLong("computer.id"))
-            .with(Computer::setName, rs.getString("computer.name"))
-            .with(Computer::setIntroducedTimestamp, rs.getTimestamp("introduced"))
-            .with(Computer::setDiscontinuedTimestamp, rs.getTimestamp("discontinued"))
-            .with(Computer::setCompanyId, rs.getLong("company_id"))
-            .with(Computer::setCompany, rs.getLong("company.id") != 0 ? new Company(rs.getLong("company.id"), rs.getString("company.name")) : null)
-            .build();
-        resultList.add(c);
-      }
-      rs.close();
-      p.close();
-    } catch (SQLException e) {
-      try {
-        if (!connect.getAutoCommit()) {
-          connect.rollback();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error during transaction rollback");
-      }
-      LOGGER.error("Error getting computers" + e.getMessage() + e.getSQLState() + e.getStackTrace());
-    } finally {
-      try {
-        if (connect.getAutoCommit()) {
-          Utils.closeConnection();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error closing connection");
-      }
+      String sql = "SELECT * FROM computer LEFT JOIN company on computer.company_id = company.id " +
+          "LIMIT ?, ?";
+      resultList = (ArrayList<Computer>) this.jdbcTemplate.query(
+          sql, new Object[] {min, max}, new ComputerMapper());
+    } catch (Exception e) {
+      LOGGER.error("Error getting computers" + e.getMessage() + e.getStackTrace());
     }
 
     return resultList;
@@ -174,33 +106,10 @@ public class DaoComputer implements DaoComputerI {
    */
   public Long getCount() {
     Long count = null;
-    ResultSet rs;
-    Connection connect = Utils.getConnection();
     try {
-      PreparedStatement p = connect.prepareStatement(" SELECT COUNT(*) FROM computer;");
-      rs = p.executeQuery();
-      while (rs.next()) {
-        count = rs.getLong(1);
-      }
-      rs.close();
-      p.close();
-    } catch (SQLException e) {
-      try {
-        if (!connect.getAutoCommit()) {
-          connect.rollback();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error during transaction rollback");
-      }
-      LOGGER.error("Error getting computers count " + e.getMessage() + e.getSQLState() + e.getStackTrace());
-    } finally {
-      try {
-        if (connect.getAutoCommit()) {
-          Utils.closeConnection();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error closing connection");
-      }
+      count = this.jdbcTemplate.queryForObject(" SELECT COUNT(*) FROM computer;", Long.class);
+    } catch (Exception e) {
+      LOGGER.error("Error getting computers count " + e.getMessage() + e.getStackTrace());
     }
     return count;
   }
@@ -213,35 +122,13 @@ public class DaoComputer implements DaoComputerI {
    */
   public Long getCount(String name) {
     Long count = null;
-    ResultSet rs;
-    Connection connect = Utils.getConnection();
     try {
-      PreparedStatement p = connect.prepareStatement(" SELECT COUNT(*) FROM computer WHERE name LIKE ?;");
-      p.setString(1, "%" + name + "%");
-      rs = p.executeQuery();
-      while (rs.next()) {
-
-        count = rs.getLong(1);
-      }
-      rs.close();
-      p.close();
-    } catch (SQLException e) {
-      try {
-        if (!connect.getAutoCommit()) {
-          connect.rollback();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error during transaction rollback");
-      }
-      LOGGER.error("Error getting computers count by name " + e.getMessage() + e.getSQLState() + e.getStackTrace());
-    } finally {
-      try {
-        if (connect.getAutoCommit()) {
-          Utils.closeConnection();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error closing connection");
-      }
+      count = this.jdbcTemplate.queryForObject(" SELECT COUNT(*) FROM computer LEFT JOIN company ON computer.company_id = company.id " +
+          "WHERE ( computer.name LIKE ? " +
+          " OR company.name LIKE ? ) ",
+          new Object[] {"%" + name + "%", "%" + name + "%"}, Long.class);
+    } catch (Exception e) {
+      LOGGER.error("Error getting computers count by name " + e.getMessage() + e.getStackTrace());
     }
     return count;
   }
@@ -254,48 +141,14 @@ public class DaoComputer implements DaoComputerI {
    */
   public Page<Computer> selectPaginated(Page page) {
     ArrayList<Computer> resultList = new ArrayList<>();
-    ResultSet rs;
-    Connection connect = Utils.getConnection();
     try {
-      PreparedStatement p = connect.prepareStatement("SELECT * FROM computer LEFT JOIN company on computer.company_id = company.id " +
-          "LIMIT ? OFFSET ?");
-      p.setLong(1, page.getNbEntries());
-      p.setLong(2, page.getFirstEntryIndex());
-
-      rs = p.executeQuery();
-      //System.out.println(p);
-      while (rs.next()) {
-        Computer c = GenericBuilder.of(Computer::new)
-            .with(Computer::setId, rs.getLong("computer.id"))
-            .with(Computer::setName, rs.getString("computer.name"))
-            .with(Computer::setIntroducedTimestamp, rs.getTimestamp("introduced"))
-            .with(Computer::setDiscontinuedTimestamp, rs.getTimestamp("discontinued"))
-            .with(Computer::setCompanyId, rs.getLong("company_id"))
-            .with(Computer::setCompany, rs.getLong("company.id") != 0 ? new Company(rs.getLong("company.id"), rs.getString("company.name")) : null)
-            .build();
-        resultList.add(c);
-      }
-      rs.close();
-      p.close();
-    } catch (SQLException e) {
-      try {
-        if (!connect.getAutoCommit()) {
-          connect.rollback();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error during transaction rollback");
-      }
-      LOGGER.error("Error getting computers" + e.getMessage() + e.getSQLState() + e.getStackTrace());
-    } finally {
-      try {
-        if (connect.getAutoCommit()) {
-          Utils.closeConnection();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error closing connection");
-      }
+      String sql = "SELECT * FROM computer LEFT JOIN company on computer.company_id = company.id " +
+          "LIMIT ? OFFSET ?";
+      resultList = (ArrayList<Computer>) this.jdbcTemplate.query(
+          sql, new Object[] {page.getNbEntries(), page.getFirstEntryIndex()}, new ComputerMapper());
+    } catch (Exception e) {
+      LOGGER.error("Error getting computers" + e.getMessage() + e.getStackTrace());
     }
-
     page.setList(resultList);
 
     return page;
@@ -310,51 +163,18 @@ public class DaoComputer implements DaoComputerI {
    */
   public Page<Computer> selectFiltered(Page page, String name) {
     ArrayList<Computer> resultList = new ArrayList<>();
-    ResultSet rs;
-    Connection connect = Utils.getConnection();
     try {
-      PreparedStatement p = connect.prepareStatement("SELECT * FROM computer LEFT JOIN company on computer.company_id = company.id " +
+      String sql = "SELECT * FROM computer LEFT JOIN company on computer.company_id = company.id " +
           "WHERE ( computer.name LIKE ? " +
           " OR company.name LIKE ? ) " +
-          "LIMIT ? OFFSET ?");
+          "LIMIT ? OFFSET ?";
+
+      resultList = (ArrayList<Computer>) this.jdbcTemplate.query(
+          sql, new Object[] {"%" + name + "%", "%" + name + "%", page.getNbEntries(), page.getFirstEntryIndex()}, new ComputerMapper());
+
       LOGGER.debug("search filter : " + name);
-      p.setString(1, "%" + name + "%");
-      p.setString(2, "%" + name + "%");
-      p.setLong(3, page.getNbEntries());
-      p.setLong(4, page.getFirstEntryIndex());
-
-      rs = p.executeQuery();
-
-      while (rs.next()) {
-        Computer c = GenericBuilder.of(Computer::new)
-            .with(Computer::setId, rs.getLong("computer.id"))
-            .with(Computer::setName, rs.getString("computer.name"))
-            .with(Computer::setIntroducedTimestamp, rs.getTimestamp("introduced"))
-            .with(Computer::setDiscontinuedTimestamp, rs.getTimestamp("discontinued"))
-            .with(Computer::setCompanyId, rs.getLong("company_id"))
-            .with(Computer::setCompany, rs.getLong("company.id") != 0 ? new Company(rs.getLong("company.id"), rs.getString("company.name")) : null)
-            .build();
-        resultList.add(c);
-      }
-      rs.close();
-      p.close();
-    } catch (SQLException e) {
-      try {
-        if (!connect.getAutoCommit()) {
-          connect.rollback();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error during transaction rollback");
-      }
-      LOGGER.error("Error getting computers" + e.getMessage() + e.getSQLState() + e.getStackTrace());
-    } finally {
-      try {
-        if (connect.getAutoCommit()) {
-          Utils.closeConnection();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error closing connection");
-      }
+    } catch (Exception e) {
+      LOGGER.error("Error getting computers" + e.getMessage() + e.getStackTrace());
     }
 
     page.setList(resultList);
@@ -372,8 +192,6 @@ public class DaoComputer implements DaoComputerI {
    */
   public Page<Computer> selectFiltered(Page page, String name, String order) {
     ArrayList<Computer> resultList = new ArrayList<>();
-    ResultSet rs;
-    Connection connect = Utils.getConnection();
     try {
 
       String sql = "SELECT * FROM computer LEFT JOIN company on computer.company_id = company.id " +
@@ -382,44 +200,11 @@ public class DaoComputer implements DaoComputerI {
           "ORDER BY ";
       sql += order;
       sql += " LIMIT ? OFFSET ?";
-      PreparedStatement p = connect.prepareStatement(sql);
-      p.setString(1, "%" + name + "%");
-      p.setString(2, "%" + name + "%");
-      p.setLong(3, page.getNbEntries());
-      p.setLong(4, page.getFirstEntryIndex());
 
-      System.out.println(p);
-      rs = p.executeQuery();
-      while (rs.next()) {
-        Computer c = GenericBuilder.of(Computer::new)
-            .with(Computer::setId, rs.getLong("computer.id"))
-            .with(Computer::setName, rs.getString("computer.name"))
-            .with(Computer::setIntroducedTimestamp, rs.getTimestamp("introduced"))
-            .with(Computer::setDiscontinuedTimestamp, rs.getTimestamp("discontinued"))
-            .with(Computer::setCompanyId, rs.getLong("company_id"))
-            .with(Computer::setCompany, rs.getLong("company.id") != 0 ? new Company(rs.getLong("company.id"), rs.getString("company.name")) : null)
-            .build();
-        resultList.add(c);
-      }
-      rs.close();
-      p.close();
-    } catch (SQLException e) {
-      try {
-        if (!connect.getAutoCommit()) {
-          connect.rollback();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error during transaction rollback");
-      }
-      LOGGER.error("Error getting computers" + e.getMessage() + e.getSQLState() + e.getStackTrace());
-    } finally {
-      try {
-        if (connect.getAutoCommit()) {
-          Utils.closeConnection();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error closing connection");
-      }
+      resultList = (ArrayList<Computer>) this.jdbcTemplate.query(
+          sql, new Object[] {"%" + name + "%", "%" + name + "%", page.getNbEntries(), page.getFirstEntryIndex()}, new ComputerMapper());
+    } catch (Exception e) {
+      LOGGER.error("Error getting computers" + e.getMessage() + e.getStackTrace());
     }
 
     page.setList(resultList);
@@ -434,45 +219,14 @@ public class DaoComputer implements DaoComputerI {
    * @return computer
    */
   public Computer getById(Long id) {
-    ResultSet rs;
     Computer c = new Computer();
-    Connection connect = Utils.getConnection();
     try {
-      PreparedStatement p = connect.prepareStatement("SELECT * FROM computer LEFT JOIN company on computer.company_id = company.id " +
-          "WHERE computer.id = ?");
-      p.setLong(1, id);
+      String sql = "SELECT * FROM computer LEFT JOIN company on computer.company_id = company.id WHERE computer.id = ?";
 
-      rs = p.executeQuery();
-
-      while (rs.next()) {
-        c = GenericBuilder.of(Computer::new)
-            .with(Computer::setId, rs.getLong("computer.id"))
-            .with(Computer::setName, rs.getString("computer.name"))
-            .with(Computer::setIntroducedTimestamp, rs.getTimestamp("introduced"))
-            .with(Computer::setDiscontinuedTimestamp, rs.getTimestamp("discontinued"))
-            .with(Computer::setCompanyId, rs.getLong("company_id"))
-            .with(Computer::setCompany, rs.getLong("company.id") != 0 ? new Company(rs.getLong("company.id"), rs.getString("company.name")) : null)
-            .build();
-      }
-      rs.close();
-      p.close();
-    } catch (SQLException e) {
-      try {
-        if (!connect.getAutoCommit()) {
-          connect.rollback();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error during transaction rollback");
-      }
-      LOGGER.error("Error retrieving computer of ID " + id + e.getMessage() + e.getSQLState() + e.getStackTrace());
-    } finally {
-      try {
-        if (connect.getAutoCommit()) {
-          Utils.closeConnection();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error closing connection");
-      }
+      c = (Computer) this.jdbcTemplate.queryForObject(
+          sql, new Object[] {id }, new ComputerMapper());
+    } catch (Exception e) {
+      LOGGER.error("Error retrieving computer of ID " + id + e.getMessage() + e.getStackTrace());
     }
 
     return c;
@@ -486,32 +240,13 @@ public class DaoComputer implements DaoComputerI {
    */
   public int delete(Long id) {
     int affectedRows = 0;
-    Connection connect = Utils.getConnection();
     try {
-      PreparedStatement p = connect.prepareStatement("DELETE FROM computer WHERE computer.id = ?");
-      p.setLong(1, id);
-
-      affectedRows = p.executeUpdate();
-
-      p.close();
+      String sql = "DELETE FROM computer WHERE computer.id = ?";
+      Object[] params = {id};
+      affectedRows = jdbcTemplate.update(sql, params);
       LOGGER.info(affectedRows + " rows updated");
-    } catch (SQLException e) {
-      try {
-        if (!connect.getAutoCommit()) {
-          connect.rollback();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error during transaction rollback");
-      }
-      LOGGER.error("Error deleting computer of ID " + id + e.getMessage() + e.getSQLState() + e.getStackTrace());
-    } finally {
-      try {
-        if (connect.getAutoCommit()) {
-          connect.close();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error closing connection");
-      }
+    } catch (Exception e) {
+      LOGGER.error("Error deleting computer of ID " + id + e.getMessage() + e.getStackTrace());
     }
     return affectedRows;
   }
@@ -524,7 +259,6 @@ public class DaoComputer implements DaoComputerI {
    */
   public int delete(ArrayList<Long> ids) {
     int affectedRows = 0;
-    Connection connect = Utils.getConnection();
     try {
       String sql = "DELETE FROM computer WHERE computer.id IN (";
       int i;
@@ -533,34 +267,16 @@ public class DaoComputer implements DaoComputerI {
       }
       sql += "?)";
 
-
-      PreparedStatement p = connect.prepareStatement(sql);
-
-      for (i = 1; i <= ids.size(); i++) {
-        p.setLong(i, ids.get(i));
+      ArrayList<Object> paramsList = new ArrayList<>();
+      for (i = 0; i < ids.size(); i++) {
+        paramsList.add(ids.get(i));
       }
 
-      affectedRows = p.executeUpdate();
-
-      p.close();
+      Object[] params = paramsList.toArray();
+      affectedRows = jdbcTemplate.update(sql, params);
       LOGGER.info(affectedRows + " rows updated");
-    } catch (SQLException e) {
-      try {
-        if (!connect.getAutoCommit()) {
-          connect.rollback();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error during transaction rollback");
-      }
-      LOGGER.error("Error deleting computers, ids :" + ids.toString() + e.getMessage() + e.getSQLState() + e.getStackTrace());
-    } finally {
-      try {
-        if (connect.getAutoCommit()) {
-          connect.close();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error closing connection");
-      }
+    } catch (Exception e) {
+      LOGGER.error("Error deleting computers, ids :" + ids.toString() + e.getMessage() + e.getStackTrace());
     }
     return affectedRows;
   }
@@ -575,47 +291,34 @@ public class DaoComputer implements DaoComputerI {
     int affectedRows = 0;
     Connection connect = Utils.getConnection();
     try {
-      PreparedStatement p = connect.prepareStatement("DELETE FROM computer WHERE computer.company_id = ?");
-      p.setLong(1, id);
+      String sql = "DELETE FROM computer WHERE computer.company_id = ?";
+      affectedRows = jdbcTemplate.update(sql, new Object[] {id });
 
-      affectedRows = p.executeUpdate();
-
-      p.close();
       LOGGER.info(affectedRows + " rows updated");
-    } catch (SQLException e) {
-      try {
-        if (!connect.getAutoCommit()) {
-          connect.rollback();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error during transaction rollback");
-      }
-      LOGGER.error("Error deleting computer of ID " + id + e.getMessage() + e.getSQLState() + e.getStackTrace());
-    } finally {
-      try {
-        if (connect.getAutoCommit()) {
-          Utils.closeConnection();
-        }
-      } catch (SQLException ex) {
-        LOGGER.error("Error closing connection");
-      }
+    } catch (Exception e) {
+      LOGGER.error("Error deleting computer of ID " + id + e.getMessage() + e.getStackTrace());
     }
     return affectedRows;
   }
+}
 
-
+class ComputerMapper implements RowMapper<Computer> {
   /**
-   * start transaction.
+   * JDBCTemplate row to computer object mapper.
+   * @param rs rs
+   * @param rowNum rownum
+   * @return computer
+   * @throws SQLException ex
    */
-  public void startTransaction() {
-    Utils.startTransaction();
+  public Computer mapRow(ResultSet rs, int rowNum) throws SQLException {
+    Computer c = GenericBuilder.of(Computer::new)
+        .with(Computer::setId, rs.getLong("computer.id"))
+        .with(Computer::setName, rs.getString("computer.name"))
+        .with(Computer::setIntroducedTimestamp, rs.getTimestamp("introduced"))
+        .with(Computer::setDiscontinuedTimestamp, rs.getTimestamp("discontinued"))
+        .with(Computer::setCompanyId, rs.getLong("company_id"))
+        .with(Computer::setCompany, rs.getLong("company.id") != 0 ? new Company(rs.getLong("company.id"), rs.getString("company.name")) : null)
+        .build();
+    return c;
   }
-
-  /**
-   * commit transaction.
-   */
-  public void commitTransaction() {
-    Utils.commitTransaction();
-  }
-
 }

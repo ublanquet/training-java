@@ -10,14 +10,16 @@
 
     <properties>
         <dataSourceClassName>com.mysql.cj.jdbc.MysqlDataSource</dataSourceClassName>
-        <dataSource.url>jdbc:mysql://localhost:3306/computer-database-db?useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC</dataSource.url>
+        <dataSource.url>jdbc:mysql://localhost:3306/computer-database-db?useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC&amp;nullNamePatternMatchesAll=true</dataSource.url>
         <dataSource.user>root</dataSource.user>
         <dataSource.password>pass</dataSource.password>
 
         <mysql-version>6.0.6</mysql-version>
         <spring.version>4.3.7.RELEASE</spring.version>
+        <spring.boot.version>1.5.2.RELEASE</spring.boot.version>
         <slf4j.version>1.7.24</slf4j.version>
         <logback.version>1.2.1</logback.version>
+        <hibernateValidator.version>5.4.1.Final</hibernateValidator.version>
 
         <!-- <JAVA_1_8_HOME>/home/ebiz/Téléchargements/jdk1.8.0_121</JAVA_1_8_HOME>-->
     </properties>
@@ -27,7 +29,7 @@
             <id>test</id>
             <properties>
                 <dataSourceClassName>com.mysql.cj.jdbc.MysqlDataSource</dataSourceClassName>
-                <dataSource.url>jdbc:mysql://mysql_test:3306/computer-database-db?useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC</dataSource.url>
+                <dataSource.url>jdbc:mysql://mysql_test:3306/computer-database-db?useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC&amp;nullNamePatternMatchesAll=true</dataSource.url>
                 <dataSource.user>root</dataSource.user>
                 <dataSource.password>pass</dataSource.password>
             </properties>
@@ -36,7 +38,7 @@
             <id>testJenkins</id>
             <properties>
                 <dataSourceClassName>com.mysql.cj.jdbc.MysqlDataSource</dataSourceClassName>
-                <dataSource.url>jdbc:mysql://localhost:3307/computer-database-db?useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC</dataSource.url>
+                <dataSource.url>jdbc:mysql://localhost:3307/computer-database-db?useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC&amp;nullNamePatternMatchesAll=true</dataSource.url>
                 <dataSource.user>root</dataSource.user>
                 <dataSource.password>pass</dataSource.password>
             </properties>
@@ -45,7 +47,7 @@
             <id>production</id>
             <properties>
                 <dataSourceClassName>com.mysql.cj.jdbc.MysqlDataSource</dataSourceClassName>
-                <dataSource.url>jdbc:mysql://mysql_prod:3306/computer-database-db?useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC</dataSource.url>
+                <dataSource.url>jdbc:mysql://mysql_prod:3306/computer-database-db?useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC&amp;nullNamePatternMatchesAll=true</dataSource.url>
                 <dataSource.user>root</dataSource.user>
                 <dataSource.password>pass</dataSource.password>
             </properties>
@@ -115,6 +117,37 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- For integration tests -->
+            <!--<plugin>-->
+                <!--<groupId>org.codehaus.cargo</groupId>-->
+                <!--<artifactId>cargo-maven2-plugin</artifactId>-->
+                <!--<version>1.6.3</version>-->
+                <!--<configuration>-->
+                    <!--&lt;!&ndash; Container definition &ndash;&gt;-->
+                    <!--<container>-->
+                        <!--<containerId>tomcat</containerId>-->
+                        <!--<type>existing</type>-->
+                        <!--<home>/opt/tomcat</home>-->
+                    <!--</container>-->
+                <!--</configuration>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>start</id>-->
+                        <!--<phase>pre-integration-test</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>start</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                    <!--<execution>-->
+                        <!--<id>stop</id>-->
+                        <!--<phase>post-integration-test</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>stop</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
 
         </plugins>
 
@@ -280,6 +313,42 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <version>${spring.version}</version>
+        </dependency>
+
+        <!-- Spring aspects for i18n -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aspects</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+
+        <!-- Validator -->
+        <!-- https://mvnrepository.com/artifact/javax.el/el-api -->
+        <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>el-api</artifactId>
+            <version>2.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernateValidator.version}</version>
+        </dependency>
+
+
+
+        <!--Spring boot for context in CLI -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${spring.boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <version>${spring.boot.version}</version>
         </dependency>
 
     </dependencies>

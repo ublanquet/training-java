@@ -5,8 +5,10 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import persistance.model.Company;
 import persistance.model.Computer;
 import persistance.model.DTO.ComputerDto;
@@ -18,11 +20,14 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 
+@WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"/applicationContext.xml"})
 public class DtoTest {
   @Resource
   protected ComputerService service;
+  @Autowired
+  Mapper mapper;
   protected Computer computer, computer2, computer10;
   protected Company company, company2, companyNull;
   protected ArrayList<Computer> list = new ArrayList<Computer>();
@@ -79,5 +84,13 @@ public class DtoTest {
     for(int i = 0; i < page.getNbEntries(); i++) {
       assertEquals(page.getListPage().get(i).toString().replace("null", "").replace("'", ""), pageDto.getListPage().get(i).toString().replace("'", ""));
     }
+  }
+
+  @Test
+  public void testFromDto() throws Exception {
+    ComputerDto cDto = Mapper.createComputerDto(computer);
+    Computer c = mapper.fromDto(cDto);
+    assertEquals(computer.toString(), c.toString());
+
   }
 }

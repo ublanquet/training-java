@@ -20,7 +20,10 @@
         <div class="alert alert-danger">
             Error 500: An error has occured!
             <br/>
-            <!-- stacktrace -->
+            ${message}
+            <!-- stacktrace
+            ${stacktrace}
+            -->
         </div>
     </div>
 </section>
