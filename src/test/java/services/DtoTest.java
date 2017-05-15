@@ -82,4 +82,12 @@ public class DtoTest {
       assertEquals(page.getListPage().get(i).toString().replace("null", "").replace("'", ""), pageDto.getListPage().get(i).toString().replace("'", ""));
     }
   }
+
+  @Test
+  public void testFromDto() throws Exception {
+    ComputerDto cDto = Mapper.createComputerDto(computer);
+    Computer c = Mapper.fromDto(cDto);
+    assertEquals(computer.toString(), c.toString());
+
+  }
 }

@@ -60,9 +60,8 @@ public class ComputerController {
   public String addComputer(Model model, HttpSession session,
                             @Valid ComputerDto computer, BindingResult bindingResult) {
     Long newId = null;
-    //ComputerValidator computerValidator = new ComputerValidator();
-    computerValidator.validate(Mapper.fromDto(computer), bindingResult);
-    //model.addAttribute("form", new Computer());
+    Computer c = Mapper.fromDto(computer);
+    computerValidator.validate(c, bindingResult);
     if (bindingResult.hasErrors()) {
       String errorString = "";
       for (ObjectError error : bindingResult.getAllErrors()) {
@@ -72,7 +71,7 @@ public class ComputerController {
       return "redirect:/dashboard";
     }
     //Computer c = Utils.buildComputerFromParams(allRequestParams);
-    newId = computerService.create(Mapper.fromDto(computer));
+    newId = computerService.create(c);
     if (newId == null || newId == 0) {
       Utils.setMessage("warning", "Error creating computer", session);
     } else {

@@ -59,6 +59,21 @@ public class CompanyService {
     return cList;
   }
 
+  /**
+   * get all companies.
+   * @return list companies
+   */
+  public Company getById(Long id) {
+    logger.debug("Get company by ID ");
+    Company c = null;
+    try {
+      c = daoC.getById(id);
+    } catch (Exception ex) {
+      logger.error("Company retrieval by ID " + id + " failure " + ex.getMessage());
+    }
+    return c;
+  }
+
 
   /**
    * delete a company and all associated computers.

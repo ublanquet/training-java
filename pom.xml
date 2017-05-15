@@ -118,6 +118,37 @@
                 </executions>
             </plugin>
 
+            <!-- For integration tests -->
+            <!--<plugin>-->
+                <!--<groupId>org.codehaus.cargo</groupId>-->
+                <!--<artifactId>cargo-maven2-plugin</artifactId>-->
+                <!--<version>1.6.3</version>-->
+                <!--<configuration>-->
+                    <!--&lt;!&ndash; Container definition &ndash;&gt;-->
+                    <!--<container>-->
+                        <!--<containerId>tomcat</containerId>-->
+                        <!--<type>existing</type>-->
+                        <!--<home>/opt/tomcat</home>-->
+                    <!--</container>-->
+                <!--</configuration>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>start</id>-->
+                        <!--<phase>pre-integration-test</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>start</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                    <!--<execution>-->
+                        <!--<id>stop</id>-->
+                        <!--<phase>post-integration-test</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>stop</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
+
         </plugins>
 
 

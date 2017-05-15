@@ -1,5 +1,9 @@
 package services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import persistance.model.Company;
 import persistance.model.Computer;
 import persistance.model.DTO.ComputerDto;
 import persistance.model.GenericBuilder;
@@ -11,12 +15,17 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Mapper {
+
+  static Logger logger = LoggerFactory.getLogger("services.Mapper");
+
+  static CompanyService companyService;
   /**
    * create dto from obj.
    * @param c obj
    * @return dto
    */
   public static ComputerDto createComputerDto(Computer c) {
+    logger.debug("create DTO from computer");
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     String formattedDateIntro = c.getIntroduced() != null ? c.getIntroduced().format(formatter) : "";
@@ -46,27 +55,34 @@ public class Mapper {
    * @return .
    */
   public static Computer fromDto(ComputerDto dto) {
+    logger.debug("Create computer from dto");
     LocalDateTime dateI = null, dateD = null;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
     try {
-      if (dto.getIntroduced() != null) {
+      if (dto.getIntroduced() != null && !dto.getIntroduced().isEmpty()) {
         dateI = LocalDate.parse(dto.getIntroduced(), formatter).atStartOfDay();
       }
-      if (dto.getDiscontinued() != null) {
+      if (dto.getDiscontinued() != null && !dto.getDiscontinued().isEmpty()) {
         dateD = LocalDate.parse(dto.getDiscontinued(), formatter).atStartOfDay();
       }
     } catch (Exception ex) {
+      logger.error("Error creating computer from DTO : incorrect date - " + ex.getMessage());
+    }
 
+    Company comp = null;
+    if (Validate.parseLong(dto.getCompanyId()) != null) {
+      comp = companyService.getById(Validate.parseLong(dto.getCompanyId()));
     }
 
     Computer c = GenericBuilder.of(Computer::new)
         .with(Computer::setName, dto.getName())
         .with(Computer::setIntroduced, dateI)
         .with(Computer::setDiscontinued, dateD)
-        .with(Computer::setCompanyId, Validate.parseLong(dto.getCompanyId()))
+        .with(Computer::setCompany, comp)
         .with(Computer::setId, Validate.parseLong(dto.getId()))
         .build();
+
+
     return c;
   }
 
