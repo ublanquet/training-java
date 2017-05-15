@@ -25,16 +25,26 @@ import java.util.Map;
 
 @Controller
 public class ComputerController {
-  @Autowired
+  final
   CompanyService companyService;
-  @Autowired
+  final
   ComputerService computerService;
-  @Autowired
+  final
   ComputerValidator computerValidator;
-  @Autowired
+  final
   Mapper mapper;
 
   Logger logger = LoggerFactory.getLogger("controller.EditComputerServlet");
+
+  //STOP_CHECKSTYLE
+  @Autowired
+  public ComputerController(CompanyService companyService, ComputerService computerService, ComputerValidator computerValidator, Mapper mapper) {
+    this.companyService = companyService;
+    this.computerService = computerService;
+    this.computerValidator = computerValidator;
+    this.mapper = mapper;
+  }
+  //START_CHECKSTYLE
 
 
   /**

@@ -13,7 +13,7 @@
 ">
 
 
-    <!-- ANNOTATIONS POUR L'INJECTION DE DEPENDANCES -->
+    <!-- ANNOTATIONS POUR L'INJECTION DE DEPENDANCES DANS LES BEANS DU CONTEXT -->
     <context:annotation-config />
 
     <!-- ANNOTATIONS POUR LA CREATION DE BEANS VIA ANNOTATIONS -->
@@ -88,7 +88,6 @@
 
     <!-- I18N -->
     <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
-        <property name="defaultLocale" value="en" />
     </bean>
 
     <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">

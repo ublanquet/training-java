@@ -37,24 +37,24 @@ public class DtoTest {
   public void setUp() {
     //service = ComputerService.getInstance();
 
-    company = new Company( (long)1, "Apple Inc.");
+    company = new Company( 1L, "Apple Inc.");
     companyNull = null;
-    company2 = new Company((long)2, "Thinking Machines");
+    company2 = new Company(2L, "Thinking Machines");
 
     computer = GenericBuilder.of(Computer::new)
-        .with(Computer::setId, (long)1)
+        .with(Computer::setId, 1L)
         .with(Computer::setName, "MacBook Pro 15.4 inch")
         .with(Computer::setCompany, company)
         .build();
 
     computer2 = GenericBuilder.of(Computer::new)
-        .with(Computer::setId, (long)2)
+        .with(Computer::setId, 2L)
         .with(Computer::setName, "CM-2a")
         .with(Computer::setCompany, company2)
         .build();
 
     computer10 = GenericBuilder.of(Computer::new)
-        .with(Computer::setId, (long)10)
+        .with(Computer::setId, 10L)
         .with(Computer::setName, "Apple IIc Plus")
         .with(Computer::setCompany, companyNull)
         .build();
@@ -90,7 +90,7 @@ public class DtoTest {
   public void testFromDto() throws Exception {
     ComputerDto cDto = Mapper.createComputerDto(computer);
     Computer c = mapper.fromDto(cDto);
-    assertEquals(computer.toString(), c.toString());
+    assertEquals(computer, c);
 
   }
 }

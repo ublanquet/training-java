@@ -190,9 +190,11 @@
     </module>
     <!-- Ignore filter-->
     <module name="SuppressionCommentFilter">
-        <property name="offCommentFormat" value="CHECKSTYLE_OFF: JAVADOC"/>
+        <!--property name="offCommentFormat" value="CHECKSTYLE_OFF: JAVADOC"/>
         <property name="onCommentFormat" value="CHECKSTYLE_ON: JAVADOC"/>
-        <property name="checkFormat" value="JavadocMethod"/>
+        <property name="checkFormat" value="JavadocMethod"/-->
+        <property name="offCommentFormat" value="STOP_CHECKSTYLE"/>
+        <property name="onCommentFormat" value="START_CHECKSTYLE"/>
     </module>
     <module name="SuppressionFilter">
         <property name="file" value="suppressions.xml"/>

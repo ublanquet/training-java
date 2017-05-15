@@ -153,6 +153,7 @@ public class Computer {
         this.discontinued = discontinued == null ? null : discontinued.toLocalDateTime();
     }
 
+    //STOP_CHECKSTYLE
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -161,11 +162,21 @@ public class Computer {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-
         Computer computer = (Computer) o;
 
-        return getId() == computer.getId();
+        if (getId() == computer.getId()) {
+            return true;
+        } else if ( (getId() == null || computer.getId() == null) &&
+                    getName() == computer.getName() &&
+                    getCompanyId() == computer.getCompanyId() &&
+                    getIntroduced() == computer.getIntroduced() &&
+                    getDiscontinued() == computer.getDiscontinued()) {
+            return true;
+        } else {
+            return false;
+        }
     }
+    //START_CHECKSTYLE
 
     @Override
     public String toString() {
