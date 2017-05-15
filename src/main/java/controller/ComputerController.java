@@ -10,6 +10,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import persistance.model.ComputerValidator;
 import persistance.model.Company;
 import persistance.model.Computer;
@@ -97,12 +98,13 @@ public class ComputerController {
    * .
    * @param model .
    * @param session .
+   * @param redirectAttrs .
    * @param allRequestParams .
    * @return .
    */
   @PostMapping("/editcomputer")
   public String editComputer(Model model, HttpSession session,
-                            @RequestParam Map<String, String> allRequestParams) {
+                            @RequestParam Map<String, String> allRequestParams, RedirectAttributes redirectAttrs) {
 
     int affectedRow = 0;
     Computer c = Utils.buildComputerFromParams(allRequestParams);
@@ -112,7 +114,9 @@ public class ComputerController {
       logger.error("Error updating computer : " + ex.getMessage() + ex.getStackTrace() + ex.getClass());
     }
     if (affectedRow == 0) {
+      //TODO use redirect attribute to stop using sessions
       Utils.setMessage("warning", "Error updating computer", session);
+      redirectAttrs.addAttribute("error", "warning");
     } else {
       Utils.setMessage("info", "Computer updated, id : " + c.getId(), session);
     }

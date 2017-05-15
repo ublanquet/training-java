@@ -2,6 +2,8 @@ package services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import persistance.dao.DaoComputer;
 import persistance.model.Computer;
 import persistance.model.Page;
@@ -13,15 +15,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Objects;
 
+@Service
 public class ComputerService {
-  private Logger logger = LoggerFactory.getLogger(" services.ComputerService");
-
-
-
+  private Logger logger = LoggerFactory.getLogger("services.ComputerService");
+  @Autowired
   private DaoComputer daoC;
-  public void setDaoC(DaoComputer daoC) {
-    this.daoC = daoC;
-  }
+
   /**
    * get by id.
    *

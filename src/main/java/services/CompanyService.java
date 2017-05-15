@@ -1,6 +1,8 @@
 package services;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import persistance.dao.DaoCompany;
 import persistance.dao.DaoComputer;
@@ -10,20 +12,13 @@ import org.slf4j.LoggerFactory;
 
 
 import java.util.ArrayList;
-
+@Service
 public class CompanyService {
 
   private Logger logger = LoggerFactory.getLogger(" services.CompanyService");
-
-  public void setDaoC(DaoCompany daoC) {
-    this.daoC = daoC;
-  }
-
-  public void setDaoComputer(DaoComputer daoComputer) {
-    this.daoComputer = daoComputer;
-  }
-
+  @Autowired
   private DaoCompany daoC;
+  @Autowired
   private DaoComputer daoComputer;
 
 

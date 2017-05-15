@@ -1,10 +1,12 @@
 package persistance.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.stereotype.Repository;
 import persistance.model.Company;
 import persistance.model.GenericBuilder;
 
@@ -12,11 +14,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+@Repository
 public class DaoCompany implements DaoCompanyI {
+  @Autowired
   private JdbcTemplate jdbcTemplate;
-  public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-    this.jdbcTemplate = jdbcTemplate;
-  }
+
 
   /**
      * create company in db.
