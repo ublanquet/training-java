@@ -20,7 +20,7 @@ public class ErrorsController {
     Integer httpErrorCode = getErrorCode(httpRequest);
 
     Throwable throwable = (Throwable) httpRequest.getAttribute(RequestDispatcher.ERROR_EXCEPTION);
-    if (httpErrorCode == 500) {
+    if (httpErrorCode == 500) { //TODO add debug var
       model.addAttribute("stacktrace", throwable.getStackTrace());
       model.addAttribute("message", throwable.getMessage());
     }
