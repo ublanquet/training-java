@@ -107,7 +107,7 @@ public class SeleniumTest {
   @Test
   public void testCreate () {
     long firstCount = service.getCount("test-selenium");
-    driver.get("http://localhost:8080/addcomputer");
+    driver.get("http://localhost:8080/computer/add");
 
     // Find the elements
     WebElement computerName = driver.findElement(By.id("computerName"));

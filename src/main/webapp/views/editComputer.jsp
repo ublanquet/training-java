@@ -17,7 +17,7 @@
 <body>
 <header class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="dashboard"> Application - Computer Database </a>
+        <a class="navbar-brand" href="/dashboard"> Application - Computer Database </a>
     </div>
 </header>
 <section id="main">
@@ -29,7 +29,7 @@
                 </div>
                 <h1>Edit Computer</h1>
 
-                <form action="editcomputer" method="POST" onsubmit="return validateDates();">
+                <form action="/computer/edit" method="POST" onsubmit="return validateDates();">
                     <input type="hidden" value="${computer.id}" name="id" id="id"/>
                     <fieldset>
                         <div class="form-group">
@@ -57,7 +57,7 @@
                     <div class="actions pull-right">
                         <input type="submit" value="Edit" class="btn btn-primary">
                         or
-                        <a href="dashboard" class="btn btn-default">Cancel</a>
+                        <a href="/dashboard" class="btn btn-default">Cancel</a>
                     </div>
                 </form>
             </div>

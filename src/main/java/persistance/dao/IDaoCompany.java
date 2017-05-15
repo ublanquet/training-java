@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 
-public interface DaoCompanyI {
+public interface IDaoCompany {
 
     Logger LOGGER = LoggerFactory.getLogger(" persistance.dao.DaoCompany");
 

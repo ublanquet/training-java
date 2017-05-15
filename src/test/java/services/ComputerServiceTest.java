@@ -158,7 +158,7 @@ public class ComputerServiceTest {
   @Test
   @Ignore
   public void testDao() throws Exception {
-    /*DaoComputer daoComputer = DaoComputerI.getInstance();
+    /*DaoComputer daoComputer = IDaoComputer.getInstance();
     daoComputer = Mockito.spy(daoComputer);
     final Computer c = Mockito.mock(Computer.class);
     Mockito.doReturn(0).when(daoComputer).create(c);

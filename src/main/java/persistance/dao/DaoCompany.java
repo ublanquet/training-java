@@ -15,7 +15,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 @Repository
-public class DaoCompany implements DaoCompanyI {
+public class DaoCompany implements IDaoCompany {
   private final JdbcTemplate jdbcTemplate;
 
   //STOP_CHECKSTYLE

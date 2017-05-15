@@ -14,7 +14,7 @@
             <input type="checkbox" name="cb" class="cb" value="${item.id}">
         </td>
         <td>
-            <a href="editcomputer?id=${item.id}" onclick="">${item.name}</a>
+            <a href="computer/edit?id=${item.id}" onclick="">${item.name}</a>
         </td>
         <td>${item.introduced}</td>
         <td>${item.discontinued}</td>

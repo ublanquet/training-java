@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import persistance.model.ComputerValidator;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 @Controller
+@RequestMapping("/computer")
 public class ComputerController {
   final
   CompanyService companyService;
@@ -54,7 +56,7 @@ public class ComputerController {
    * @param session .
    * @return .
    */
-  @GetMapping("/addcomputer")
+  @GetMapping("/add")
   public String addComputerForm(Model model, HttpSession session) {
     ArrayList<Company> companies = companyService.getAll();
     model.addAttribute("form", new ComputerDto());
@@ -70,7 +72,7 @@ public class ComputerController {
    * @param bindingResult .
    * @return .
    */
-  @PostMapping("/addcomputer")
+  @PostMapping("/add")
   public String addComputer(Model model, HttpSession session,
                             @Valid ComputerDto computer, BindingResult bindingResult) {
     Long newId = null;
@@ -86,7 +88,7 @@ public class ComputerController {
     }
     //Computer c = Utils.buildComputerFromParams(allRequestParams);
     newId = computerService.create(c);
-    if (newId == null || newId == 0) {
+    if (newId == null || newId == 0) {      //TODO use redirect attribute to stop using sessions
       Utils.setMessage("warning", "Error creating computer", session);
     } else {
       Utils.setMessage("info", "Computer created, id : " + newId, session);
@@ -102,7 +104,7 @@ public class ComputerController {
    * @param allRequestParams .
    * @return .
    */
-  @PostMapping("/editcomputer")
+  @PostMapping("/edit")
   public String editComputer(Model model, HttpSession session,
                             @RequestParam Map<String, String> allRequestParams, RedirectAttributes redirectAttrs) {
 
@@ -130,7 +132,7 @@ public class ComputerController {
    * @param id .
    * @return .
    */
-  @GetMapping("/editcomputer")
+  @GetMapping("/edit")
   public String editComputerForm(Model model, @RequestParam(value = "id") Long id) {
     ArrayList<Company> companies = companyService.getAll();
     model.addAttribute("companies", companies);
