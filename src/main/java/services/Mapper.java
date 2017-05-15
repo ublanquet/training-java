@@ -3,6 +3,7 @@ package services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import persistance.model.Company;
 import persistance.model.Computer;
 import persistance.model.DTO.ComputerDto;
@@ -14,11 +15,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+@Service
 public class Mapper {
 
   static Logger logger = LoggerFactory.getLogger("services.Mapper");
 
-  static CompanyService companyService;
+  @Autowired
+  CompanyService companyService;
   /**
    * create dto from obj.
    * @param c obj
@@ -54,7 +57,7 @@ public class Mapper {
    * @param dto .
    * @return .
    */
-  public static Computer fromDto(ComputerDto dto) {
+  public Computer fromDto(ComputerDto dto) {
     logger.debug("Create computer from dto");
     LocalDateTime dateI = null, dateD = null;
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");

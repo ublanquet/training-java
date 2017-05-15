@@ -31,6 +31,9 @@ public class ComputerController {
   ComputerService computerService;
   @Autowired
   ComputerValidator computerValidator;
+  @Autowired
+  Mapper mapper;
+
   Logger logger = LoggerFactory.getLogger("controller.EditComputerServlet");
 
 
@@ -60,7 +63,7 @@ public class ComputerController {
   public String addComputer(Model model, HttpSession session,
                             @Valid ComputerDto computer, BindingResult bindingResult) {
     Long newId = null;
-    Computer c = Mapper.fromDto(computer);
+    Computer c = mapper.fromDto(computer);
     computerValidator.validate(c, bindingResult);
     if (bindingResult.hasErrors()) {
       String errorString = "";

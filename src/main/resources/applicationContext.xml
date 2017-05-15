@@ -18,6 +18,8 @@
 
     <!-- ANNOTATIONS POUR LA CREATION DE BEANS VIA ANNOTATIONS -->
     <context:component-scan base-package="controller" />
+    <context:component-scan base-package="services" />
+
 
     <!-- CREATION MANAGED BEANS  -->
     <bean name="companyDao" class="persistance.dao.DaoCompany" scope="singleton" >
