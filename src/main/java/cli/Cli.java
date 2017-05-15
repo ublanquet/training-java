@@ -23,11 +23,10 @@ import java.util.Scanner;
 public class Cli {
     private static DaoComputer daoC;
     private static DaoCompany daoComp;
-    private static Logger logger = LoggerFactory.getLogger(" dao.Cli");
+    private static Logger logger = LoggerFactory.getLogger("dao.Cli");
     private static Boolean running = true;
     private static ComputerService compService;
     private static CompanyService companyService;
-
     private static Scanner scanner = new Scanner(System.in);
 
     private static Page<Computer> pageComputer = new Page<Computer>(20, 0);

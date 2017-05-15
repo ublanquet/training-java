@@ -24,7 +24,6 @@ public class CompanyServiceTest {
 
     @Before
     public void setUp() {
-        //service = new CompanyService();
         company = new Company( 1L, "Apple Inc.");
         company10 = new Company( 10L, "Digital Equipment Corporation");
     }

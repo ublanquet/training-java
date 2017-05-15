@@ -33,8 +33,6 @@ public class ComputerServiceTest {
 
     @Before
     public void setUp() {
-        //service = ComputerService.getInstance();
-
         company = new Company( 1L, "Apple Inc.");
         companyNull = null;
         company2 = new Company(2L, "Thinking Machines");
@@ -94,7 +92,7 @@ public class ComputerServiceTest {
     public void testGetAllComputerPaginated() throws Exception {
         page = service.getPaginated(page);
 
-        assertEquals(computer.toString(), page.list.get(0).toString());
+        assertEquals(computer, page.list.get(0));
         //assertEquals(computer2.toString(), page.list.get(1).toString());
         //assertEquals(computer10.toString(), page.list.get(9).toString());
 
@@ -114,11 +112,11 @@ public class ComputerServiceTest {
       }
 
       Computer created = service.getById(createdId);
-      assertEquals(computerToCreate.toString(), created.toString());
+      assertEquals(computerToCreate, created);
       created.setName("editedName");
       service.update(created);
       Computer edited = service.getById(created.getId());
-      assertEquals(created.toString(), edited.toString());
+      assertEquals(created, edited);
       assertEquals("editedName", edited.getName());
 
 
