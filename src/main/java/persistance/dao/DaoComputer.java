@@ -19,8 +19,14 @@ import java.util.ArrayList;
 
 @Repository
 public class DaoComputer implements DaoComputerI {
+  private final JdbcTemplate jdbcTemplate;
+
+  //STOP_CHECKSTYLE
   @Autowired
-  private JdbcTemplate jdbcTemplate;
+  public DaoComputer(JdbcTemplate jdbcTemplate) {
+    this.jdbcTemplate = jdbcTemplate;
+  }
+  //START_CHECKSTYLE
 
   /**
    * create in db.

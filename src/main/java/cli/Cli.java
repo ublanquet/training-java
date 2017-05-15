@@ -26,7 +26,7 @@ public class Cli {
     private static Logger logger = LoggerFactory.getLogger(" dao.Cli");
     private static Boolean running = true;
     private static ComputerService compService;
-    private static CompanyService companyService = new CompanyService();
+    private static CompanyService companyService;
 
     private static Scanner scanner = new Scanner(System.in);
 

@@ -21,10 +21,15 @@ import java.util.Locale;
 
 @Controller
 public class DashboardController {
-  @Autowired
-  private ComputerService computerService;
+  private final ComputerService computerService;
   Logger logger = LoggerFactory.getLogger("controller.EditComputerServlet");
 
+  //STOP_CHECKSTYLE
+  @Autowired
+  public DashboardController(ComputerService computerService) {
+    this.computerService = computerService;
+  }
+  //START_CHECKSTYLE
   /**
    * .
    * @param model .

@@ -16,9 +16,14 @@ import java.util.ArrayList;
 
 @Repository
 public class DaoCompany implements DaoCompanyI {
-  @Autowired
-  private JdbcTemplate jdbcTemplate;
+  private final JdbcTemplate jdbcTemplate;
 
+  //STOP_CHECKSTYLE
+  @Autowired
+  public DaoCompany(JdbcTemplate jdbcTemplate) {
+    this.jdbcTemplate = jdbcTemplate;
+  }
+  //START_CHECKSTYLE
 
   /**
      * create company in db.

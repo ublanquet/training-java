@@ -18,9 +18,14 @@ import java.util.Objects;
 @Service
 public class ComputerService {
   private Logger logger = LoggerFactory.getLogger("services.ComputerService");
-  @Autowired
-  private DaoComputer daoC;
+  private final DaoComputer daoC;
 
+  //STOP_CHECKSTYLE
+  @Autowired
+  public ComputerService(DaoComputer daoC) {
+    this.daoC = daoC;
+  }
+  //START_CHECKSTYLE
   /**
    * get by id.
    *

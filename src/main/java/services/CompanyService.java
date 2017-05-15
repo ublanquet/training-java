@@ -16,10 +16,16 @@ import java.util.ArrayList;
 public class CompanyService {
 
   private Logger logger = LoggerFactory.getLogger(" services.CompanyService");
+  private final DaoCompany daoC;
+  private final DaoComputer daoComputer;
+
+  //STOP_CHECKSTYLE
   @Autowired
-  private DaoCompany daoC;
-  @Autowired
-  private DaoComputer daoComputer;
+  public CompanyService(DaoCompany daoC, DaoComputer daoComputer) {
+    this.daoC = daoC;
+    this.daoComputer = daoComputer;
+  }
+  //START_CHECKSTYLE
 
 
   /**

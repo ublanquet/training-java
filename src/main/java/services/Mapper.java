@@ -20,8 +20,16 @@ public class Mapper {
 
   static Logger logger = LoggerFactory.getLogger("services.Mapper");
 
-  @Autowired
+  final
   CompanyService companyService;
+
+  //STOP_CHECKSTYLE
+  @Autowired
+  public Mapper(CompanyService companyService) {
+    this.companyService = companyService;
+  }
+  //START_CHECKSTYLE
+
   /**
    * create dto from obj.
    * @param c obj
