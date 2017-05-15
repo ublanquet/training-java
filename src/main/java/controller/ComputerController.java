@@ -86,7 +86,6 @@ public class ComputerController {
       Utils.setMessage("warning", "Error creating computer, invalid param : " + errorString, session);
       return "redirect:/dashboard";
     }
-    //Computer c = Utils.buildComputerFromParams(allRequestParams);
     newId = computerService.create(c);
     if (newId == null || newId == 0) {      //TODO use redirect attribute to stop using sessions
       Utils.setMessage("warning", "Error creating computer", session);

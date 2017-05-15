@@ -83,7 +83,7 @@ public class ComputerServiceTest {
     public void testGetAllComputer() throws Exception {
         ArrayList<Computer> computers = service.getAll( (long) 0, (long) 10);
 
-        assertEquals(computer.toString(), computers.get(0).toString());
+        assertEquals(computer, computers.get(0));
         //assertEquals(computer2.toString(), computers.get(1).toString());
         //assertEquals(computer10.toString(), computers.get(9).toString());
     }

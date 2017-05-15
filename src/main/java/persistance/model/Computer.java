@@ -2,6 +2,7 @@ package persistance.model;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Computer {
     private Long id;
@@ -164,13 +165,13 @@ public class Computer {
         }
         Computer computer = (Computer) o;
 
-        if (getId() == computer.getId()) {
+        if (Objects.equals(getId(), computer.getId())) {
             return true;
         } else if ( (getId() == null || computer.getId() == null) &&
-                    getName() == computer.getName() &&
-                    getCompanyId() == computer.getCompanyId() &&
-                    getIntroduced() == computer.getIntroduced() &&
-                    getDiscontinued() == computer.getDiscontinued()) {
+                    Objects.equals(getName(), computer.getName()) &&
+                    Objects.equals(getCompanyId(), computer.getCompanyId()) &&
+                    getIntroduced().equals(computer.getIntroduced()) &&
+                    getDiscontinued().equals(computer.getDiscontinued())) {
             return true;
         } else {
             return false;
