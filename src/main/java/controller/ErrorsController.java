@@ -21,7 +21,12 @@ public class ErrorsController {
 
     Throwable throwable = (Throwable) httpRequest.getAttribute(RequestDispatcher.ERROR_EXCEPTION);
     if (httpErrorCode == 500) { //TODO add debug var
-      model.addAttribute("stacktrace", throwable.getStackTrace());
+      String trace = "";
+      for (StackTraceElement st : throwable.getStackTrace()) {
+        trace += st.toString() + "\n";
+      }
+
+      model.addAttribute("stacktrace", trace);
       model.addAttribute("message", throwable.getMessage());
     }
 

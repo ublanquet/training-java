@@ -1,6 +1,7 @@
 package controller;
 
 
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import persistance.model.Computer;
 import persistance.model.GenericBuilder;
 import services.Validate;
@@ -22,6 +23,18 @@ public class Utils {
     session.setAttribute("messageLevel", level);
     session.setAttribute("message", msg);
     session.setAttribute("messageDisplayNb", 0);
+  }
+
+  /**
+   * Set dashboard feedback message.
+   * @param level bootstrap class success/warning/info/danger
+   * @param msg message text
+   * @param attributes user session
+   */
+  public static void setMessage(String level, String msg, RedirectAttributes attributes) {
+    attributes.addAttribute("messageHide", "false");
+    attributes.addAttribute("messageLevel", level);
+    attributes.addAttribute("message", msg);
   }
 
   /**

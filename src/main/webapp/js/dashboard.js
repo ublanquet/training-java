@@ -123,7 +123,7 @@ $(function () {
             if(count < perPage) {
                 lastPage = 0;
             }
-            pageMax = maxPages+lastPage;
+            pageMax = maxPages+lastPage -1; // -1 because start at 0
 
                 if(pagesStartIndex == 0) {
                     $(".pageNum").each(function (i) {

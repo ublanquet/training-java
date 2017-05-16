@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import persistance.model.Computer;
 import persistance.model.DTO.ComputerDto;
 import persistance.model.Page;
@@ -15,9 +17,9 @@ import services.ComputerService;
 import services.Mapper;
 import services.Validate;
 
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Locale;
+
 
 @Controller
 public class DashboardController {
@@ -30,24 +32,34 @@ public class DashboardController {
     this.computerService = computerService;
   }
   //START_CHECKSTYLE
+
   /**
    * .
    * @param model .
-   * @param session .
-   * @param locale .
+   * @param locale  .
+   * @param message .
+   * @param messageHide .
+   * @param messageLevel .
    * @return .
    */
   @GetMapping("/dashboard")
-  public String dashboard(Model model, HttpSession session, Locale locale) {
+  public String dashboard(Model model, Locale locale,
+                          @ModelAttribute(value = "message") String message,
+                          @ModelAttribute(value = "messageHide") String messageHide,
+                          @ModelAttribute(value = "messageLevel") String messageLevel) {
     Page<ComputerDto> page;
     page = Mapper.convertPageDto(computerService.getPaginated(new Page<Computer>(10)));
     model.addAttribute("page", page);
+
+    // for operations feedback messages (crud success/failure)
+    model.addAttribute("message", message);
+    model.addAttribute("messageHide", !messageHide.equals("false"));
+    model.addAttribute("messageLevel", messageLevel);
+
     model.addAttribute("list", page.getListPage());
-    model.addAttribute("totalCount", page.getAllPagesItemCount()); // computerService.getCount());
-    Long pageCount = (long) page.getMaxPage(); // computerService.getCount() / 10; // 10 is default amount per page
+    model.addAttribute("totalCount", page.getAllPagesItemCount());
+    Long pageCount = (long) page.getMaxPage(); // 10 is default amount per page
     model.addAttribute("totalPages", pageCount);
-    logger.debug("Current locale :" + locale.getDisplayName());
-    Utils.cleanMessage(session);
     return "dashboard";
   }
 
@@ -55,7 +67,6 @@ public class DashboardController {
   /**
    * .
    * @param model  .
-   * @param session .
    * @param pageN .
    * @param perPage .
    * @param search .
@@ -64,7 +75,7 @@ public class DashboardController {
    * @return .
    */
   @PostMapping("/dashboard/ajax")
-  public String dashboardAjax(Model model, HttpSession session, Locale locale,
+  public String dashboardAjax(Model model, Locale locale,
                               @RequestParam(value = "pageN", defaultValue = "0") Integer pageN,
                               @RequestParam(value = "perPage", defaultValue = "10") Integer perPage,
                               @RequestParam(value = "search", required = false) String search,
@@ -90,12 +101,12 @@ public class DashboardController {
 
   /**
    * .
-   * @param session .
+   * @param redir .
    * @param selection .
    * @return .
    */
   @PostMapping("/dashboard")
-  public String delete(HttpSession session, @RequestParam(value = "selection") String selection) {
+  public String delete(RedirectAttributes redir, @RequestParam(value = "selection") String selection) {
     String message = "Computers deleted, id : ";
     String[] idToDelete = selection.split(",");
     ArrayList<Long> ids = new ArrayList<>();
@@ -111,8 +122,8 @@ public class DashboardController {
         message = message + " INVALID ID : '" + selected + "', ";
       }
     }
-    Utils.setMessage("info", message, session); // TODO use redirect var RedirectAttributes redir
-    return "dashboard";
+    Utils.setMessage("info", message, redir);
+    return "redirect:/dashboard";
   }
 
 

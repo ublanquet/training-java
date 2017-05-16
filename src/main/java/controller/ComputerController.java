@@ -20,7 +20,6 @@ import services.CompanyService;
 import services.ComputerService;
 import services.Mapper;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Map;
@@ -53,11 +52,10 @@ public class ComputerController {
   /**
    * .
    * @param model .
-   * @param session .
    * @return .
    */
   @GetMapping("/add")
-  public String addComputerForm(Model model, HttpSession session) {
+  public String addComputerForm(Model model) {
     ArrayList<Company> companies = companyService.getAll();
     model.addAttribute("form", new ComputerDto());
     model.addAttribute("companies", companies);
@@ -67,13 +65,13 @@ public class ComputerController {
   /**
    * .
    * @param model .
-   * @param session .
+   * @param redirectAttributes .
    * @param computer .
    * @param bindingResult .
    * @return .
    */
   @PostMapping("/add")
-  public String addComputer(Model model, HttpSession session,
+  public String addComputer(Model model, RedirectAttributes redirectAttributes,
                             @Valid ComputerDto computer, BindingResult bindingResult) {
     Long newId = null;
     Computer c = mapper.fromDto(computer);
@@ -83,14 +81,14 @@ public class ComputerController {
       for (ObjectError error : bindingResult.getAllErrors()) {
         errorString += error.getObjectName() + " - " + error.getDefaultMessage() + "<br/>";
       }
-      Utils.setMessage("warning", "Error creating computer, invalid param : " + errorString, session);
+      Utils.setMessage("warning", "Error creating computer, invalid param : " + errorString, redirectAttributes);
       return "redirect:/dashboard";
     }
     newId = computerService.create(c);
-    if (newId == null || newId == 0) {      //TODO use redirect attribute to stop using sessions
-      Utils.setMessage("warning", "Error creating computer", session);
+    if (newId == null || newId == 0) {
+      Utils.setMessage("warning", "Error creating computer", redirectAttributes);
     } else {
-      Utils.setMessage("info", "Computer created, id : " + newId, session);
+      Utils.setMessage("info", "Computer created, id : " + newId, redirectAttributes);
     }
     return "redirect:/dashboard";
   }
@@ -98,14 +96,12 @@ public class ComputerController {
   /**
    * .
    * @param model .
-   * @param session .
    * @param redirectAttrs .
    * @param allRequestParams .
    * @return .
    */
   @PostMapping("/edit")
-  public String editComputer(Model model, HttpSession session,
-                            @RequestParam Map<String, String> allRequestParams, RedirectAttributes redirectAttrs) {
+  public String editComputer(Model model, @RequestParam Map<String, String> allRequestParams, RedirectAttributes redirectAttrs) {
 
     int affectedRow = 0;
     Computer c = Utils.buildComputerFromParams(allRequestParams);
@@ -115,11 +111,9 @@ public class ComputerController {
       logger.error("Error updating computer : " + ex.getMessage() + ex.getStackTrace() + ex.getClass());
     }
     if (affectedRow == 0) {
-      //TODO use redirect attribute to stop using sessions
-      Utils.setMessage("warning", "Error updating computer", session);
-      redirectAttrs.addAttribute("error", "warning");
+      Utils.setMessage("warning", "Error updating computer", redirectAttrs);
     } else {
-      Utils.setMessage("info", "Computer updated, id : " + c.getId(), session);
+      Utils.setMessage("info", "Computer updated, id : " + c.getId(), redirectAttrs);
     }
 
     return "redirect:/dashboard";
