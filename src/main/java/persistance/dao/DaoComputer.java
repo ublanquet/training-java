@@ -55,6 +55,7 @@ public class DaoComputer implements IDaoComputer {
       LOGGER.info(" Computer created, generated ID : " + generatedKey);
     } catch (Exception e) {
       LOGGER.error("Error creating computer " + e.getMessage() + e.getStackTrace());
+      throw e;
     }
     return generatedKey;
   }
@@ -81,6 +82,7 @@ public class DaoComputer implements IDaoComputer {
       LOGGER.info(affectedRows + " rows updated");
     } catch (Exception e) {
       LOGGER.error("Error updating computer of ID " + c.getId() + e.getMessage() + e.getStackTrace());
+      throw e;
     }
     return affectedRows;
   }
@@ -101,6 +103,7 @@ public class DaoComputer implements IDaoComputer {
           sql, new Object[] {min, max}, new ComputerMapper());
     } catch (Exception e) {
       LOGGER.error("Error getting computers" + e.getMessage() + e.getStackTrace());
+      throw e;
     }
 
     return resultList;
@@ -117,6 +120,7 @@ public class DaoComputer implements IDaoComputer {
       count = this.jdbcTemplate.queryForObject(" SELECT COUNT(*) FROM computer;", Long.class);
     } catch (Exception e) {
       LOGGER.error("Error getting computers count " + e.getMessage() + e.getStackTrace());
+      throw e;
     }
     return count;
   }
@@ -136,6 +140,7 @@ public class DaoComputer implements IDaoComputer {
           new Object[] {"%" + name + "%", "%" + name + "%"}, Long.class);
     } catch (Exception e) {
       LOGGER.error("Error getting computers count by name " + e.getMessage() + e.getStackTrace());
+      throw e;
     }
     return count;
   }
@@ -155,6 +160,7 @@ public class DaoComputer implements IDaoComputer {
           sql, new Object[] {page.getNbEntries(), page.getFirstEntryIndex()}, new ComputerMapper());
     } catch (Exception e) {
       LOGGER.error("Error getting computers" + e.getMessage() + e.getStackTrace());
+      throw e;
     }
     page.setList(resultList);
 
@@ -182,6 +188,7 @@ public class DaoComputer implements IDaoComputer {
       LOGGER.debug("search filter : " + name);
     } catch (Exception e) {
       LOGGER.error("Error getting computers" + e.getMessage() + e.getStackTrace());
+      throw e;
     }
 
     page.setList(resultList);
@@ -212,6 +219,7 @@ public class DaoComputer implements IDaoComputer {
           sql, new Object[] {"%" + name + "%", "%" + name + "%", page.getNbEntries(), page.getFirstEntryIndex()}, new ComputerMapper());
     } catch (Exception e) {
       LOGGER.error("Error getting computers" + e.getMessage() + e.getStackTrace());
+      throw e;
     }
 
     page.setList(resultList);
@@ -234,6 +242,7 @@ public class DaoComputer implements IDaoComputer {
           sql, new Object[] {id }, new ComputerMapper());
     } catch (Exception e) {
       LOGGER.error("Error retrieving computer of ID " + id + e.getMessage() + e.getStackTrace());
+      throw e;
     }
 
     return c;
@@ -254,6 +263,7 @@ public class DaoComputer implements IDaoComputer {
       LOGGER.info(affectedRows + " rows updated");
     } catch (Exception e) {
       LOGGER.error("Error deleting computer of ID " + id + e.getMessage() + e.getStackTrace());
+      throw e;
     }
     return affectedRows;
   }
@@ -284,6 +294,7 @@ public class DaoComputer implements IDaoComputer {
       LOGGER.info(affectedRows + " rows updated");
     } catch (Exception e) {
       LOGGER.error("Error deleting computers, ids :" + ids.toString() + e.getMessage() + e.getStackTrace());
+      throw e;
     }
     return affectedRows;
   }
@@ -304,6 +315,7 @@ public class DaoComputer implements IDaoComputer {
       LOGGER.info(affectedRows + " rows updated");
     } catch (Exception e) {
       LOGGER.error("Error deleting computer of ID " + id + e.getMessage() + e.getStackTrace());
+      throw e;
     }
     return affectedRows;
   }

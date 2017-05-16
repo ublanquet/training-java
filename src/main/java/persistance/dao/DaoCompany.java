@@ -45,6 +45,7 @@ public class DaoCompany implements IDaoCompany {
         LOGGER.info(" Company created, generated ID : " + generatedKey);
       } catch (Exception e) {
         LOGGER.error("Error creating company " + e.getMessage() + e.getStackTrace());
+        throw e;
       }
       return generatedKey;
     }
@@ -65,6 +66,7 @@ public class DaoCompany implements IDaoCompany {
         LOGGER.info(affectedRows + " rows updated");
       } catch (Exception e) {
         LOGGER.error("Error updating company of ID " + c.getId() + e.getMessage() + e.getStackTrace());
+        throw e;
       }
       //return affectedRows;
     }
@@ -84,6 +86,7 @@ public class DaoCompany implements IDaoCompany {
             sql, new Object[] {min, max}, new CompanyMapper());
       } catch (Exception e) {
         LOGGER.error("Error getting companies" + e.getMessage() + e.getStackTrace());
+        throw e;
       }
 
       return resultList;
@@ -101,6 +104,7 @@ public class DaoCompany implements IDaoCompany {
             sql, new Object[] {}, new CompanyMapper());
       } catch (Exception e) {
         LOGGER.error("Error getting companies" + e.getMessage() + e.getStackTrace());
+        throw e;
       }
 
       return resultList;
@@ -120,6 +124,7 @@ public class DaoCompany implements IDaoCompany {
             sql, new Object[] {id }, new CompanyMapper());
       } catch (Exception e) {
         LOGGER.error("Error retrieving company of ID " + id + e.getMessage() + e.getStackTrace());
+        throw e;
       }
 
       return c;
@@ -139,6 +144,7 @@ public class DaoCompany implements IDaoCompany {
         LOGGER.info(affectedRows + " rows updated");
       } catch (Exception e) {
         LOGGER.error("Error deleting company of ID " + id + e.getMessage() + e.getStackTrace());
+        throw e;
       }
       return affectedRows;
     }

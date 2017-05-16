@@ -15,7 +15,7 @@ import java.util.ArrayList;
 @Service
 public class CompanyService {
 
-  private Logger logger = LoggerFactory.getLogger(" services.CompanyService");
+  private Logger logger = LoggerFactory.getLogger("services.CompanyService");
   private final DaoCompany daoC;
   private final DaoComputer daoComputer;
 
