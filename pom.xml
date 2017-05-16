@@ -8,6 +8,19 @@
     <artifactId>training-java</artifactId>
     <version>0.1.0</version>
 
+    <!-- Spring data release train bom -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-releasetrain</artifactId>
+                <version>Ingalls-SR3</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <properties>
         <dataSourceClassName>com.mysql.cj.jdbc.MysqlDataSource</dataSourceClassName>
         <dataSource.url>jdbc:mysql://localhost:3306/computer-database-db?useSSL=false&amp;useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC&amp;nullNamePatternMatchesAll=true</dataSource.url>
@@ -15,7 +28,7 @@
         <dataSource.password>pass</dataSource.password>
 
         <mysql-version>6.0.6</mysql-version>
-        <spring.version>4.3.7.RELEASE</spring.version>
+        <spring.version>4.3.8.RELEASE</spring.version>
         <spring.boot.version>1.5.2.RELEASE</spring.boot.version>
         <slf4j.version>1.7.24</slf4j.version>
         <logback.version>1.2.1</logback.version>
@@ -27,6 +40,7 @@
         <selenium.version>3.3.1</selenium.version>
         <hikari.version>2.5.1</hikari.version>
         <jstl.version>1.2</jstl.version>
+        <hibernate.version>5.2.10.Final</hibernate.version>
     </properties>
 
     <profiles>
@@ -157,6 +171,7 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- DB -->
         <!-- DB connector -->
         <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
         <dependency>
@@ -165,12 +180,27 @@
             <version>${mysql-version}</version>
             <scope>runtime</scope>
         </dependency>
-        <!-- DB pool -->
+        <!-- DB pool
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>${hikari.version}</version>
             <scope>compile</scope>
+        </dependency>-->
+        <!-- Hibernate ORM -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-hikaricp</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+        <!-- Spring data modules -->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-rest-webmvc</artifactId>
         </dependency>
 
         <!-- TESTING -->
@@ -225,8 +255,6 @@
             <scope>provided</scope>
         </dependency>
 
-
-
         <!-- SPRING -->
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-core -->
         <dependency>
@@ -275,7 +303,11 @@
             <artifactId>spring-aspects</artifactId>
             <version>${spring.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
 
         <!-- Validator -->
         <!-- https://mvnrepository.com/artifact/javax.el/el-api -->
@@ -291,8 +323,6 @@
             <version>${hibernateValidator.version}</version>
             <scope>provided</scope>
         </dependency>
-
-
 
         <!--Spring boot for context in CLI -->
         <dependency>

@@ -2,9 +2,11 @@ package services;
 
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
+import persistance.dao.ComputerRepository;
 import persistance.model.Company;
 import persistance.model.Computer;
 import persistance.model.GenericBuilder;
@@ -27,6 +29,8 @@ import static org.junit.Assert.fail;
 public class ComputerServiceTest {
   @Resource
     protected ComputerService service;
+  @Autowired
+    protected ComputerRepository computerRepository;
     protected Computer computer, computer2, computer10, computerToCreate,invalidComputer, invalidComputer2;
     protected Company company, company2, companyNull;
     protected Page<Computer> page;
@@ -103,6 +107,13 @@ public class ComputerServiceTest {
         }catch (NullPointerException ex) {}
 
     }
+
+    @Test
+    public void testSpringDataJpa() throws Exception {
+      Computer c = computerRepository.findById(1L);
+      assertEquals(computer, c);
+    }
+
 
     @Test
     public void testCreateDeleteComputer() throws Exception {
