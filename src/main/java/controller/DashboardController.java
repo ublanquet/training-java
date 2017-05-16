@@ -43,8 +43,8 @@ public class DashboardController {
     page = Mapper.convertPageDto(computerService.getPaginated(new Page<Computer>(10)));
     model.addAttribute("page", page);
     model.addAttribute("list", page.getListPage());
-    model.addAttribute("totalCount", computerService.getCount());
-    Long pageCount = computerService.getCount() / 10;
+    model.addAttribute("totalCount", page.getAllPagesItemCount()); // computerService.getCount());
+    Long pageCount = (long) page.getMaxPage(); // computerService.getCount() / 10; // 10 is default amount per page
     model.addAttribute("totalPages", pageCount);
     logger.debug("Current locale :" + locale.getDisplayName());
     Utils.cleanMessage(session);
@@ -75,10 +75,10 @@ public class DashboardController {
 
     if (search != null && search != "" && order == null) {
       page = computerService.getFiltered(page, search);
-      model.addAttribute("filteredCount", computerService.getCount(search));
+      model.addAttribute("filteredCount", page.getAllPagesItemCount()); // computerService.getCount(search));
     } else if (order != null) {
       page = computerService.getFiltered(page, search, order);
-      model.addAttribute("filteredCount", computerService.getCount(search));
+      model.addAttribute("filteredCount", page.getAllPagesItemCount()); // computerService.getCount(search));
     } else {
       page = computerService.getPaginated(page);
     }
@@ -111,7 +111,7 @@ public class DashboardController {
         message = message + " INVALID ID : '" + selected + "', ";
       }
     }
-    Utils.setMessage("info", message, session);
+    Utils.setMessage("info", message, session); // TODO use redirect var RedirectAttributes redir
     return "dashboard";
   }
 

@@ -133,7 +133,7 @@ public class ComputerService {
   public Page<Computer> getPaginated(Page<Computer> page) {
     logger.debug("Retrieving pagniated computers stored in DB : ");
     page = daoC.selectPaginated(page);
-
+    page.setAllPagesItemCount(getCount());
     return page;
   }
 
@@ -147,7 +147,7 @@ public class ComputerService {
   public Page<Computer> getFiltered(Page<Computer> page, String name) {
     logger.debug("Retrieving pagniated computers stored in DB : ");
     page = daoC.selectFiltered(page, name != null ? name : "");
-
+    page.setAllPagesItemCount(getCount(name));
     return page;
   }
 
@@ -175,6 +175,7 @@ public class ComputerService {
     }
 
     page = daoC.selectFiltered(page, name != null ? name : "", orderString);
+    page.setAllPagesItemCount(getCount(name));
 
     return page;
   }

@@ -109,6 +109,8 @@ public class Mapper {
     }
     Page<ComputerDto> pageDto = new Page<>(page.getNbEntries(), page.currentPage);
     pageDto.list = dtoList;
+    pageDto.setAllPagesItemCount(page.getAllPagesItemCount());
+
     return pageDto;
   }
 }
