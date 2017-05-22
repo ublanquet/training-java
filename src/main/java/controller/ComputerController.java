@@ -129,7 +129,7 @@ public class ComputerController {
   public String editComputerForm(Model model, @RequestParam(value = "id") Long id) {
     ArrayList<Company> companies = companyService.getAll();
     model.addAttribute("companies", companies);
-    model.addAttribute("computer", computerService.getById(id));
+    model.addAttribute("computer", Mapper.createComputerDto(computerService.getById(id)));
     return "editComputer";
   }
 

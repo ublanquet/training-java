@@ -4,10 +4,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import persistance.dao.ComputerRepository;
 import persistance.dao.DaoComputer;
 import persistance.model.Computer;
 import persistance.model.Page;
 
+import javax.annotation.Resource;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,6 +21,8 @@ import java.util.Objects;
 public class ComputerService {
   private Logger logger = LoggerFactory.getLogger("services.ComputerService");
   private final DaoComputer daoC;
+  @Resource
+  private ComputerRepository computerRepository;
 
   //STOP_CHECKSTYLE
   @Autowired
@@ -36,7 +40,8 @@ public class ComputerService {
     logger.info("Retrieving computer of ID " + id + ": ");
     Computer computer = null;
     try {
-      computer = daoC.getById(id);
+      computer = computerRepository.findById(id);
+      //computer = daoC.getById(id);
       logger.debug(computer.toString());
     } catch (Exception ex) {
       logger.error("Error retrieving computer" + ex.getMessage() + ex.getStackTrace());
@@ -89,7 +94,7 @@ public class ComputerService {
   public Long create(Computer c) {
     if (!Validate.isValidComputer(c)) {
       logger.error("Error persisting computer : invalid object");
-      return (long) 0;
+      return 0L;
     }
     long generatedKey = 0;
     try {

@@ -34,22 +34,23 @@
                     <fieldset>
                         <div class="form-group">
                             <label for="computerName">Computer name</label>
-                            <input type="text" class="form-control" id="computerName" name="computerName" placeholder="Computer name" required="required" pattern="[A-Za-z0-9 ]{1,40}" >
+                            <input type="text" class="form-control" id="computerName" name="computerName" value="${computer.name}" placeholder="Computer name" required="required" pattern="[A-Za-z0-9 ]{1,40}" >
                         </div>
                         <div class="form-group">
                             <label for="introduced">Introduced date</label>
-                            <input type="date" class="form-control" id="introduced" name="introduced" placeholder="Introduced date" pattern="^(((0[1-9]|[12]\d|3[01])/(0[13578]|1[02])/((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)/(0[13456789]|1[012])/((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])/02/((19|[2-9]\d)\d{2}))|(29/02/((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$" >
+                            <input type="date" class="form-control" id="introduced" name="introduced" value="${computer.introduced}" placeholder="Introduced date" pattern="^(((0[1-9]|[12]\d|3[01])/(0[13578]|1[02])/((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)/(0[13456789]|1[012])/((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])/02/((19|[2-9]\d)\d{2}))|(29/02/((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$" >
                         </div>
                         <div class="form-group">
                             <label for="discontinued">Discontinued date</label>
-                            <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date" pattern="^(((0[1-9]|[12]\d|3[01])/(0[13578]|1[02])/((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)/(0[13456789]|1[012])/((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])/02/((19|[2-9]\d)\d{2}))|(29/02/((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$">
+                            <input type="date" class="form-control" id="discontinued" name="discontinued" value="${computer.discontinued}" placeholder="Discontinued date" pattern="^(((0[1-9]|[12]\d|3[01])/(0[13578]|1[02])/((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)/(0[13456789]|1[012])/((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])/02/((19|[2-9]\d)\d{2}))|(29/02/((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$">
                         </div>
                         <div class="form-group">
                             <label for="companyId">Company</label>
                             <select class="form-control" id="companyId" name="companyId">
                                 <option value="0">--</option>
                                 <c:forEach items="${companies}" var="item">
-                                    <option value="${item.id}">${item.name}</option>
+                                    <option value="${item.id}"
+                                            <c:if test="${computer.companyId == item.id}"> selected </c:if> >  ${item.name}</option>
                                 </c:forEach>
                             </select>
                         </div>

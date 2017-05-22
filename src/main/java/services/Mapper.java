@@ -44,7 +44,7 @@ public class Mapper {
 
     String companyId = "", companyName = "";
     if (c.getCompany() != null) {
-      companyId = c.getCompanyId().toString();
+      companyId = c.getCompany().getId().toString();
       companyName = c.getCompany().getName();
     }
 
