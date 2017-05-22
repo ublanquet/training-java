@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+
+
+    <!-- ANNOTATIONS POUR L'INJECTION DE DEPENDANCES DANS LES BEANS DU CONTEXT -->
+    <context:annotation-config />
+
+    <!-- ANNOTATIONS POUR LA CREATION DE BEANS VIA ANNOTATIONS -->
+    <context:component-scan base-package="model" />
+    <context:component-scan base-package="persistance" />
+    <context:component-scan base-package="services" />
+
+
+
+
+    <!-- CREATION MANAGED BEANS  -->
+    <bean id="computerValidator" class="validator.ComputerValidator"/>
+
+    <!-- DB -->
+
+    <!-- JPA -->
+    <jpa:repositories base-package="persistance.dao" entity-manager-factory-ref="myEmf"/>
+    <bean id="myEmf" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="packagesToScan" value="model" />
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+        </property>
+        <property name="jpaProperties">
+            <props>
+                <!--
+                <prop key="hibernate.hbm2ddl.auto">validate</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+                -->
+            </props>
+        </property>
+    </bean>
+
+    <!-- DATASOURCE -->
+    <!-- Get HikariCP properties -->
+
+    <bean name="propertyPlaceholder" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <value>classpath:db.properties</value>
+        </property>
+    </bean>
+
+    <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+        <property name="dataSourceProperties" >
+            <props>
+                <prop key="url">${dataSource.url2}</prop>
+                <prop key="user">${dataSource.user}</prop>
+                <prop key="password">${dataSource.password}</prop>
+            </props>
+        </property>
+        <property name="dataSourceClassName" value="${dataSourceClassName}" />
+        <property name="maximumPoolSize" value="${maximumPoolSize}" />
+                  <!--value="oracle.jdbc.driver.OracleDriver"-->
+    </bean>
+
+    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource">
+        <constructor-arg ref="hikariConfig" />
+    </bean>
+
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="persistance.dao.Utils.setDS"/>
+        <property name="arguments">
+            <list>
+                <ref bean="dataSource"/>
+            </list>
+        </property>
+    </bean>
+    <!-- TRANSACTION -->
+    <tx:annotation-driven />
+
+    <!--<bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>-->
+    <!-- JPA transacMana  http://www.baeldung.com/the-persistence-layer-with-spring-and-jpa-->
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="myEmf" />
+    </bean>
+
+    <!-- JDBC TEMPLATE -->
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+</beans>
