@@ -41,7 +41,6 @@ public class ComputerService {
     Computer computer = null;
     try {
       computer = computerRepository.findById(id);
-      //computer = daoC.getById(id);
       logger.debug(computer.toString());
     } catch (Exception ex) {
       logger.error("Error retrieving computer" + ex.getMessage() + ex.getStackTrace());
