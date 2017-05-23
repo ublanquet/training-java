@@ -4,9 +4,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.util.List;
@@ -19,10 +21,9 @@ public class User implements UserDetails {
   private Long id;
   private String login;
   private String pass;
-  private String role;
 
   /* Spring Security related fields*/
-  @Transient
+  @OneToMany(fetch = FetchType.EAGER)
   private List<Role> authorities;
   @Transient
   private boolean accountNonExpired = true;
@@ -30,7 +31,6 @@ public class User implements UserDetails {
   private boolean accountNonLocked = true;
   @Transient
   private boolean credentialsNonExpired = true;
-  @Transient
   private boolean enabled = true;
 
   /**
@@ -38,6 +38,7 @@ public class User implements UserDetails {
    */
   public User() {
   }
+
 
   /**
    * .
@@ -91,8 +92,12 @@ public class User implements UserDetails {
   }
 }
 
+@Entity
+@Table(name = "role")
 class Role implements GrantedAuthority {
-
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private int id;
   private String name;
 
 

@@ -6,13 +6,29 @@
 
     <http  create-session="stateless" use-expressions="true"> <!--can use create-session never -->
         <http-basic/>
+        <logout />
         <custom-filter ref="digestFilter" after="BASIC_AUTH_FILTER" />
         <intercept-url pattern="/**" access="hasRole('ROLE_USER')"/>
     </http>
 
+    <!-- mite be needed
+    <authentication-manager>
+        <authentication-provider user-service-ref='userService'/>
+    </authentication-manager>-->
+
+    <!-- hardcoded test impl
     <user-service id="userService">
         <user name="user" password="password" authorities="ROLE_USER" />
-    </user-service>
+    </user-service> -->
+
+    <!-- db security, use standard spring security tables in pointed datasource -->
+    <!-- subject ask for custom...
+    <authentication-manager>
+        <authentication-provider>
+            <jdbc-user-service data-source-ref="dataSource"/>
+        </authentication-provider>
+    </authentication-manager> -->
+
 
     <b:bean id="digestFilter" class=
             "org.springframework.security.web.authentication.www.DigestAuthenticationFilter">
