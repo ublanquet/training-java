@@ -40,6 +40,7 @@
             <hikari.version>2.5.1</hikari.version>
             <jstl.version>1.2</jstl.version>
             <hibernate.version>5.2.10.Final</hibernate.version>
+            <org.springframework.security.version>4.2.2.RELEASE</org.springframework.security.version>
     </properties>
 
 <build>
@@ -226,7 +227,16 @@
             <artifactId>spring-orm</artifactId>
             <version>${spring.version}</version>
         </dependency>
-	
+     <dependency>
+         <groupId>org.springframework</groupId>
+         <artifactId>spring-aop</artifactId>
+         <version>${spring.version}</version>
+     </dependency>
+     <dependency>
+         <groupId>org.springframework.security</groupId>
+         <artifactId>spring-security-core</artifactId>
+         <version>${org.springframework.security.version}</version>
+     </dependency>
     </dependencies>
 	
 </project>

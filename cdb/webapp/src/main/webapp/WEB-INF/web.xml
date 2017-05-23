@@ -3,15 +3,30 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
+    <!-- error -->
     <error-page>
         <location>/errors</location>
     </error-page>
 
+    <!-- Spring context-->
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:/applicationContext*.xml</param-value>
+        <param-value>
+            classpath:/applicationContext*.xml
+            /WEB-INF/security.xml
+        </param-value>
     </context-param>
+
+    <!-- security-->
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
     <listener>
         <listener-class>
@@ -19,6 +34,7 @@
         </listener-class>
     </listener>
 
+    <!-- spring dispatcher servlet-->
     <servlet>
         <servlet-name>dispatcher</servlet-name>
         <servlet-class>
