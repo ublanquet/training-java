@@ -8,7 +8,7 @@
         <http-basic/>
         <logout />
         <custom-filter ref="digestFilter" after="BASIC_AUTH_FILTER" />
-        <intercept-url pattern="/**" access="hasRole('ROLE_USER')"/>
+        <intercept-url pattern="/**" access="isAuthenticated()"/>
     </http>
 
     <!-- mite be needed
