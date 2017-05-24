@@ -57,7 +57,7 @@ public class ComputerService {
     logger.info("Retrieving computer count");
     long count = 0;
     try {
-      count = daoC.getCount();
+      count = computerRepository.count();
     } catch (Exception ex) {
       logger.error("Error retrieving computer" + ex.getMessage() + ex.getStackTrace());
     }
@@ -77,7 +77,7 @@ public class ComputerService {
     }
     long count = 0;
     try {
-      count = daoC.getCount(name);
+      count = computerRepository.countByNameContaining(name);
     } catch (Exception ex) {
       logger.error("Error retrieving computer" + ex.getMessage() + ex.getStackTrace());
     }
