@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.ebiz.ugo</groupId>
+		<artifactId>cdb</artifactId>
+		<version>0.1.0</version>
+	</parent>
+    <groupId>com.ebiz.ugo</groupId>
+    <artifactId>webapp</artifactId>
+    <version>0.1.0</version>
+    <packaging>war</packaging>
+
+    
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
+    </build>
+
+    <dependencies>
+        <!-- core -->
+        <dependency>
+            <groupId>com.ebiz.ugo</groupId>
+            <artifactId>core</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ebiz.ugo</groupId>
+            <artifactId>bindings</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ebiz.ugo</groupId>
+            <artifactId>service</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ebiz.ugo</groupId>
+            <artifactId>persistence</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+
+        <!-- JEE -->
+        <!-- https://mvnrepository.com/artifact/javax.servlet.jsp.jstl/jstl -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>${jstl.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/javax.servlet/servlet-api -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+
+
+        <!-- Validator -->
+        <!-- https://mvnrepository.com/artifact/javax.el/el-api -->
+        <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>el-api</artifactId>
+            <version>${javaElApi.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernateValidator.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Spring -->
+        <!-- security -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>${org.springframework.security.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>${org.springframework.security.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>
