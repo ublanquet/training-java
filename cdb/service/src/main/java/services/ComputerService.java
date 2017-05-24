@@ -268,10 +268,11 @@ public class ComputerService {
       logger.error("No Computer updated, incorrect object");
       return 0;
     }
-    int affectedRow = daoC.update(c);
-    if (affectedRow == 0) {
+    Computer newc = computerRepository.save(c); //daoC.update(c);
+    if (!newc.equals(c)) {
       logger.error("No Computer updated, error");
+      return 0;
     }
-    return affectedRow;
+    return 1;
   }
 }
