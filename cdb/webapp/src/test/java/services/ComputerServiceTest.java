@@ -22,9 +22,7 @@ import java.util.ArrayList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-@WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
-@Ignore
 @ContextConfiguration(locations={"/applicationContext.xml"})
 public class ComputerServiceTest {
   @Resource

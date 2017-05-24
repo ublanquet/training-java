@@ -20,8 +20,6 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 
-@Ignore
-@WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"/applicationContext.xml"})
 public class DtoTest {

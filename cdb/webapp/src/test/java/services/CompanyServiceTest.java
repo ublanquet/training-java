@@ -14,10 +14,8 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
-@WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"/applicationContext.xml"})
-@Ignore
 public class CompanyServiceTest {
   @Resource
     protected CompanyService service;
