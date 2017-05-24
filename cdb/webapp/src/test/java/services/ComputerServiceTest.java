@@ -6,11 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-import persistance.dao.ComputerRepository;
-import persistance.model.Company;
-import persistance.model.Computer;
-import persistance.model.GenericBuilder;
-import persistance.model.Page;
+import model.Company;
+import model.Computer;
+import model.GenericBuilder;
+import model.Page;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,12 +24,11 @@ import static org.junit.Assert.fail;
 
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
+@Ignore
 @ContextConfiguration(locations={"/applicationContext.xml"})
 public class ComputerServiceTest {
   @Resource
     protected ComputerService service;
-  @Autowired
-    protected ComputerRepository computerRepository;
     protected Computer computer, computer2, computer10, computerToCreate,invalidComputer, invalidComputer2;
     protected Company company, company2, companyNull;
     protected Page<Computer> page;
@@ -107,13 +105,6 @@ public class ComputerServiceTest {
         }catch (NullPointerException ex) {}
 
     }
-
-    @Test
-    public void testSpringDataJpa() throws Exception {
-      Computer c = computerRepository.findById(1L);
-      assertEquals(computer, c);
-    }
-
 
     @Test
     public void testCreateDeleteComputer() throws Exception {

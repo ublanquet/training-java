@@ -31,10 +31,13 @@
 
                 <form action="/computer/edit" method="POST" onsubmit="return validateDates();">
                     <input type="hidden" value="${computer.id}" name="id" id="id"/>
+                    <input type="hidden"
+                           name="${_csrf.parameterName}"
+                           value="${_csrf.token}"/>
                     <fieldset>
                         <div class="form-group">
                             <label for="computerName">Computer name</label>
-                            <input type="text" class="form-control" id="computerName" name="computerName" value="${computer.name}" placeholder="Computer name" required="required" pattern="[A-Za-z0-9 ]{1,40}" >
+                            <input type="text" class="form-control" id="computerName" name="computerName" value="${computer.name}" placeholder="Computer name" required="required" pattern="[A-Za-z0-9 .]{1,40}" >
                         </div>
                         <div class="form-group">
                             <label for="introduced">Introduced date</label>

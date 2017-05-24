@@ -55,6 +55,9 @@
                             </select>
                         </div>
                     </fieldset>
+                    <input type="hidden"
+                           name="${_csrf.parameterName}"
+                           value="${_csrf.token}"/>
                     <div class="actions pull-right">
                         <input type="submit" value="Add" class="btn btn-primary">
                         or
