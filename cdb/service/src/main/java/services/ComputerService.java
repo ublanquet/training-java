@@ -97,7 +97,9 @@ public class ComputerService {
     }
     long generatedKey = 0;
     try {
-      generatedKey = daoC.create(c);
+      c = computerRepository.save(c);
+      computerRepository.flush();
+      generatedKey = c.getId();
     } catch (Exception ex) {
       logger.error("Error persisting computer " + ex.getMessage());
     }

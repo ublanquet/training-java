@@ -20,6 +20,13 @@ public interface ComputerRepository extends JpaRepository<Computer, Long> {
   //use Pageable obj created by new PageRequest
   Page<Computer> findAll(Pageable pageRequest);
 
+  Page<Computer> findByName(Pageable pageRequest, String name);
+  Page<Computer> findByNameOrCompanyName(Pageable pageRequest, String name);
+
+
+
+  Long countByName(String name);
+
   //can use @Query to write straight sql (use EntityName instead of table), can use OrderBy and Like in name, if name too long, use @Query, can use pageable objects for select all, they can use sort objects
   //perf issues : eager/lazy fetching, number of columns, pagination
 }
