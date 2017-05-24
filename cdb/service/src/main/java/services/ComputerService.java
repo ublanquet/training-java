@@ -77,7 +77,7 @@ public class ComputerService {
     }
     long count = 0;
     try {
-      count = computerRepository.countByNameContaining(name);
+      count = computerRepository.countByName(name);
     } catch (Exception ex) {
       logger.error("Error retrieving computer" + ex.getMessage() + ex.getStackTrace());
     }
