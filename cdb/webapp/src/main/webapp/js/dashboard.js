@@ -101,6 +101,26 @@ $(function () {
 
     function ajaxTableReload() {
         var filter = $("#searchbox").val();
+
+        var csrfParameter = $("meta[name='_csrf_parameter']").attr("content");
+        var csrfToken = $("meta[name='_csrf']").attr("content");
+        var csrfHeader = $("meta[name='_csrf_header']").attr("content");
+        $.ajaxSetup({
+            headers: { 'X-CSRF-TOKEN': csrfToken }
+        });
+        /*$.ajax({
+            url: 'contextPath + "/dashboard/ajax"',
+            headers: {
+            },
+            method: 'POST',
+            dataType: 'json',
+            data: YourData,
+            success: function(data){
+                console.log('succes: '+data);
+            }
+        });*/
+
+
         $.post(contextPath + "/dashboard/ajax", {
             pageN: pageN,
             perPage: perPage,
