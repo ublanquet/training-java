@@ -113,6 +113,32 @@ public class ComputerService {
   }
 
   /**
+   * Persist and return computer obj.
+   * @param c .
+   * @return .
+   */
+  public Computer createAndReturn(Computer c) {
+    if (!Validate.isValidComputer(c)) {
+      logger.error("Error persisting computer : invalid object");
+      return null;
+    }
+    long generatedKey = 0;
+    try {
+      c = computerRepository.save(c);
+      computerRepository.flush();
+      generatedKey = c.getId();
+    } catch (Exception ex) {
+      logger.error("Error persisting computer " + ex.getMessage());
+    }
+    if (generatedKey == 0) {
+      logger.error("Error persisting computer");
+      return null;
+    }
+    logger.debug("Computer persist success, generated ID : " + generatedKey);
+    return c;
+  }
+
+  /**
    * get all computers.
    *
    * @param start offset
@@ -274,5 +300,24 @@ public class ComputerService {
       return 0;
     }
     return 1;
+  }
+
+  /**
+   * .
+   * @param c .
+   * @return .
+   */
+  public Computer updateAndReturn(Computer c) {
+    logger.debug("Updating computer of id : " + c.getId());
+    if (!Validate.isValidComputer(c)) {
+      logger.error("No Computer updated, incorrect object");
+      return null;
+    }
+    Computer newc = computerRepository.save(c); //daoC.update(c);
+    if (!newc.equals(c)) {
+      logger.error("No Computer updated, error");
+      return null;
+    }
+    return newc;
   }
 }

@@ -12,17 +12,27 @@
 
 
 
-    <http  create-session="stateless" use-expressions="true"> <!--can use create-session never -->
+    <http  create-session="stateless" use-expressions="true" pattern="/api/**"> <!--can use create-session never -->
+        <http-basic/>
+        <csrf disabled="true"/>
+        <custom-filter ref="digestFilter" after="BASIC_AUTH_FILTER" />
+        <intercept-url pattern="/api/**" access="hasRole('ADMIN')" method="GET"/>
+        <intercept-url pattern="/api/**" access="hasRole('ADMIN')" method="POST" />
+    </http>
+
+
+    <http  create-session="stateless" use-expressions="true" pattern=""> <!--can use create-session never -->
         <http-basic/>
         <logout />
         <custom-filter ref="digestFilter" after="BASIC_AUTH_FILTER" />
-        <!--intercept-url pattern="/**" access="isAuthenticated()"/-->
-        <intercept-url pattern="/login*" access="isAnonymous()"/>
+        <intercept-url pattern="/login**" access="isAnonymous()"/>
         <intercept-url pattern="/dashboard" access="hasRole('USER')" method="GET"/>
         <intercept-url pattern="/dashboard" access="hasRole('ADMIN')" method="POST"/>
-        <intercept-url pattern="/computer/*" access="hasRole('ADMIN')" method="GET"/>
-        <intercept-url pattern="/computer/*" access="hasRole('ADMIN')" method="POST"/>
+        <intercept-url pattern="/computer/**" access="hasRole('ADMIN')" method="GET" />
+        <intercept-url pattern="/computer/**" access="hasRole('ADMIN')" method="POST"/>
     </http>
+
+
 
     <b:bean id="digestFilter" class=
             "org.springframework.security.web.authentication.www.DigestAuthenticationFilter">
