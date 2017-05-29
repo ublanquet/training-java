@@ -1,7 +1,9 @@
 package cli;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.core.MediaType;
+
 import persistance.dao.DaoCompany;
 import persistance.dao.DaoComputer;
 import model.Company;
@@ -32,6 +34,14 @@ public class Cli {
     private static Page<Computer> pageComputer = new Page<Computer>(20, 0);
     private static Page<Company> pageCompany = new Page<Company>(20, 0);
 
+    private static final String APIURL = "http://localhost:8080/api";
+    private static final Client CLIENT = ClientBuilder.newClient();
+    private static final String USERNAME = "test";
+    private static final String PASSWORD = "test";
+
+    private static final String AUTHSTRING = USERNAME + ":" + PASSWORD;
+    private static final String AUTHHEADER = "Authorization";
+    private static final String AUTHHEADERVAL = "Basic " + java.util.Base64.getEncoder().encodeToString(AUTHSTRING.getBytes());
 
     /**
      * main of Cli.
@@ -39,9 +49,28 @@ public class Cli {
      * @param args arguments
      */
     public static void main(String[] args) {
-        ApplicationContext context = new ClassPathXmlApplicationContext("/applicationContext.xml");
-        compService = (ComputerService) context.getBean("computerService");
-        companyService =  (CompanyService) context.getBean("companyService");
+        //ApplicationContext context = new ClassPathXmlApplicationContext("/applicationContext.xml");
+        //compService = (ComputerService) context.getBean("computerService");
+        //companyService =  (CompanyService) context.getBean("companyService");
+
+
+/* POST example
+Form form = new Form();
+form.param("key", "foo");
+form.param("value", "bar");
+
+TrackingNumber requestResult =
+target.request(MediaType.APPLICATION_JSON_TYPE)
+    .post(Entity.entity(form,MediaType.APPLICATION_FORM_URLENCODED_TYPE),
+        TrackingNumber.class);*/
+
+        Computer c = CLIENT
+            .target(APIURL)
+            .path("computer/{id}")
+            .resolveTemplate("id", 1)
+            .request(MediaType.APPLICATION_JSON).header(AUTHHEADER, AUTHHEADERVAL) // The basic authentication header goes here
+            .get(Computer.class);
+        System.out.println(c);
 
         System.out.println("Welcome to ComputerDataBase CLI");
         logger.debug("CLI start");
@@ -243,8 +272,14 @@ public class Cli {
     public static String displayComputerbyId(Long id) {
         System.out.println("Retrieving computer of ID " + id + ": ");
         try {
-            Computer computer = compService.getById(id);
-            System.out.println(computer.toString());
+            Computer c = CLIENT
+                .target(APIURL)
+                .path("computer/{id}")
+                .resolveTemplate("id", id)
+                .request(MediaType.APPLICATION_JSON).header(AUTHHEADER, AUTHHEADERVAL) // The basic authentication header goes here
+                .get(Computer.class);
+            //Computer computer = compService.getById(id);
+            System.out.println(c.toString());
         } catch (Exception ex) {
             return "Command error " + ex.getMessage();
         }
