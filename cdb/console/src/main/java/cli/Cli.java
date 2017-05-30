@@ -2,8 +2,13 @@ package cli;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import persistance.dao.DaoCompany;
 import persistance.dao.DaoComputer;
 import model.Company;
@@ -19,6 +24,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -230,11 +236,33 @@ target.request(MediaType.APPLICATION_JSON_TYPE)
     public static String displayAllComputerPaged(String pageN, String nb) {
         System.out.println("Displaying all computers stored in DB : ");
         try {
-            pageComputer.setNbEntries(Integer.parseInt(nb));
+            /*pageComputer.setNbEntries(Integer.parseInt(nb));
             pageComputer.setCurrentPage(Integer.parseInt(pageN));
-            compService.getPaginated(pageComputer);
+            compService.getPaginated(pageComputer);*/
 
-            System.out.println(pageComputer.toString());
+            Response response = CLIENT
+                .target(APIURL)
+                .path("computer/list")
+                .queryParam("pageN", pageN)
+                .queryParam("perPage", nb)
+                .request(MediaType.APPLICATION_JSON).header(AUTHHEADER, AUTHHEADERVAL) // The basic authentication header goes here
+                .get();
+
+            String json = response.readEntity(String.class);
+            response.close();
+            byte[] jsonData = json.getBytes();
+            ObjectMapper objectMapper = new ObjectMapper();
+
+        //read JSON like DOM Parser
+            // read/print as json because difficulties both for page generic, and for computer dates
+            JsonNode rootNode = objectMapper.readTree(jsonData);
+            JsonNode listNode = rootNode.path("list");
+            Iterator<JsonNode> elements = listNode.elements();
+            while (elements.hasNext()) {
+                System.out.println(elements.next().toString());
+                //Computer c = objectMapper.readValue(elements.next().toString(), Computer.class);
+                //System.out.println(c.toString());
+            }
         } catch (Exception ex) {
             return "Command error " + ex.getMessage();
         }
@@ -360,7 +388,21 @@ target.request(MediaType.APPLICATION_JSON_TYPE)
         }
         long generatedKey = 0;
         try {
-            generatedKey = compService.create(c);
+            Form form = new Form();
+            form.param("name", c.getName());
+            form.param("companyId", c.getCompanyId() != null ? c.getCompanyId().toString() : "");
+            form.param("introduced", c.getIntroducedTimestamp() != null ? c.getIntroducedTimestamp().toString() : "");
+            form.param("discontinued", c.getDiscontinuedTimestamp() != null ? c.getDiscontinuedTimestamp().toString() : "");
+
+            c = CLIENT
+                .target(APIURL)
+                .path("computer/add")
+                .request(MediaType.APPLICATION_JSON).header(AUTHHEADER, AUTHHEADERVAL) // The basic authentication header goes here
+                .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE),
+                    Computer.class);
+
+            generatedKey = c.getId();
+            //generatedKey = compService.create(c);
             System.out.println(c.toString());
         } catch (Exception ex) {
             return "Command error " + ex.getMessage();

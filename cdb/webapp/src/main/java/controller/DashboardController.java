@@ -56,7 +56,7 @@ public class DashboardController {
     model.addAttribute("messageHide", !messageHide.equals("false"));
     model.addAttribute("messageLevel", messageLevel);
 
-    model.addAttribute("list", page.getListPage());
+    model.addAttribute("list", page.getList());
     model.addAttribute("totalCount", page.getAllPagesItemCount());
     Long pageCount = (long) page.getMaxPage(); // 10 is default amount per page
     model.addAttribute("totalPages", pageCount);
@@ -94,7 +94,7 @@ public class DashboardController {
       page = computerService.getPaginated(page);
     }
     Page<ComputerDto> pageDto = Mapper.convertPageDto(page);
-    model.addAttribute("list", pageDto.getListPage());
+    model.addAttribute("list", pageDto.getList());
 
     return "dashboardTable";
   }

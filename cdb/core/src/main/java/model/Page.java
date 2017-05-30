@@ -85,7 +85,7 @@ public class Page<T> {
         this.currentPage = currentPage;
     }
 
-    public ArrayList<T> getListPage() {
+    public ArrayList<T> getList() {
         return list;
     }
 

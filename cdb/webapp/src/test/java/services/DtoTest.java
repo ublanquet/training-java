@@ -81,7 +81,7 @@ public class DtoTest {
     Page<ComputerDto> pageDto = Mapper.convertPageDto(page);
 
     for(int i = 0; i < page.getNbEntries(); i++) {
-      assertEquals(page.getListPage().get(i).toString().replace("null", "").replace("'", ""), pageDto.getListPage().get(i).toString().replace("'", ""));
+      assertEquals(page.getList().get(i).toString().replace("null", "").replace("'", ""), pageDto.getList().get(i).toString().replace("'", ""));
     }
   }
 
