@@ -27,16 +27,12 @@ import java.util.Map;
 @Controller
 @RequestMapping("/computer")
 public class ComputerController {
-  final
-  CompanyService companyService;
-  final
-  ComputerService computerService;
-  final
-  ComputerValidator computerValidator;
-  final
-  Mapper mapper;
+  private final CompanyService companyService;
+  private final ComputerService computerService;
+  private final ComputerValidator computerValidator;
+  private final Mapper mapper;
 
-  Logger logger = LoggerFactory.getLogger("controller.EditComputerServlet");
+  private static final Logger logger = LoggerFactory.getLogger(ComputerController.class);
 
   //STOP_CHECKSTYLE
   @Autowired
