@@ -29,7 +29,7 @@ public class RestApiComputerController {
   private final ComputerValidator computerValidator;
   private final Mapper mapper;
 
-  private static final Logger logger = LoggerFactory.getLogger(RestApiComputerController.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RestApiComputerController.class);
 
   //STOP_CHECKSTYLE
   @Autowired

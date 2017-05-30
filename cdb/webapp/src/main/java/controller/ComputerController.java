@@ -32,7 +32,7 @@ public class ComputerController {
   private final ComputerValidator computerValidator;
   private final Mapper mapper;
 
-  private static final Logger logger = LoggerFactory.getLogger(ComputerController.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ComputerController.class);
 
   //STOP_CHECKSTYLE
   @Autowired
@@ -104,7 +104,7 @@ public class ComputerController {
     try {
       affectedRow = computerService.update(c);
     } catch (Exception ex) {
-      logger.error("Error updating computer : " + ex.getMessage() + ex.getStackTrace() + ex.getClass());
+      LOGGER.error("Error updating computer : " + ex.getMessage() + ex.getStackTrace() + ex.getClass());
     }
     if (affectedRow == 0) {
       Utils.setMessage("warning", "Error updating computer", redirectAttrs);

@@ -24,7 +24,7 @@ import java.util.Locale;
 @Controller
 public class DashboardController {
   private final ComputerService computerService;
-  private static final Logger logger = LoggerFactory.getLogger("controller.EditComputerServlet");
+  private static final Logger LOGGER = LoggerFactory.getLogger("controller.EditComputerServlet");
 
   //STOP_CHECKSTYLE
   @Autowired

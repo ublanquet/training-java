@@ -62,7 +62,7 @@ public class Cli {
             .resolveTemplate("id", 1)
             .request(MediaType.APPLICATION_JSON).header(AUTHHEADER, AUTHHEADERVAL) // The basic authentication header goes here
             .get(Computer.class);
-        System.out.println(c);
+        System.out.println(c); //Basic test
 
         System.out.println("Welcome to ComputerDataBase CLI");
         logger.debug("CLI start");
@@ -239,7 +239,12 @@ public class Cli {
             byte[] jsonData = json.getBytes();
             ObjectMapper objectMapper = new ObjectMapper();
 
-        //read JSON like DOM Parser
+            //TODO true mapping via jackson instead of json manual display
+            // also see mapper.readValue(jsonString, new TypeReference<Data<String>>() {}); for generic type problem solve
+            // OR JavaType type = mapper.getTypeFactory().constructCollectionType(List.class, Foo.class)    //  List<Foo> list = mapper.readValue(new File("input.json"), type);
+            // OR JavaType topMost = mapper.getTypeFactory().constructParametricType(MyWrapper.cl‌​ass, ActualClassRuntime.class)
+            //https://stackoverflow.com/a/17404277
+            //read JSON like DOM Parser
             // read/print as json because difficulties both for page generic, and for computer dates
             JsonNode rootNode = objectMapper.readTree(jsonData);
             JsonNode listNode = rootNode.path("list");
@@ -385,7 +390,7 @@ public class Cli {
                 .path("computer/add")
                 .request(MediaType.APPLICATION_JSON).header(AUTHHEADER, AUTHHEADERVAL) // The basic authentication header goes here
                 .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE),
-                    Computer.class);
+                    Computer.class); // TODO pass params in JSON
 
             generatedKey = c.getId();
             //generatedKey = compService.create(c);

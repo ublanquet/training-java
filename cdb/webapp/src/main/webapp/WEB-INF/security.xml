@@ -16,8 +16,7 @@
         <http-basic/>
         <csrf disabled="true"/>
         <custom-filter ref="digestFilter" after="BASIC_AUTH_FILTER" />
-        <intercept-url pattern="/api/**" access="hasRole('ADMIN')" method="GET"/>
-        <intercept-url pattern="/api/**" access="hasRole('ADMIN')" method="POST" />
+        <intercept-url pattern="/api/**" access="hasRole('ADMIN')" />
     </http>
 
 

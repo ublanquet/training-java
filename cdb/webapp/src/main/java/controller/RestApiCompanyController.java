@@ -1,8 +1,6 @@
 package controller;
 
 import model.Company;
-import model.Computer;
-import model.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +21,7 @@ public class RestApiCompanyController {
   private final ComputerValidator computerValidator;
   private final Mapper mapper;
 
-  private static final Logger logger = LoggerFactory.getLogger(RestApiCompanyController.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(RestApiCompanyController.class);
 
   //STOP_CHECKSTYLE
   @Autowired
