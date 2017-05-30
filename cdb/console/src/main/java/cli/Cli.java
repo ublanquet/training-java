@@ -55,7 +55,7 @@ public class Cli {
      * @param args arguments
      */
     public static void main(String[] args) {
- 
+
         Computer c = CLIENT
             .target(APIURL)
             .path("computer/{id}")
@@ -240,7 +240,7 @@ public class Cli {
             ObjectMapper objectMapper = new ObjectMapper();
 
         //read JSON like DOM Parser
-            // read/print as json because difficulties both for page generic, and for computer dates
+            // read/print as json because difficulties both for page generic list, and for computer dates
             JsonNode rootNode = objectMapper.readTree(jsonData);
             JsonNode listNode = rootNode.path("list");
             Iterator<JsonNode> elements = listNode.elements();
