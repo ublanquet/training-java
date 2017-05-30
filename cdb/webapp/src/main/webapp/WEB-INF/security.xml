@@ -4,30 +4,34 @@
          xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
-    <http  create-session="stateless" use-expressions="true"> <!--can use create-session never -->
+    <http pattern="/static/**" security="none"/>
+    <http pattern="/js/**" security="none"/>
+    <http pattern="/css/**" security="none"/>
+    <http pattern="/fonts/**" security="none"/>
+
+
+
+
+    <http  create-session="stateless" use-expressions="true" pattern="/api/**"> <!--can use create-session never -->
+        <http-basic/>
+        <csrf disabled="true"/>
+        <custom-filter ref="digestFilter" after="BASIC_AUTH_FILTER" />
+        <intercept-url pattern="/api/**" access="hasRole('ADMIN')" method="GET"/>
+        <intercept-url pattern="/api/**" access="hasRole('ADMIN')" method="POST" />
+    </http>
+
+
+    <http  create-session="stateless" use-expressions="true" pattern=""> <!--can use create-session never -->
         <http-basic/>
         <logout />
         <custom-filter ref="digestFilter" after="BASIC_AUTH_FILTER" />
-        <intercept-url pattern="/**" access="isAuthenticated()"/>
+        <intercept-url pattern="/login**" access="isAnonymous()"/>
+        <intercept-url pattern="/dashboard" access="hasRole('USER')" method="GET"/>
+        <intercept-url pattern="/dashboard" access="hasRole('ADMIN')" method="POST"/>
+        <intercept-url pattern="/computer/**" access="hasRole('ADMIN')" method="GET" />
+        <intercept-url pattern="/computer/**" access="hasRole('ADMIN')" method="POST"/>
     </http>
 
-    <!-- mite be needed
-    <authentication-manager>
-        <authentication-provider user-service-ref='userService'/>
-    </authentication-manager>-->
-
-    <!-- hardcoded test impl
-    <user-service id="userService">
-        <user name="user" password="password" authorities="ROLE_USER" />
-    </user-service> -->
-
-    <!-- db security, use standard spring security tables in pointed datasource -->
-    <!-- subject ask for custom...
-    <authentication-manager>
-        <authentication-provider>
-            <jdbc-user-service data-source-ref="dataSource"/>
-        </authentication-provider>
-    </authentication-manager> -->
 
 
     <b:bean id="digestFilter" class=

@@ -57,7 +57,7 @@ public class ComputerService {
     logger.info("Retrieving computer count");
     long count = 0;
     try {
-      count = daoC.getCount();
+      count = computerRepository.count();
     } catch (Exception ex) {
       logger.error("Error retrieving computer" + ex.getMessage() + ex.getStackTrace());
     }
@@ -77,7 +77,7 @@ public class ComputerService {
     }
     long count = 0;
     try {
-      count = daoC.getCount(name);
+      count = computerRepository.countByName(name);
     } catch (Exception ex) {
       logger.error("Error retrieving computer" + ex.getMessage() + ex.getStackTrace());
     }
@@ -97,7 +97,9 @@ public class ComputerService {
     }
     long generatedKey = 0;
     try {
-      generatedKey = daoC.create(c);
+      c = computerRepository.save(c);
+      computerRepository.flush();
+      generatedKey = c.getId();
     } catch (Exception ex) {
       logger.error("Error persisting computer " + ex.getMessage());
     }
@@ -108,6 +110,32 @@ public class ComputerService {
 
     logger.debug("Computer persist success, generated ID : " + generatedKey);
     return generatedKey;
+  }
+
+  /**
+   * Persist and return computer obj.
+   * @param c .
+   * @return .
+   */
+  public Computer createAndReturn(Computer c) {
+    if (!Validate.isValidComputer(c)) {
+      logger.error("Error persisting computer : invalid object");
+      return null;
+    }
+    long generatedKey = 0;
+    try {
+      c = computerRepository.save(c);
+      computerRepository.flush();
+      generatedKey = c.getId();
+    } catch (Exception ex) {
+      logger.error("Error persisting computer " + ex.getMessage());
+    }
+    if (generatedKey == 0) {
+      logger.error("Error persisting computer");
+      return null;
+    }
+    logger.debug("Computer persist success, generated ID : " + generatedKey);
+    return c;
   }
 
   /**
@@ -266,10 +294,30 @@ public class ComputerService {
       logger.error("No Computer updated, incorrect object");
       return 0;
     }
-    int affectedRow = daoC.update(c);
-    if (affectedRow == 0) {
+    Computer newc = computerRepository.save(c); //daoC.update(c);
+    if (!newc.equals(c)) {
       logger.error("No Computer updated, error");
+      return 0;
     }
-    return affectedRow;
+    return 1;
+  }
+
+  /**
+   * .
+   * @param c .
+   * @return .
+   */
+  public Computer updateAndReturn(Computer c) {
+    logger.debug("Updating computer of id : " + c.getId());
+    if (!Validate.isValidComputer(c)) {
+      logger.error("No Computer updated, incorrect object");
+      return null;
+    }
+    Computer newc = computerRepository.save(c); //daoC.update(c);
+    if (!newc.equals(c)) {
+      logger.error("No Computer updated, error");
+      return null;
+    }
+    return newc;
   }
 }
