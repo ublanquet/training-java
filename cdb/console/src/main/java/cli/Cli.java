@@ -55,7 +55,6 @@ public class Cli {
      * @param args arguments
      */
     public static void main(String[] args) {
- 
         Computer c = CLIENT
             .target(APIURL)
             .path("computer/{id}")
@@ -228,7 +227,7 @@ public class Cli {
 
             Response response = CLIENT
                 .target(APIURL)
-                .path("computer/list")
+                .path("computers")
                 .queryParam("pageN", pageN)
                 .queryParam("perPage", nb)
                 .request(MediaType.APPLICATION_JSON).header(AUTHHEADER, AUTHHEADERVAL) // The basic authentication header goes here
@@ -387,7 +386,7 @@ public class Cli {
 
             c = CLIENT
                 .target(APIURL)
-                .path("computer/add")
+                .path("computer")
                 .request(MediaType.APPLICATION_JSON).header(AUTHHEADER, AUTHHEADERVAL) // The basic authentication header goes here
                 .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE),
                     Computer.class); // TODO pass params in JSON
