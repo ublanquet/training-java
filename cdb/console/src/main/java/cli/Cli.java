@@ -55,21 +55,7 @@ public class Cli {
      * @param args arguments
      */
     public static void main(String[] args) {
-        //ApplicationContext context = new ClassPathXmlApplicationContext("/applicationContext.xml");
-        //compService = (ComputerService) context.getBean("computerService");
-        //companyService =  (CompanyService) context.getBean("companyService");
-
-
-/* POST example
-Form form = new Form();
-form.param("key", "foo");
-form.param("value", "bar");
-
-TrackingNumber requestResult =
-target.request(MediaType.APPLICATION_JSON_TYPE)
-    .post(Entity.entity(form,MediaType.APPLICATION_FORM_URLENCODED_TYPE),
-        TrackingNumber.class);*/
-
+ 
         Computer c = CLIENT
             .target(APIURL)
             .path("computer/{id}")
