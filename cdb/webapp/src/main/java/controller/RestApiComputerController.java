@@ -19,6 +19,7 @@ import validator.ComputerValidator;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -95,33 +96,8 @@ public class RestApiComputerController {
   }
 
   @RequestMapping(value = "/computer", method = RequestMethod.DELETE)
-  public ResponseEntity<?> delete(@RequestParam(value = "selection") String selection) {
-    String deleted = "", notFound = "";
-    Boolean success = true;
-
-    String[] idToDelete = selection.split(",");
-    ArrayList<Long> ids = new ArrayList<>();
-    for (String selected : idToDelete) {
-      try { //TODO simplify, multi delete
-        ids.add(Validate.parseLong(selected));
-        if (computerService.delete(Validate.parseLong(selected)) > 0) {
-          deleted = deleted + selected + ", ";
-        } else {
-          notFound = notFound + "" + selected + ", ";
-          success = false;
-        }
-      } catch (NullPointerException ex) {
-        notFound = notFound + "" + selected + ", ";
-        success = false;
-      }
-    }
-
-    Map<String, String> result = new HashMap<>();
-    result.put("success", success.toString());
-    result.put("deleted", deleted);
-    result.put("notFound", notFound);
-
-
-    return ResponseEntity.ok(result);
+  public ResponseEntity<?> delete(@RequestParam(value = "selection") ArrayList<Long> selection) {
+    Integer deleted = computerService.delete(selection);
+    return ResponseEntity.ok(deleted + " computers deleted");
   }
 }

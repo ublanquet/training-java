@@ -378,7 +378,7 @@ public class Cli {
         }
         long generatedKey = 0;
         try {
-            Form form = new Form();
+            Form form = new Form(); //TODO forget form, use json obj
             form.param("name", c.getName());
             form.param("companyId", c.getCompanyId() != null ? c.getCompanyId().toString() : "");
             form.param("introduced", c.getIntroducedTimestamp() != null ? c.getIntroducedTimestamp().toString() : "");
