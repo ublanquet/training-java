@@ -6,19 +6,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import services.CompanyService;
 import services.ComputerService;
 import services.Mapper;
 import validator.ComputerValidator;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/companies")
 public class RestApiCompanyController {
   private final CompanyService companyService;
   private final ComputerService computerService;
@@ -37,13 +35,13 @@ public class RestApiCompanyController {
   }
   //START_CHECKSTYLE
 
-  @RequestMapping(value = "/companies", method = RequestMethod.GET)
+  @GetMapping
   public ResponseEntity<?> getCompanies() {
     List<Company> companies =  companyService.getAll();
     return ResponseEntity.ok(companies);
   }
 
-  @RequestMapping(value = "/companies/{id}", method = RequestMethod.GET)
+  @GetMapping(value = "/{id}")
   public ResponseEntity<?> getCompany(@PathVariable Long id) {
     Company c = companyService.getById(id);
     if (c == null) {
@@ -52,7 +50,7 @@ public class RestApiCompanyController {
     return ResponseEntity.ok(c);
   }
 
-  @RequestMapping(value = "/companies/{id}", method = RequestMethod.DELETE)
+  @DeleteMapping(value = "/{id}")
   public ResponseEntity<?> delete(@PathVariable Long id) {
     Integer result = companyService.delete(id);
     return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Computers deleted by deleting the company " + id + " : " + result);

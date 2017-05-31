@@ -19,7 +19,7 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/computers")
 public class RestApiComputerController {
   private final CompanyService companyService;
   private final ComputerService computerService;
@@ -38,7 +38,7 @@ public class RestApiComputerController {
   }
   //START_CHECKSTYLE
 
-  @RequestMapping(value = "/computers", method = RequestMethod.POST)
+  @PostMapping
   public ResponseEntity<?> create(@Valid ComputerDto computer, BindingResult bindingResult) {
     Computer c = mapper.fromDto(computer); //Utils.buildComputerFromParams(allRequestParams); //mapper.fromDto(computer);
     computerValidator.validate(c, bindingResult);
@@ -50,7 +50,7 @@ public class RestApiComputerController {
     }
   }
 
-  @RequestMapping(value = "/computers", method = RequestMethod.PUT)
+  @PutMapping
   public ResponseEntity<?> edit(@Valid ComputerDto computer, BindingResult bindingResult) {
     Computer c = mapper.fromDto(computer); // Utils.buildComputerFromParams(allRequestParams); //mapper.fromDto(computer);
     computerValidator.validate(c, bindingResult);
@@ -62,7 +62,7 @@ public class RestApiComputerController {
     }
   }
 
-  @RequestMapping(value = "/computers/{computerId}", method = RequestMethod.GET)
+  @GetMapping(value = "/{computerId}")
   public ResponseEntity<?> get(@PathVariable Long computerId) {
     Computer c = computerService.getById(computerId);
     if (c == null || c.getId() == 0) {
@@ -73,7 +73,7 @@ public class RestApiComputerController {
     }
   }
 
-  @RequestMapping(value = "/computers", method = RequestMethod.GET)
+  @GetMapping
   public ResponseEntity<?> getPage(@RequestParam(value = "pageN", defaultValue = "0") Integer pageN,
                                @RequestParam(value = "perPage", defaultValue = "10") Integer perPage,
                                @RequestParam(value = "search", required = false) String search,
@@ -91,9 +91,18 @@ public class RestApiComputerController {
     return ResponseEntity.ok(page);
   }
 
-  @RequestMapping(value = "/computers", method = RequestMethod.DELETE)
-  public ResponseEntity<?> delete(@RequestParam(value = "selection") ArrayList<Long> selection) {
-    Integer deleted = computerService.delete(selection);
+  @DeleteMapping
+  public ResponseEntity<?> delete(@RequestParam(value = "selection") ArrayList<Long> idsToDelete) {
+    Integer deleted = computerService.delete(idsToDelete);
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(deleted + " computers deleted");
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<?> delete(@PathVariable Long id) {
+    Integer deleted = computerService.delete(id);
+    if (deleted == 0) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Id not found");
+    }
     return ResponseEntity.status(HttpStatus.NO_CONTENT).body(deleted + " computers deleted");
   }
 }
