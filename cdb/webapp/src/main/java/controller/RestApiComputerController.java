@@ -94,6 +94,6 @@ public class RestApiComputerController {
   @RequestMapping(value = "/computers", method = RequestMethod.DELETE)
   public ResponseEntity<?> delete(@RequestParam(value = "selection") ArrayList<Long> selection) {
     Integer deleted = computerService.delete(selection);
-    return ResponseEntity.ok(deleted + " computers deleted");
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(deleted + " computers deleted");
   }
 }
