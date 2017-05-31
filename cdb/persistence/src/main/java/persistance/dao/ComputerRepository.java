@@ -21,9 +21,9 @@ public interface ComputerRepository extends JpaRepository<Computer, Long> {
   //use Pageable obj created by new PageRequest
   Page<Computer> findAll(Pageable pageRequest);
 
-  Page<Computer> findByNameContaining(Pageable pageRequest, String name);
-  Page<Computer> findByNameOrCompanyNameContaining(Pageable pageRequest, String name);
-
+  List<Computer> findByNameContaining(Pageable pageRequest, String name);
+  List<Computer> findByNameOrCompanyNameContaining(Pageable pageRequest, String name);
+  //TODO  put list into my page class in  service, use pageRequest for offset/limit, custom query are needed for multiple tables
 
   @Query(value = "SELECT COUNT(c.id) FROM computer c LEFT JOIN company c2 on c.company_id = c2.id WHERE ( c.name LIKE %?1% OR c2.name LIKE %?1% ) ", nativeQuery = true)
   Long countByName(String name);

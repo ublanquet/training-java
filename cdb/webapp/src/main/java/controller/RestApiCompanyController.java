@@ -39,13 +39,13 @@ public class RestApiCompanyController {
     return ResponseEntity.ok(companies);
   }
 
-  @RequestMapping(value = "/company/{id}", method = RequestMethod.GET)
+  @RequestMapping(value = "/companies/{id}", method = RequestMethod.GET)
   public ResponseEntity<?> getCompany(@PathVariable Long id) {
     Company c = companyService.getById(id);
     return ResponseEntity.ok(c);
   }
 
-  @RequestMapping(value = "/company/{id}", method = RequestMethod.DELETE)
+  @RequestMapping(value = "/companies/{id}", method = RequestMethod.DELETE)
   public ResponseEntity<?> delete(@PathVariable Long id) {
     Integer result = companyService.delete(id);
 

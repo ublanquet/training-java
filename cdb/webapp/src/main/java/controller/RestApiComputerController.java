@@ -13,14 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import services.CompanyService;
 import services.ComputerService;
 import services.Mapper;
-import services.Validate;
 import validator.ComputerValidator;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -42,7 +38,7 @@ public class RestApiComputerController {
   }
   //START_CHECKSTYLE
 
-  @RequestMapping(value = "/computer", method = RequestMethod.POST)
+  @RequestMapping(value = "/computers", method = RequestMethod.POST)
   public ResponseEntity<?> create(@Valid ComputerDto computer, BindingResult bindingResult) {
     Computer c = mapper.fromDto(computer); //Utils.buildComputerFromParams(allRequestParams); //mapper.fromDto(computer);
     computerValidator.validate(c, bindingResult);
@@ -50,11 +46,11 @@ public class RestApiComputerController {
       return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(bindingResult.getAllErrors()); //error 422
     } else {
       c = computerService.createAndReturn(c);
-      return ResponseEntity.ok(c);
+      return ResponseEntity.status(HttpStatus.CREATED).body(c);
     }
   }
 
-  @RequestMapping(value = "/computer", method = RequestMethod.PUT)
+  @RequestMapping(value = "/computers", method = RequestMethod.PUT)
   public ResponseEntity<?> edit(@Valid ComputerDto computer, BindingResult bindingResult) {
     Computer c = mapper.fromDto(computer); // Utils.buildComputerFromParams(allRequestParams); //mapper.fromDto(computer);
     computerValidator.validate(c, bindingResult);
@@ -66,7 +62,7 @@ public class RestApiComputerController {
     }
   }
 
-  @RequestMapping(value = "/computer/{computerId}", method = RequestMethod.GET)
+  @RequestMapping(value = "/computers/{computerId}", method = RequestMethod.GET)
   public ResponseEntity<?> get(@PathVariable Long computerId) {
     Computer c = computerService.getById(computerId);
     if (c == null || c.getId() == 0) {
@@ -95,7 +91,7 @@ public class RestApiComputerController {
     return ResponseEntity.ok(page);
   }
 
-  @RequestMapping(value = "/computer", method = RequestMethod.DELETE)
+  @RequestMapping(value = "/computers", method = RequestMethod.DELETE)
   public ResponseEntity<?> delete(@RequestParam(value = "selection") ArrayList<Long> selection) {
     Integer deleted = computerService.delete(selection);
     return ResponseEntity.ok(deleted + " computers deleted");

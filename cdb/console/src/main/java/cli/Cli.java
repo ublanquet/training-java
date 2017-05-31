@@ -242,7 +242,7 @@ public class Cli {
             // also see mapper.readValue(jsonString, new TypeReference<Data<String>>() {}); for generic type problem solve
             // OR JavaType type = mapper.getTypeFactory().constructCollectionType(List.class, Foo.class)    //  List<Foo> list = mapper.readValue(new File("input.json"), type);
             // OR JavaType topMost = mapper.getTypeFactory().constructParametricType(MyWrapper.cl‌​ass, ActualClassRuntime.class)
-            //https://stackoverflow.com/a/17404277
+            //https://stackoverflow.com/a/17404277 // https://docs.oracle.com/javaee/7/tutorial/jaxrs-client001.htm#BABBIHEJ
             //read JSON like DOM Parser
             // read/print as json because difficulties both for page generic, and for computer dates
             JsonNode rootNode = objectMapper.readTree(jsonData);
@@ -292,7 +292,7 @@ public class Cli {
         try {
             Computer c = CLIENT
                 .target(APIURL)
-                .path("computer/{id}")
+                .path("computers/{id}")
                 .resolveTemplate("id", id)
                 .request(MediaType.APPLICATION_JSON).header(AUTHHEADER, AUTHHEADERVAL) // The basic authentication header goes here
                 .get(Computer.class);
@@ -386,7 +386,7 @@ public class Cli {
 
             c = CLIENT
                 .target(APIURL)
-                .path("computer")
+                .path("computers")
                 .request(MediaType.APPLICATION_JSON).header(AUTHHEADER, AUTHHEADERVAL) // The basic authentication header goes here
                 .post(Entity.entity(form, MediaType.APPLICATION_FORM_URLENCODED_TYPE),
                     Computer.class); // TODO pass params in JSON
