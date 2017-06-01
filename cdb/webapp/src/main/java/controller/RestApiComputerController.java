@@ -18,6 +18,7 @@ import validator.ComputerValidator;
 import javax.validation.Valid;
 import java.util.ArrayList;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/computers")
 public class RestApiComputerController {
@@ -36,7 +37,6 @@ public class RestApiComputerController {
     this.computerValidator = computerValidator;
     this.mapper = mapper;
   }
-  //START_CHECKSTYLE
 
   @PostMapping
   public ResponseEntity<?> create(@Valid ComputerDto computer, BindingResult bindingResult) {
@@ -105,4 +105,5 @@ public class RestApiComputerController {
     }
     return ResponseEntity.status(HttpStatus.NO_CONTENT).body(deleted + " computers deleted");
   }
-}
+}  //START_CHECKSTYLE
+

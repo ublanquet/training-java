@@ -11,10 +11,9 @@ import services.CompanyService;
 import services.ComputerService;
 import services.Mapper;
 import validator.ComputerValidator;
-
-import javax.validation.Valid;
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/companies")
 public class RestApiCompanyController {
@@ -33,7 +32,7 @@ public class RestApiCompanyController {
     this.computerValidator = computerValidator;
     this.mapper = mapper;
   }
-  //START_CHECKSTYLE
+
 
   @GetMapping
   public ResponseEntity<?> getCompanies() {
@@ -56,4 +55,4 @@ public class RestApiCompanyController {
     return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Computers deleted by deleting the company " + id + " : " + result);
   }
 
-}
+} //START_CHECKSTYLE
