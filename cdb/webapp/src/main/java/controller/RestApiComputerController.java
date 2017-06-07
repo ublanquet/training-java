@@ -39,7 +39,7 @@ public class RestApiComputerController {
   }
 
   @PostMapping
-  public ResponseEntity<?> create(@Valid ComputerDto computer, BindingResult bindingResult) {
+  public ResponseEntity<?> create(@Valid @RequestBody ComputerDto computer, BindingResult bindingResult) {
     Computer c = mapper.fromDto(computer); //Utils.buildComputerFromParams(allRequestParams); //mapper.fromDto(computer);
     computerValidator.validate(c, bindingResult);
     if (bindingResult.hasErrors()) {
@@ -51,7 +51,7 @@ public class RestApiComputerController {
   }
 
   @PutMapping
-  public ResponseEntity<?> edit(@Valid ComputerDto computer, BindingResult bindingResult) {
+  public ResponseEntity<?> edit(@Valid @RequestBody ComputerDto computer, BindingResult bindingResult) {
     Computer c = mapper.fromDto(computer); // Utils.buildComputerFromParams(allRequestParams); //mapper.fromDto(computer);
     computerValidator.validate(c, bindingResult);
     if (bindingResult.hasErrors()) {
